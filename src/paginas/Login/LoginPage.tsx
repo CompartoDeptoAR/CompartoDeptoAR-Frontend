@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { loginUsuario } from "../../api/hoock/useLogin";
+import apiAuth from "../../api/api.auth";
+
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -11,13 +12,11 @@ const LoginPage = () => {
     e.preventDefault();
 
     try {
-      const data = await loginUsuario(email, password);
-
-      // Guardar token y rol en localStorage
+      const data = await apiAuth.auth.login(email,password)
       localStorage.setItem("token", data.token);
-      localStorage.setItem("role", data.role);
+      localStorage.setItem("role", data.rol);
 
-      navigate("/home"); // Redirige al home
+      navigate("/home");
     } catch (err: any) {
       console.error(err);
       alert(err.message);
@@ -26,9 +25,15 @@ const LoginPage = () => {
 
   return (
     <form onSubmit={handleLogin}>
+      <h1>Iniciar sesion</h1>
+      <h2>Email</h2>
       <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" />
+      <h2>Contraseña</h2>
       <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Contraseña" />
       <button type="submit">Ingresar</button>
+      <p>
+        ¿No tenes cuenta? <a href="/login">Registrate</a>
+      </p>
     </form>
   );
 };

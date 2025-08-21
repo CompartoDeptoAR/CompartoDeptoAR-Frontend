@@ -1,6 +1,6 @@
 import React from "react";
 
-interface RegistroFormProps {
+interface PrimerFormRegistroProps {
   nombreCompleto: string;
   correo: string;
   contraseña: string;
@@ -14,7 +14,7 @@ interface RegistroFormProps {
 
 }
 
-const RegistroForm: React.FC<RegistroFormProps> = ({
+const PrimerFormRegistro: React.FC<PrimerFormRegistroProps> = ({
   nombreCompleto,
   correo,
   contraseña,
@@ -39,6 +39,8 @@ const RegistroForm: React.FC<RegistroFormProps> = ({
           value={nombreCompleto}
           onChange={(e) => setNombreCompleto(e.target.value)}
           required
+          minLength={3}
+          title="El nombre debe tener al menos 3 letras" 
         />
       </div>
 
@@ -64,6 +66,9 @@ const RegistroForm: React.FC<RegistroFormProps> = ({
             value={contraseña}
             onChange={(e) => setContraseña(e.target.value)}
             required
+            minLength={8}
+            pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$"
+            title="La contraseña debe tener al menos 8 caracteres, incluyendo mayúsculas, minúsculas y un número"
           />
           <button
             type="button"
@@ -74,7 +79,7 @@ const RegistroForm: React.FC<RegistroFormProps> = ({
         </div>
       </div>
 
-      {/* Boton next a campos de menor priodidad*/}
+  
       <button type="submit">
         Siguiente
       </button>
@@ -86,4 +91,4 @@ const RegistroForm: React.FC<RegistroFormProps> = ({
   );
 };
 
-export default RegistroForm;
+export default PrimerFormRegistro;
