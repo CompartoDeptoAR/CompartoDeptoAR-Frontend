@@ -1,6 +1,6 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import HomePage from "../paginas/Home/HomePage";
-import { getUserRole } from "../api/api.auth";
+import { getUserRol } from "../api/api.auth";
 import AdminPage from "../paginas/Admin/AdminPage";
 
 
@@ -15,7 +15,7 @@ const ProtectedRouter =()=>{
   return (
     <Routes>
       <Route path="/home" element={<HomePage />} />
-      <Route path="/admin" element={getUserRole() === "ADMIN_ROLE" ? <AdminPage /> : <Navigate to="/home" replace />} />
+      <Route path="/admin" element={getUserRol() === "ADMIN_ROLE" ? <AdminPage /> : <Navigate to="/home" replace />} />
     </Routes>
   );
 };

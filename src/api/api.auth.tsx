@@ -26,7 +26,7 @@ const apiAuth ={
 
             console.log(payload);
             const result = await axiosApi.post<{ token: string; rol: string }>(
-                `${import.meta.env.VITE_URL_USER}/registrar`,
+                import.meta.env.VITE_URL_USER,
                 payload
             );
 
