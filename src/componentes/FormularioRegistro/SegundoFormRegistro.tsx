@@ -1,18 +1,18 @@
 import type React from "react";
-import type { Genero, HabitosOpciones, HabitosUsuario, PreferenciaOpciones, PreferenciasUsuario } from "../../modelos/Usuario";
+import type { Genero, HabitosOpciones, PreferenciaOpciones } from "../../modelos/Usuario";
 
 
 interface SegundoFormRegistroProps{
     edad: number;
     genero: Genero;
     descripcion: string;
-    habitos:HabitosUsuario;
-    preferencia: PreferenciasUsuario;
+    habitos:HabitosOpciones[];
+    preferencia: PreferenciaOpciones[];
     setEdad: (value: number) => void;
     setGenero: (value: Genero) => void;
     setDescripcion: (value: string) => void;
-    setHabitos: (value: HabitosUsuario) => void;
-    setPreferencia: (value: PreferenciasUsuario) =>void;
+    setHabitos: (value: HabitosOpciones[]) => void;
+    setPreferencia: (value: PreferenciaOpciones[]) =>void;
     handleSubmit:(e: React.FormEvent) => void;
 }
 
@@ -53,17 +53,17 @@ const SegundoFormRegistro: React.FC<SegundoFormRegistroProps>=({
     ];
 
     const toggleOpcionPreferencia = (opcion: PreferenciaOpciones) => {
-        const nuevasOpciones = preferencia.opciones.includes(opcion)
-        ? preferencia.opciones.filter(o => o !== opcion)
-        : [...preferencia.opciones, opcion];
-        setPreferencia({ opciones: nuevasOpciones });
+        const nuevasOpciones = preferencia.includes(opcion)
+        ? preferencia.filter(o => o !== opcion)
+        : [...preferencia, opcion];
+        setPreferencia(nuevasOpciones);
     };
 
     const toggleOpcionHabito = (opcion: HabitosOpciones) => {
-        const nuevasOpciones = habitos.opciones.includes(opcion)
-        ? habitos.opciones.filter(o => o !== opcion)
-        : [...habitos.opciones, opcion];
-        setHabitos({ opciones: nuevasOpciones });
+        const nuevasOpciones = habitos.includes(opcion)
+        ? habitos.filter(o => o !== opcion)
+        : [...habitos, opcion];
+        setHabitos(nuevasOpciones);
     };
     return(
         <div>
@@ -104,6 +104,7 @@ const SegundoFormRegistro: React.FC<SegundoFormRegistroProps>=({
                     placeholder="Hola soy Juan, estoy buscando compañero de alquiler en la Cidad de La Plata, bla bla..."
                     value={descripcion}
                     onChange={(e) => setDescripcion(e.target.value)}
+                    max={100}
                     
                     />
                 </div>
@@ -115,7 +116,7 @@ const SegundoFormRegistro: React.FC<SegundoFormRegistroProps>=({
                         <label key={opcion} style={{ display: "block" }}>
                         <input
                             type="checkbox"
-                            checked={habitos.opciones.includes(opcion)}
+                            checked={habitos.includes(opcion)}
                             onChange={() => toggleOpcionHabito(opcion)}
                         />
                         {opcion}
@@ -130,7 +131,7 @@ const SegundoFormRegistro: React.FC<SegundoFormRegistroProps>=({
                         <label key={opcion} style={{ display: "block" }}>
                         <input
                             type="checkbox"
-                            checked={preferencia.opciones.includes(opcion)}
+                            checked={preferencia.includes(opcion)}
                             onChange={() => toggleOpcionPreferencia(opcion)}
                         />
                         {opcion}

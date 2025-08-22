@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import SegundoFormRegistro from "../../componentes/FormularioRegistro/SegundoFormRegistro";
 import { useNavigate } from "react-router-dom";
 
-import type { Genero, HabitosUsuario, PreferenciasUsuario } from "../../modelos/Usuario";
+import type { Genero, HabitosOpciones, PreferenciaOpciones, } from "../../modelos/Usuario";
 import PrimerFormRegistro from "../../componentes/FormularioRegistro/PrimerFormRegistro";
 import apiAuth from "../../api/api.auth";
 
@@ -19,8 +19,8 @@ const RegistroPage: React.FC = () => {
   const [edad, setEdad] = useState<number | undefined>(undefined);
   const [genero, setGenero] = useState<Genero>("Prefiero no decir");
   const [descripcion, setDescripcion] = useState<string>("");
-  const [habitos, setHabitos] = useState<HabitosUsuario>({ opciones: [] });
-  const [preferencia, setPreferencia] = useState<PreferenciasUsuario>({ opciones: [] });
+  const [habitos, setHabitos] = useState<HabitosOpciones[]>([]);
+  const [preferencia, setPreferencia] = useState<PreferenciaOpciones[]>([]);
 
   const [paso, setPaso] = useState<1 | 2>(1); 
   const navigate = useNavigate();

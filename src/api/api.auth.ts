@@ -1,4 +1,5 @@
-import type { Genero, HabitosUsuario, PreferenciasUsuario } from "../modelos/Usuario";
+import { handleApiError } from "../helpers/handleApiError";
+import type { Genero, HabitosOpciones, PreferenciaOpciones, } from "../modelos/Usuario";
 import axiosApi from "./_api";
 
 
@@ -11,27 +12,27 @@ const apiAuth ={
         registrar: async (
             nombreCompleto: string, 
             correo: string, 
-            constraseña: string, 
+            contraseña: string, 
             edad: number, 
             genero?: Genero,
             descripcion?: string,
-            habitos?:HabitosUsuario,
-            preferencia?:PreferenciasUsuario) => {
+            habitos?:HabitosOpciones[],
+            preferencia?:PreferenciaOpciones[]) => {
             try {
-            const payload: any = { nombreCompleto, correo, constraseña, edad };
-            if (genero) payload.genero = genero;
-            if (descripcion) payload.descripcion = descripcion;
-            if (habitos) payload.habitos= habitos;
-            if (preferencia) payload.preferencia = preferencia;
+            const datos: any = { nombreCompleto, correo, contraseña, edad };
+            if (genero) datos.genero = genero;
+            if (descripcion) datos.descripcion = descripcion;
+            if (habitos) datos.habitos= habitos;
+            if (preferencia) datos.preferencia = preferencia;
 
-            console.log(payload);
+            console.log(datos);
             const result = await axiosApi.post<{ token: string; rol: string }>(
                 import.meta.env.VITE_URL_USER,
-                payload
+                datos
             );
 
             if (result.status === 201) return result.data;
-            throw new Error("No se pudo registrar el usuario");
+            handleApiError(result.status, "No se pudo registrar el usuario");
             } catch (error: any) {
             if (error.response) {
                 throw new Error(error.response.data.message || "Error al registrarse");
@@ -39,11 +40,11 @@ const apiAuth ={
             throw new Error("Error de conexión");
             }
         },
-        login: async (correo: string, contraseña: string) => {
+        login: async (correo: string, contrasena: string) => {
             try {
             const result = await axiosApi.post<{ token: string, rol: string }>(
-                import.meta.env.URL_AUTH + "/login",
-                { correo, contraseña }
+                import.meta.env.VITE_URL_AUTH + "/login",
+                { correo, contrasena }
             );
 
             if (result.status === 200) return result.data;

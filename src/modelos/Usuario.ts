@@ -15,13 +15,11 @@ export interface UsuarioPerfil {
   edad: number;
   genero?: string;
   descripcion?: string;
-  habitos?: HabitosUsuario;
-  preferencias?: PreferenciasUsuario;
+  habitos?: HabitosOpciones[];
+  preferencias?: PreferenciaOpciones[];
 }
 
-export interface PreferenciasUsuario {
-  opciones:PreferenciaOpciones[];
-}
+
 export type PreferenciaOpciones =
       |"No me molesta que fumen"
       |"No me molestan las mascotas"
@@ -32,9 +30,7 @@ export type PreferenciaOpciones =
       |"Prefiero alguien tranquilo"
       |"Prefiero alguien social";
 
-export interface HabitosUsuario {
-  opciones:HabitosOpciones[];
-}
+
 export type HabitosOpciones =
     |"Fumador"
     |"Tengo mascotas"

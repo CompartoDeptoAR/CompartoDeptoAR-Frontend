@@ -32,7 +32,7 @@ const LoginPage = () => {
       <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Contraseña" />
       <button type="submit">Ingresar</button>
       <p>
-        ¿No tenes cuenta? <a href="/login">Registrate</a>
+        ¿No tenes cuenta? <a href="/registro">Registrate</a>
       </p>
     </form>
   );
