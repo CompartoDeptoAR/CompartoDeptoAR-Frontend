@@ -1,4 +1,5 @@
 import React from "react";
+import '../../styles/auth.css'
 
 interface PrimerFormRegistroProps {
   nombreCompleto: string;
@@ -10,7 +11,7 @@ interface PrimerFormRegistroProps {
   setContraseña: (value: string) => void;
   togglePassword: () => void;
   handleSubmit: (e: React.FormEvent) => void;
-
+  onSwitch: () => void ;
 
 }
 
@@ -24,11 +25,11 @@ const PrimerFormRegistro: React.FC<PrimerFormRegistroProps> = ({
   setContraseña,
   togglePassword,
   handleSubmit,
-
+  onSwitch,
 }) => {
   return (
-    <form onSubmit={handleSubmit} >
-      <h2 >Crear cuenta</h2>
+    <form onSubmit={handleSubmit} className="form-container">
+      <h2 className="form-title">Crear cuenta</h2>
 
       {/* Nombre */}
       <div >
@@ -85,7 +86,9 @@ const PrimerFormRegistro: React.FC<PrimerFormRegistroProps> = ({
       </button>
 
       <p>
-        ¿Ya tienes cuenta? <a href="/login">Inicia sesión</a>
+        ¿Ya tienes cuenta? <a href="#" onClick={e => { e.preventDefault(); onSwitch(); }}>
+          Inicia sesión
+        </a>
       </p>
     </form>
   );

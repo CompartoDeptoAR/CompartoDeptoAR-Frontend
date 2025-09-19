@@ -3,7 +3,11 @@ import Router from "./routers/Router";
 
 const App: React.FC =()=>{
     return(
-         <Router />
+        <div>
+             <Router />
+            
+        </div>
+         
     );
 };
 

@@ -13,7 +13,7 @@ export interface Usuario{
 export interface UsuarioPerfil {
   nombreCompleto: string;
   edad: number;
-  genero?: string;
+  genero?: Genero;
   descripcion?: string;
   habitos?: HabitosOpciones[];
   preferencias?: PreferenciaOpciones[];
@@ -40,6 +40,28 @@ export type HabitosOpciones =
     |"Recibo visitas seguido"
     |"Cocino en casa"
     |"Hago ejercicio en casa";
+
+export const opcionesHabitos: HabitosOpciones[] = [
+        "Fumador",
+        "Tengo mascotas",
+        "Escucho música fuerte",
+        "Me acuesto tarde",
+        "Trabajo desde casa",
+        "Recibo visitas seguido",
+        "Cocino en casa",
+        "Hago ejercicio en casa",
+    ];
+
+export const opcionesPreferencias: PreferenciaOpciones[] = [
+        "No me molesta que fumen",
+        "No me molestan las mascotas",
+        "Ok con música fuerte",
+        "Ok con horarios nocturnos",
+        "Ok con visitas frecuentes",
+        "Prefiero alguien ordenado",
+        "Prefiero alguien tranquilo",
+        "Prefiero alguien social",
+    ];
 
 export type Genero = "Masculino" | "Femenino" | "Prefiero no decir";
 

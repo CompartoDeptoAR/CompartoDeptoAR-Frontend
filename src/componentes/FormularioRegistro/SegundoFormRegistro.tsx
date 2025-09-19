@@ -1,5 +1,5 @@
 import type React from "react";
-import type { Genero, HabitosOpciones, PreferenciaOpciones } from "../../modelos/Usuario";
+import { opcionesHabitos, opcionesPreferencias, type Genero, type HabitosOpciones, type PreferenciaOpciones } from "../../modelos/Usuario";
 
 
 interface SegundoFormRegistroProps{
@@ -14,6 +14,7 @@ interface SegundoFormRegistroProps{
     setHabitos: (value: HabitosOpciones[]) => void;
     setPreferencia: (value: PreferenciaOpciones[]) =>void;
     handleSubmit:(e: React.FormEvent) => void;
+    onCancelar: () => void;
 }
 
 const SegundoFormRegistro: React.FC<SegundoFormRegistroProps>=({
@@ -28,29 +29,10 @@ const SegundoFormRegistro: React.FC<SegundoFormRegistroProps>=({
     setHabitos,
     setPreferencia,
     handleSubmit,
+    onCancelar,
 })=>{
     
-    const opcionesHabitos: HabitosOpciones[] = [
-        "Fumador",
-        "Tengo mascotas",
-        "Escucho música fuerte",
-        "Me acuesto tarde",
-        "Trabajo desde casa",
-        "Recibo visitas seguido",
-        "Cocino en casa",
-        "Hago ejercicio en casa",
-    ];
-
-    const opcionesPreferencias: PreferenciaOpciones[] = [
-        "No me molesta que fumen",
-        "No me molestan las mascotas",
-        "Ok con música fuerte",
-        "Ok con horarios nocturnos",
-        "Ok con visitas frecuentes",
-        "Prefiero alguien ordenado",
-        "Prefiero alguien tranquilo",
-        "Prefiero alguien social",
-    ];
+   
 
     const toggleOpcionPreferencia = (opcion: PreferenciaOpciones) => {
         const nuevasOpciones = preferencia.includes(opcion)
@@ -66,7 +48,7 @@ const SegundoFormRegistro: React.FC<SegundoFormRegistroProps>=({
         setHabitos(nuevasOpciones);
     };
     return(
-        <div>
+        <div className="form-container-segundo">
             <h2>Datos faltantes</h2>
             <form onSubmit={handleSubmit} >
                 {/*Edad*/}
@@ -141,6 +123,9 @@ const SegundoFormRegistro: React.FC<SegundoFormRegistroProps>=({
                    
                 <button type="submit">
                     Registrarse
+                </button>
+                <button type="button" onClick={onCancelar}>
+                    Cancelar
                 </button>
             </form>
         </div>

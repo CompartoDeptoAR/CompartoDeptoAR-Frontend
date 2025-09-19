@@ -1,22 +1,23 @@
 import { Routes, Route, Navigate } from "react-router-dom";
-import RegistroPage from "../paginas/Registro/RegistroPage";
+import Layout from "../componentes/Layout/Layout";
 import ProtectedRouter from "./ProtectedRoute";
-import LoginPage from "../paginas/Login/LoginPage";
+import AuthPage from "../paginas/Auth/AuthPage";
+import { useUser } from "../contexts/UsuarioContext";
 
-const isLoggedIn = () => !!localStorage.getItem("token");
+
 
 const Router: React.FC = () => {
+  const { loggedIn } = useUser();
   return (
-     <Routes>
-      {/* Ruta publica de registro */}
-      <Route path="/registro" element={isLoggedIn() ? <Navigate to="/home" replace /> : <RegistroPage />} />
-      <Route path="/login" element={isLoggedIn() ? <Navigate to="/home" replace /> : <LoginPage />} />
+    <Routes>
 
-      {/* Rutas protegidas */}
-      <Route path="/*" element={<ProtectedRouter />} />
+      <Route path="/auth" element={!loggedIn ? <AuthPage /> : <Navigate to="/" replace />}/>
       
-      {/* Redirigir / al home o registro según el estado */}
-      <Route path="/" element={isLoggedIn() ? <Navigate to="/home" replace /> : <Navigate to="/registro" replace />} />
+      <Route element={<Layout />}>
+        <Route path="/*" element={<ProtectedRouter />} />
+      </Route>
+
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 };

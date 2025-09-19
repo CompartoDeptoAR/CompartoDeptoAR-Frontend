@@ -1,22 +1,23 @@
 import React, { useState } from "react";
 
-import SegundoFormRegistro from "../../componentes/FormularioRegistro/SegundoFormRegistro";
+import SegundoFormRegistro from "../../../componentes/FormularioRegistro/SegundoFormRegistro";
 import { useNavigate } from "react-router-dom";
 
-import type { Genero, HabitosOpciones, PreferenciaOpciones, } from "../../modelos/Usuario";
-import PrimerFormRegistro from "../../componentes/FormularioRegistro/PrimerFormRegistro";
-import apiAuth from "../../api/api.auth";
+import type { Genero, HabitosOpciones, PreferenciaOpciones, } from "../../../modelos/Usuario";
+import PrimerFormRegistro from "../../../componentes/FormularioRegistro/PrimerFormRegistro";
+import apiAuth from "../../../api/api.auth";
 
+import '../../../styles/auth.css'
 
-const RegistroPage: React.FC = () => {
+const RegistroPage = ({ onSwitch }: { onSwitch: () => void }) => {
   // Primer formulario
-  const [nombreCompleto, setNombre] = useState<string>("");
+  const [nombreCompleto, setNombreCompleto] = useState<string>("");
   const [correo, setCorreo] = useState<string>("");
-  const [contraseña, setPassword] = useState<string>("");
+  const [contraseña, setContraseña] = useState<string>("");
   const [mostrarPassword, setMostrarPassword] = useState<boolean>(false);
 
   // Segundo formulario (opcional)
-  const [edad, setEdad] = useState<number | undefined>(undefined);
+  const [edad, setEdad] = useState<number>(0);
   const [genero, setGenero] = useState<Genero>("Prefiero no decir");
   const [descripcion, setDescripcion] = useState<string>("");
   const [habitos, setHabitos] = useState<HabitosOpciones[]>([]);
@@ -28,13 +29,13 @@ const RegistroPage: React.FC = () => {
   const togglePassword = () => setMostrarPassword(!mostrarPassword);
 
   // Paso 1: completar el primer formulario
-  const handleSubmitPrimerForm = (e: React.FormEvent) => {
+  const handlePaso1Submit = (e: React.FormEvent) => {
     e.preventDefault();
     setPaso(2); // pasa al formulario opcional
   };
 
   // Paso 2: enviar registro completo
-  const handleSubmitSegundoForm = async (e: React.FormEvent) => {
+  const handleRegistroFinal = async (e: React.FormEvent) => {
     e.preventDefault();
 
     try {
@@ -51,7 +52,8 @@ const RegistroPage: React.FC = () => {
 
       localStorage.setItem("token", data.token);
       localStorage.setItem("rol", data.rol);
-
+      localStorage.setItem("id", data.id);
+      
       navigate("/home");
     } catch (err: any) {
       console.error(err);
@@ -59,26 +61,30 @@ const RegistroPage: React.FC = () => {
     }
   };
 
-
+  const handleCancelarPaso2 = () => {
+    setPaso(1); 
+  };
   return (
-    <div className="container mt-5">
-      {paso === 1 && (
+    <div className={`registro-pasos-container paso-${paso}`}>
+ 
+      <div className="registro-step paso-1">
         <PrimerFormRegistro
           nombreCompleto={nombreCompleto}
           correo={correo}
           contraseña={contraseña}
           mostrarPassword={mostrarPassword}
-          setNombreCompleto={setNombre}
+          setNombreCompleto={setNombreCompleto}
           setCorreo={setCorreo}
-          setContraseña={setPassword}
+          setContraseña={setContraseña}
           togglePassword={togglePassword}
-          handleSubmit={handleSubmitPrimerForm}
+          handleSubmit={handlePaso1Submit}
+          onSwitch={onSwitch}
         />
-      )}
-
-      {paso === 2 && (
+      </div>
+  
+      <div className="registro-step paso-2">
         <SegundoFormRegistro
-          edad={edad || 0}
+          edad={edad}
           genero={genero}
           descripcion={descripcion}
           habitos={habitos}
@@ -88,9 +94,10 @@ const RegistroPage: React.FC = () => {
           setDescripcion={setDescripcion}
           setHabitos={setHabitos}
           setPreferencia={setPreferencia}
-          handleSubmit={handleSubmitSegundoForm}
+          handleSubmit={handleRegistroFinal}
+          onCancelar={handleCancelarPaso2}
         />
-      )}
+      </div>
     </div>
   );
 };

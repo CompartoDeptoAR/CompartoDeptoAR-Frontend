@@ -3,8 +3,6 @@ import type { Genero, HabitosOpciones, PreferenciaOpciones, } from "../modelos/U
 import axiosApi from "./_api";
 
 
-export const getUserRol = () => localStorage.getItem("rol");
-export const isLoggedIn = () => !!localStorage.getItem("token");
 
 
 const apiAuth ={
@@ -26,7 +24,7 @@ const apiAuth ={
             if (preferencia) datos.preferencia = preferencia;
 
             console.log(datos);
-            const result = await axiosApi.post<{ token: string; rol: string }>(
+            const result = await axiosApi.post<{ token: string; rol: string; id:string }>(
                 import.meta.env.VITE_URL_USER,
                 datos
             );
@@ -40,22 +38,23 @@ const apiAuth ={
             throw new Error("Error de conexión");
             }
         },
-        login: async (correo: string, contrasena: string) => {
-            try {
-            const result = await axiosApi.post<{ token: string, rol: string }>(
-                import.meta.env.VITE_URL_AUTH + "/login",
-                { correo, contrasena }
+     login: async (correo: string, contrasena: string, id?: string) => {
+        try {
+            const result = await axiosApi.post<{ token: string; rol: string; id: string }>(
+            import.meta.env.VITE_URL_AUTH + "/login",
+            { correo, contrasena, id }
             );
 
             if (result.status === 200) return result.data;
             throw new Error("Error al iniciar sesión");
-            } catch (error: any) {
+        } catch (error: any) {
             if (error.response) {
-                throw new Error(error.response.data.message || "Credenciales inválidas");
+            throw new Error(error.response.data.message || "Credenciales inválidas");
             }
             throw new Error("Error de conexión");
-            }
+        }
         },
+
        // logout: 
     }
 }

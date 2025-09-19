@@ -1,0 +1,39 @@
+@import './variables.css';
+
+/* Estilos globales */
+body {
+  margin: 0;
+  font-family: var(--fuente-principal);
+  background: linear-gradient(135deg, var(--violeta-secundario), var(--violeta-fondo));
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+/* Transiciones entre páginas */
+.page-transition {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+/* === Botón Cancelar === */
+button {
+  width: 100%;
+  padding: 0.8rem;
+  background: transparent;
+  color: var(--violeta-secundario);
+  border: 2px solid var(--violeta-secundario);
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  background: var(--violeta-secundario);
+  color: white;
+}

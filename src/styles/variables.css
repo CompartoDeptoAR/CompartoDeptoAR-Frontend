@@ -1,0 +1,16 @@
+:root {
+  --violeta-principal: hsl(282, 100%, 36%);
+  --violeta-secundario: #450481e8;
+  --violeta-hover: #7d00e6;
+  --violeta-fondo: #5a2e7e;
+
+  --blanco: #ffffff;
+  --gris-claro: #ccc;
+  --sombra: rgba(0, 0, 0, 0.2);
+
+  --fuente-principal: 'Arial', sans-serif;
+
+  --borde-radius: 12px;
+  --padding: 2rem;
+  --ancho-form: 350px;
+}
