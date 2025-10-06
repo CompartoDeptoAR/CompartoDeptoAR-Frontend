@@ -1,27 +1,44 @@
-import React, { useState } from "react";
-import { opcionesHabitos, opcionesPreferencias, type UsuarioPerfil } from "../../modelos/Usuario";
+import  { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import type { UsuarioPerfil, HabitosUsuario, PreferenciasUsuario } from "../../modelos/Usuario";
 
 interface FormularioPerfilProps {
   perfil: UsuarioPerfil;
-  modo: "view" | "editar"|"verOtro";
+  modo: "view" | "editar" | "verOtro";
   onSubmit?: (usuario: UsuarioPerfil) => void;
 }
 
-const FormularioPerfil: React.FC<FormularioPerfilProps> = ({ perfil, modo, onSubmit }) => {
-  const perfilDefault: UsuarioPerfil = {
-    nombreCompleto: "",
-    edad: 0,
-    genero: "Prefiero no decir",
-    descripcion: "",
-    habitos: [],
-    preferencias: [],
-  };
+// Mapeo de labels legibles a las keys del objeto HabitosUsuario
+const habitosConfig: { key: keyof HabitosUsuario; label: string }[] = [
+  { key: "fumador", label: "Fumador" },
+  { key: "mascotas", label: "Tengo mascotas" },
+  { key: "musicaFuerte", label: "Escucho música fuerte" },
+  { key: "horariosNocturno", label: "Me acuesto tarde" },
+  { key: "visitas", label: "Recibo visitas seguido" },
+  { key: "orden", label: "Soy ordenado" },
+  { key: "tranquilo", label: "Soy tranquilo" },
+  { key: "social", label: "Soy social" },
+  { key: "cocino", label: "Cocino en casa" },
+  { key: "ejercicio", label: "Hago ejercicio en casa" },
+];
 
-  const [formData, setFormData] = useState<UsuarioPerfil>(perfil ?? perfilDefault);
+// Mapeo de labels legibles a las keys del objeto PreferenciasUsuario
+const preferenciasConfig: { key: keyof PreferenciasUsuario; label: string }[] = [
+  { key: "fumador", label: "No me molesta que fumen" },
+  { key: "mascotas", label: "No me molestan las mascotas" },
+  { key: "musicaFuerte", label: "Ok con música fuerte" },
+  { key: "horariosNocturno", label: "Ok con horarios nocturnos" },
+  { key: "visitas", label: "Ok con visitas frecuentes" },
+  { key: "orden", label: "Prefiero alguien ordenado" },
+  { key: "tranquilo", label: "Prefiero alguien tranquilo" },
+  { key: "social", label: "Prefiero alguien social" },
+];
+
+const FormularioPerfil: React.FC<FormularioPerfilProps> = ({ perfil, modo, onSubmit }) => {
+  const [formData, setFormData] = useState<UsuarioPerfil>(perfil);
   const navigate = useNavigate();
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (perfil) {
       setFormData(perfil);
     }
@@ -37,18 +54,24 @@ const FormularioPerfil: React.FC<FormularioPerfilProps> = ({ perfil, modo, onSub
     }));
   };
 
-  const toggleCheckbox = (nombreCampo: "habitos" | "preferencias", valor: string) => {
-    setFormData((prev) => {
-      const actual = prev[nombreCampo] as string[];
-      const nuevo = actual!.includes(valor)
-        ? actual!.filter((item) => item !== valor)
-        : [...actual!, valor];
+  const toggleHabito = (key: keyof HabitosUsuario) => {
+    setFormData((prev) => ({
+      ...prev,
+      habitos: {
+        ...(prev.habitos ?? {}),
+        [key]: !prev.habitos?.[key],
+      },
+    }));
+  };
 
-      return {
-        ...prev,
-        [nombreCampo]: nuevo,
-      };
-    });
+  const togglePreferencia = (key: keyof PreferenciasUsuario) => {
+    setFormData((prev) => ({
+      ...prev,
+      preferencias: {
+        ...(prev.preferencias ?? {}),
+        [key]: !prev.preferencias?.[key],
+      },
+    }));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -58,11 +81,13 @@ const FormularioPerfil: React.FC<FormularioPerfilProps> = ({ perfil, modo, onSub
     }
   };
 
+  const esSoloVista = modo === "view" || modo === "verOtro";
+
   return (
     <form className="form-container" onSubmit={handleSubmit}>
       <div>
         <label>Nombre</label>
-        {modo === "view" ? (
+        {esSoloVista ? (
           <p>{formData.nombreCompleto}</p>
         ) : (
           <input
@@ -77,7 +102,7 @@ const FormularioPerfil: React.FC<FormularioPerfilProps> = ({ perfil, modo, onSub
 
       <div>
         <label>Edad</label>
-        {modo === "view" ? (
+        {esSoloVista ? (
           <p>{formData.edad}</p>
         ) : (
           <input
@@ -94,10 +119,11 @@ const FormularioPerfil: React.FC<FormularioPerfilProps> = ({ perfil, modo, onSub
 
       <div>
         <label>Género</label>
-        {modo === "view" ? (
-          <p>{formData.genero}</p>
+        {esSoloVista ? (
+          <p>{formData.genero || "No especificado"}</p>
         ) : (
           <select name="genero" value={formData.genero} onChange={handleChange} required>
+            <option value="">Seleccione una opción</option>
             <option value="Masculino">Masculino</option>
             <option value="Femenino">Femenino</option>
             <option value="Prefiero no decir">Prefiero no decir</option>
@@ -107,65 +133,101 @@ const FormularioPerfil: React.FC<FormularioPerfilProps> = ({ perfil, modo, onSub
 
       <div>
         <label>Descripción</label>
-        {modo === "view" ? (
-          <p>{formData.descripcion}</p>
+        {esSoloVista ? (
+          <p>{formData.descripcion || "Sin descripción"}</p>
         ) : (
-          <textarea name="descripcion" value={formData.descripcion} onChange={handleChange} />
+          <textarea 
+            name="descripcion" 
+            value={formData.descripcion || ""} 
+            onChange={handleChange}
+            placeholder="Cuéntanos sobre ti..."
+          />
         )}
       </div>
 
       <div>
-        <label>Hábitos</label>
-        {modo === "view" ? (
-          <ul>
-              {formData.habitos!.map((h) => (
-              <li key={h}>{h}</li>
-            ))}
-          </ul>
-        ) : (
-          opcionesHabitos.map((habito) => (
-            <div key={habito}>
-              <label>
-                <input
-                  type="checkbox"
-                  checked={formData.habitos!.includes(habito)}
-                  onChange={() => toggleCheckbox("habitos", habito)}
-                />
-                {habito}
-              </label>
+        <fieldset>
+          <label>Hábitos</label>
+          {esSoloVista ? (
+            <ul>
+              {habitosConfig.map(({ key, label }) => (
+                formData.habitos?.[key] && (
+                  <li key={key}>{label}</li>
+                )
+              ))}
+              {(!formData.habitos || Object.values(formData.habitos).every(v => !v)) && (
+                <li>Sin hábitos especificados</li>
+              )}
+            </ul>
+          ) : (
+            <div>
+              {habitosConfig.map(({ key, label }) => (
+                <div key={key}>
+                  <label>
+                    <input
+                      type="checkbox"
+                      checked={formData.habitos?.[key] || false}
+                      onChange={() => toggleHabito(key)}
+                    />
+                    {label}
+                  </label>
+                </div>
+              ))}
             </div>
-          ))
-        )}
+          )}
+        </fieldset>
       </div>
 
       <div>
-        <label>Preferencias</label>
-        {modo === "view" ? (
-          <ul>
-            {formData.preferencias!.map((p) => (
-              <li key={p}>{p}</li>
-            ))}
-          </ul>
-        ) : (
-          opcionesPreferencias.map((pref) => (
-            <div key={pref}>
-              <label>
-                <input
-                  type="checkbox"
-                  checked={formData.preferencias!.includes(pref)}
-                  onChange={() => toggleCheckbox("preferencias", pref)}
-                />
-                {pref}
-              </label>
+        <fieldset>
+          <label>Preferencias</label>
+          {esSoloVista ? (
+            <ul>
+              {preferenciasConfig.map(({ key, label }) => (
+                formData.preferencias?.[key] && (
+                  <li key={key}>{label}</li>
+                )
+              ))}
+              {(!formData.preferencias || Object.values(formData.preferencias).every(v => !v)) && (
+                <li>Sin preferencias especificadas</li>
+              )}
+            </ul>
+          ) : (
+            <div>
+              {preferenciasConfig.map(({ key, label }) => (
+                <div key={key}>
+                  <label>
+                    <input
+                      type="checkbox"
+                      checked={formData.preferencias?.[key] || false}
+                      onChange={() => togglePreferencia(key)}
+                    />
+                    {label}
+                  </label>
+                </div>
+              ))}
             </div>
-          ))
-        )}
+          )}
+        </fieldset>  
       </div>
 
       <div>
         {modo === "view" && (
           <button type="button" onClick={() => navigate("/perfil-edit")}>
             Editar Perfil
+          </button>
+        )}
+        {modo === "editar" && (
+          <>
+            <button type="submit">Guardar Cambios</button>
+            <button type="button" onClick={() => navigate("/perfil")}>
+              Cancelar
+            </button>
+          </>
+        )}
+        {modo === "verOtro" && (
+          <button type="button" onClick={() => navigate(-1)}>
+            Volver
           </button>
         )}
       </div>

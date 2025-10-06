@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 import type { Genero, HabitosOpciones, PreferenciaOpciones, } from "../../../modelos/Usuario";
 import PrimerFormRegistro from "../../../componentes/FormularioRegistro/PrimerFormRegistro";
-import apiAuth from "../../../api/api.auth";
+import apiAuth from "../../../api/endpoints/auth";
 
 import '../../../styles/auth.css'
 

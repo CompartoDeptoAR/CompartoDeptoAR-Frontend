@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import apiAuth from "../../../api/api.auth";
+import apiAuth from "../../../api/endpoints/auth";
 import'../../../styles/auth.css'
 import { useUser } from "../../../contexts/UsuarioContext";
 

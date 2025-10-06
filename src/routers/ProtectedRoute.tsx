@@ -15,13 +15,12 @@ const ProtectedRouter = () => {
 
   return (
     <Routes>
-      <Route path="/" element={<HomePage />} />
-      <Route path="mi-perfil" element={<PerfilView />} />
-
+      
       {userRol === "USER_ROLE" && (
         <>
           <Route path="publicacion" element={<Publicacion />} />
           <Route path="crear-publicacion" element={<CrearPublicacion />} />
+          <Route path="mi-perfil" element={<PerfilView />} />
         </>
       )}
 

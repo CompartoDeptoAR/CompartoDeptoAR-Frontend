@@ -1,5 +1,5 @@
-import type { UsuarioPerfil } from "../modelos/Usuario";
-import axiosApi from "./_api";
+import type { UsuarioPerfil } from "../../modelos/Usuario";
+import axiosApi from "../config/axios.config";
 
 
 const api = {
@@ -12,8 +12,12 @@ const api = {
             if (result.status === 200) return result.data;
             return undefined as unknown as UsuarioPerfil;
            
-        }
-    
+        },
+        /*
+        editarPerfil:async()=>{
+            const resut= await axiosApi.put()
+          }  
+    */
     }
 }
 
