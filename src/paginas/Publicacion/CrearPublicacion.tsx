@@ -1,30 +1,44 @@
 import { useState } from "react";
 import FormularioPublicacion from "../../componentes/FormularioPublicacion/FormularioPublicacion";
-import type { PreferenciaOpciones } from "../../modelos/Usuario";
+import type { PreferenciasUsuario } from "../../modelos/Usuario";
 
-const CrearPublicacion=()=>{
-    const [titulo, setTitulo] = useState<string>('');
-    const [ubicacion, setUbicacion] = useState<string>('');
-    const [precio, setPrecio] = useState<number>(0);
-    const [descripcion, setDescripcion] = useState<string>('');
-    const [foto, setFoto] = useState<string>('');
-    const [reglas, setReglas] = useState<string>('');
-    const [preferencia, setPreferencia] = useState<PreferenciaOpciones[]>();
-    
-    
-    
-    return(
-        <FormularioPublicacion
-            titulo={titulo}
-            ubicacion={ubicacion}
-            precio={precio}
-            descripcion={descripcion}
-            foto={foto}
-            reglas={reglas}
-            preferencia={preferencia}
-            
-        />
-    )
-}
+const CrearPublicacion = () => {
+  const [publicacion, setPublicacion] = useState({
+    titulo: "",
+    ubicacion: "",
+    precio: 0,
+    descripcion: "",
+    foto: "",
+    reglas: "",
+    preferencia: {} as PreferenciasUsuario,
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setPublicacion((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    // Validaciones
+    if (!publicacion.titulo || !publicacion.ubicacion || !publicacion.precio || !publicacion.descripcion) {
+      alert("Por favor completa todos los campos requeridos.");
+      return;
+    }
+
+    console.log("Publicación enviada:", publicacion);
+    alert("¡Publicación creada exitosamente!");
+    // Acá luego iría la conexión con el backend (POST)
+  };
+
+  return (
+    <FormularioPublicacion
+      publicacion={publicacion}
+      handleChange={handleChange}
+      handleSubmit={handleSubmit}
+    />
+  );
+};
 
 export default CrearPublicacion;

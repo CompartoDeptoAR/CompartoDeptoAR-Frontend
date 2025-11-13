@@ -1,7 +1,5 @@
 export const PUBLIC_ROUTES = [
-  '/auth/login',
-  '/auth/register',
-  '/',
+  '/auth',
 ];
 
 const isPublicRoute = (url: string): boolean => {

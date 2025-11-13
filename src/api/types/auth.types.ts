@@ -1,3 +1,4 @@
+import type { Rol } from "../../modelos/Roles";
 import type { Genero, HabitosUsuario, PreferenciasUsuario } from "../../modelos/Usuario";
 
 export interface LoginRequest {
@@ -7,8 +8,9 @@ export interface LoginRequest {
 
 export interface LoginResponse {
   token: string;
-  rol: string;
-  id: string;
+  rol: Rol[];
+  ID: string;
+  mail?: string;
 }
 
 export interface RegisterRequest {

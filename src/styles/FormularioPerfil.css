@@ -1,0 +1,48 @@
+.form-container {
+  max-width: 600px;
+  margin: 2rem auto;
+  background: #fff;
+  padding: 2rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+.form-container label {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.form-container input,
+.form-container select,
+.form-container textarea {
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.form-container textarea {
+  resize: none;
+  min-height: 80px;
+}
+
+.form-container fieldset {
+  border: 1px solid #dee2e6;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.form-container fieldset label {
+  font-weight: normal;
+}
+
+.form-container ul {
+  padding-left: 1.2rem;
+}
+
+.form-container button {
+  margin-right: 0.5rem;
+}

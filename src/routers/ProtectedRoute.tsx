@@ -1,30 +1,34 @@
 import { Navigate, Route, Routes } from "react-router-dom";
-import HomePage from "../paginas/Home/HomePage";
 import Publicacion from "../paginas/Publicacion/Publicacion";
 import CrearPublicacion from "../paginas/Publicacion/CrearPublicacion";
 import AdminPage from "../paginas/Admin/AdminPage";
-import { useUser } from "../contexts/UsuarioContext";
 import PerfilView from "../paginas/Perfil/PerfilView";
+import { TokenService } from "../services/auth/tokenService";
+import { Rol } from "../modelos/Roles";
+import PerfilEdit from "../paginas/Perfil/PerfilEdit";
 
 const ProtectedRouter = () => {
-  const { loggedIn, rol: userRol } = useUser();
+  const  loggedIn = TokenService.getAuthData();
+  const userRol = TokenService.getUserRol();
   
   if (!loggedIn) {
     return <Navigate to="/auth" replace />;
   }
-
+  const hasRole = (role: Rol) => 
+  Array.isArray(userRol) && userRol.includes(role);
   return (
     <Routes>
       
-      {userRol === "USER_ROLE" && (
+      {hasRole(Rol.USUARIO) && (
         <>
           <Route path="publicacion" element={<Publicacion />} />
           <Route path="crear-publicacion" element={<CrearPublicacion />} />
           <Route path="mi-perfil" element={<PerfilView />} />
+          <Route path="editar-perfil" element={<PerfilEdit />} />
         </>
       )}
 
-      {userRol === "ADMIN_ROLE" && (
+      {hasRole(Rol.ADMIN) && (
         <Route path="admin" element={<AdminPage />} />
       )}
 

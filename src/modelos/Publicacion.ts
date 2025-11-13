@@ -1,4 +1,5 @@
-import type { PreferenciaOpciones } from "./Usuario";
+import type { PreferenciasUsuario } from "./Usuario";
+
 
 export interface Publicacion{
     titulo:string;
@@ -7,7 +8,7 @@ export interface Publicacion{
     descripcion:string;
     foto:string;
     reglas: string;
-    preferencia: PreferenciaOpciones;
+    preferencia: PreferenciasUsuario;
 }
 
 

@@ -1,24 +1,43 @@
+import { data } from "react-router-dom";
 import type { UsuarioPerfil } from "../../modelos/Usuario";
 import axiosApi from "../config/axios.config";
+import { LocalStorageService, STORAGE_KEYS } from "../../services/storage/localStorage.service";
 
 
-const api = {
+const apiUsuario = {
     usuario: {
       
-        perfil: async(usuarioId: string):Promise<UsuarioPerfil>=>{
+        perfil: async():Promise<UsuarioPerfil>=>{
             const result= await axiosApi.get<UsuarioPerfil>(
-                import.meta.env.VITE_URL_USER + usuarioId
+                `${import.meta.env.VITE_URL_USER}/perfil`
             )
-            if (result.status === 200) return result.data;
+            console.log(data)
+            
+            if (result.status === 200) { 
+                LocalStorageService.setObject(STORAGE_KEYS.PREFERENCES, result.data);
+                return result.data;
+            }
             return undefined as unknown as UsuarioPerfil;
            
         },
-        /*
-        editarPerfil:async()=>{
-            const resut= await axiosApi.put()
-          }  
-    */
+        editarPerfil: async ( data: Partial<UsuarioPerfil>): Promise<UsuarioPerfil> => {
+            try {
+                const result = await axiosApi.put<UsuarioPerfil>(
+                `${import.meta.env.VITE_URL_USER}/perfil`,
+                data
+                );
+                return result.data;
+            } catch (error: any) {
+                if (error.response) {
+                throw new Error(
+                    error.response.data.message || "Error al editar perfil"
+                );
+                }
+                throw new Error("Error de conexión");
+            }
+        },
+       
     }
 }
 
-export default api;
+export default apiUsuario;

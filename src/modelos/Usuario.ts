@@ -1,5 +1,5 @@
 import type { Rol } from "./Roles";
-
+export type Genero = "Masculino" | "Femenino" | "Prefiero no decir";
 
 export interface Usuario{
   id?: string;
@@ -19,30 +19,56 @@ export interface UsuarioPerfil {
   preferencias?: PreferenciasUsuario;
 }
 
+export const OPCIONES_HABITOS = [
+  'fumador',
+  'mascotas',
+  'musicaFuerte',
+  'horariosNocturno',
+  'visitas',
+  'orden',
+  'tranquilo',
+  'social',
+  'cocino',
+  'ejercicio',
+] as const;
 
-export const opcionesHabitos = [
-        "Fumador",
-        "Tengo mascotas",
-        "Escucho música fuerte",
-        "Me acuesto tarde",
-        "Trabajo desde casa",
-        "Recibo visitas seguido",
-        "Cocino en casa",
-        "Hago ejercicio en casa",
-    ];
+export const OPCIONES_PREFERENCIAS = [
+  'fumador',
+  'mascotas',
+  'musicaFuerte',
+  'horariosNocturno',
+  'visitas',
+  'orden',
+  'tranquilo',
+  'social',
+] as const;
 
-export const opcionesPreferencias = [
-        "No me molesta que fumen",
-        "No me molestan las mascotas",
-        "Ok con música fuerte",
-        "Ok con horarios nocturnos",
-        "Ok con visitas frecuentes",
-        "Prefiero alguien ordenado",
-        "Prefiero alguien tranquilo",
-        "Prefiero alguien social",
-    ];
+export type HabitoKey = typeof OPCIONES_HABITOS[number];
+export type PreferenciaKey = typeof OPCIONES_PREFERENCIAS[number];
 
-export type Genero = "Masculino" | "Femenino" | "Prefiero no decir";
+export const LABELS_HABITOS: Record<HabitoKey, string> = {
+  fumador: "Fumador",
+  mascotas: "Tengo mascotas",
+  musicaFuerte: "Escucho música fuerte",
+  horariosNocturno: "Horarios nocturnos",
+  visitas: "Recibo visitas frecuentes",
+  orden: "Soy ordenado",
+  tranquilo: "Tranquilo",
+  social: "Social",
+  cocino: "Cocino regularmente",
+  ejercicio: "Hago ejercicio",
+};
+
+export const LABELS_PREFERENCIAS: Record<PreferenciaKey, string> = {
+  fumador: "Acepto fumadores",
+  mascotas: "Acepto mascotas",
+  musicaFuerte: "Acepto música fuerte",
+  horariosNocturno: "Acepto horarios nocturnos",
+  visitas: "Acepto visitas",
+  orden: "Prefiero orden",
+  tranquilo: "Prefiero tranquilidad",
+  social: "Prefiero ambiente social",
+};
 
 export interface HabitosUsuario {
   fumador?: boolean;
@@ -55,6 +81,7 @@ export interface HabitosUsuario {
   social?:boolean;
   cocino?: boolean;
   ejercicio?: boolean;
+  [key: string]: boolean | undefined; 
 }
 
 export interface PreferenciasUsuario {
@@ -66,4 +93,5 @@ export interface PreferenciasUsuario {
   orden?: boolean;
   tranquilo?:boolean;
   social?:boolean;
+  [key: string]: boolean | undefined; 
 }

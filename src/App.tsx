@@ -5,14 +5,10 @@ import Router from "./routers/Router";
 
 const App: React.FC =()=>{
     return(
-        <div>
-            <LoadingProvider>
-                <GlobalLoader />
-                <Router />
-            </LoadingProvider>
-            
-            
-        </div>
+        <LoadingProvider>
+            <GlobalLoader />
+            <Router />
+        </LoadingProvider>
          
     );
 };

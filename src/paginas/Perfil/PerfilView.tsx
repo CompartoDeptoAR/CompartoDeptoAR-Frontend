@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import api from "../../api/endpoints/usuario";
 import FormularioPerfil from "../../componentes/FormularioPerfil/FormularioPerfil";
-import { useUser } from "../../contexts/UsuarioContext"
+
 import type { UsuarioPerfil } from "../../modelos/Usuario";
+import { TokenService } from "../../services/auth/tokenService";
 
 const PerfilView: React.FC = () => {
-  const { id: userId } = useUser();  
+  const  userId  = TokenService.getUserId();  
   const [perfil, setPerfil] = useState<UsuarioPerfil>();
 
   useEffect(() => {
@@ -13,7 +14,7 @@ const PerfilView: React.FC = () => {
 
     const fetchData = async () => {
       try {
-        const data = await api.usuario.perfil(userId); 
+        const data = await api.usuario.perfil(); 
         setPerfil(data);
       } catch (error) {
         console.error(error);
@@ -21,7 +22,7 @@ const PerfilView: React.FC = () => {
     };
 
     fetchData();
-  }, [userId]);
+  }, []);
 
   if (!perfil) return <div>Cargando...</div>;
 

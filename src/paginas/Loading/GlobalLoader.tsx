@@ -1,3 +1,4 @@
+
 import React from "react";
 import { useLoading } from "../../contexts/LoadingContext";
 
@@ -15,3 +16,4 @@ const GlobalLoader: React.FC = () => {
 };
 
 export default GlobalLoader;
+
