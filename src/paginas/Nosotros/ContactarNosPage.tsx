@@ -1,12 +1,12 @@
 import React, { useState } from "react";
+import axios from "axios";
 import { Container, Form, Button, Alert } from "react-bootstrap";
 import { TokenService } from "../../services/auth/tokenService";
 
 const ContactarNosPage: React.FC = () => {
-
   const authData = TokenService.getAuthData();
 
-  const [email, setEmail] = useState(authData?.email || "");
+  const [email, setEmail] = useState(authData?.mail || "");
   const [mensaje, setMensaje] = useState("");
   const [enviado, setEnviado] = useState(false);
   const [error, setError] = useState("");
@@ -14,13 +14,11 @@ const ContactarNosPage: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Validación simple
     if (!mensaje.trim()) {
       setError("El mensaje no puede estar vacío.");
       return;
     }
 
-    // Contar palabras
     const palabras = mensaje.trim().split(/\s+/).length;
     if (palabras > 300) {
       setError("El mensaje no puede superar las 300 palabras.");
@@ -28,18 +26,16 @@ const ContactarNosPage: React.FC = () => {
     }
 
     setError("");
-    try {
-      // Simulación de envío
-      console.log({
-        correo: email,
-        mensaje,
-      });
 
-      // Aquí podrías llamar a tu endpoint real:
-      // await apiContacto.enviarMensaje({ correo: email, mensaje });
+    try {
+      await axios.post("http://localhost:3000/api/contacto", {
+        mail: email,
+        mensaje: mensaje,
+      });
 
       setEnviado(true);
       setMensaje("");
+
     } catch (err: any) {
       setError("Error al enviar el mensaje. Intenta nuevamente.");
     }
@@ -71,7 +67,7 @@ const ContactarNosPage: React.FC = () => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            disabled={!!authData?.email} // 🔒 bloqueado si está logueado
+            disabled={!!authData?.mail}
           />
         </Form.Group>
 
