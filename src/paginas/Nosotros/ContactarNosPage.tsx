@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Container, Form, Button, Alert } from "react-bootstrap";
 import { TokenService } from "../../services/auth/tokenService";
-import apiContacto from "../../api/endpoints/contacto";
+import apiContacto from "../../api/endpoints/contacto"; 
 
 const ContactarNosPage: React.FC = () => {
   const datosAuth = TokenService.getAuthData();
@@ -42,7 +42,6 @@ const ContactarNosPage: React.FC = () => {
     } catch (err: any) {
       console.error("Error al enviar el mensaje:", err);
       setError(err.message || "Ocurrió un error desconocido al enviar el mensaje.");
-
     } finally {
       setCargando(false);
     }
