@@ -1,15 +1,18 @@
 import React, { useState } from "react";
+import axios from "axios";
 import { Container, Form, Button, Alert } from "react-bootstrap";
 import { TokenService } from "../../services/auth/tokenService";
-import axiosApi from "../../api/config/axios.config";
+
+const URL_BASE_API = `http://localhost:3000`;
 
 const ContactarNosPage: React.FC = () => {
-  const authData = TokenService.getAuthData();
+  const datosAuth = TokenService.getAuthData();
 
-  const [email, setEmail] = useState(authData?.mail || "");
+  const [email, setEmail] = useState(datosAuth?.mail || "");
   const [mensaje, setMensaje] = useState("");
   const [enviado, setEnviado] = useState(false);
   const [error, setError] = useState("");
+  const [cargando, setCargando] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -19,31 +22,34 @@ const ContactarNosPage: React.FC = () => {
       return;
     }
 
-    const palabras = mensaje.trim().split(/\s+/).length;
-    if (palabras > 300) {
+    const cantidadPalabras = mensaje.trim().split(/\s+/).length;
+    if (cantidadPalabras > 300) {
       setError("El mensaje no puede superar las 300 palabras.");
       return;
     }
 
     setError("");
+    setCargando(true); 
 
     try {
-      await axiosApi.post("/api/contacto", {
+      await axios.post(`${URL_BASE_API}/api/contacto`, { 
         mail: email,
         mensaje: mensaje,
       });
 
       setEnviado(true);
       setMensaje("");
+
     } catch (err: any) {
       console.error("Error al enviar:", err);
+      // Recuerda que si el backend no está corriendo, verás 'ERR_NETWORK' o 'ECONNREFUSED'
       setError("Error al enviar el mensaje. Intenta nuevamente.");
+    } finally {
+      setCargando(false);
     }
   };
 
-  const palabrasCount =
-    mensaje.trim() === "" ? 0 : mensaje.trim().split(/\s+/).length;
-
+  const contadorPalabras = mensaje.trim() === "" ? 0 : mensaje.trim().split(/\s+/).length;
   return (
     <Container className="my-5" style={{ maxWidth: "600px" }}>
       <h2 className="text-center mb-4">Contáctanos</h2>
@@ -70,7 +76,7 @@ const ContactarNosPage: React.FC = () => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            disabled={!!authData?.mail}
+            disabled={!!datosAuth?.mail}
           />
         </Form.Group>
 
@@ -84,15 +90,16 @@ const ContactarNosPage: React.FC = () => {
             value={mensaje}
             onChange={(e) => setMensaje(e.target.value)}
             required
+            disabled={cargando}
           />
           <Form.Text className="text-muted">
-            {palabrasCount} / 300 palabras
+            {contadorPalabras} / 300 palabras
           </Form.Text>
         </Form.Group>
 
         <div className="text-center">
-          <Button variant="primary" type="submit">
-            Enviar mensaje
+          <Button variant="primary" type="submit" disabled={cargando}>
+            {cargando ? 'Enviando...' : 'Enviar mensaje'}
           </Button>
         </div>
       </Form>
