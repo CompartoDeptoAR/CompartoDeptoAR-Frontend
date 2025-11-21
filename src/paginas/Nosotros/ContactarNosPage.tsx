@@ -1,9 +1,7 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { Container, Form, Button, Alert } from "react-bootstrap";
 import { TokenService } from "../../services/auth/tokenService";
-
-const URL_BASE_API = `http://localhost:3000`;
+import apiContacto from "../../api/endpoints/contacto";
 
 const ContactarNosPage: React.FC = () => {
   const datosAuth = TokenService.getAuthData();
@@ -32,24 +30,26 @@ const ContactarNosPage: React.FC = () => {
     setCargando(true); 
 
     try {
-      await axios.post(`${URL_BASE_API}/api/contacto`, { 
+      await apiContacto.contacto.enviarMensaje({ 
         mail: email,
         mensaje: mensaje,
       });
 
       setEnviado(true);
       setMensaje("");
+      setError(""); 
 
     } catch (err: any) {
-      console.error("Error al enviar:", err);
-      // Recuerda que si el backend no está corriendo, verás 'ERR_NETWORK' o 'ECONNREFUSED'
-      setError("Error al enviar el mensaje. Intenta nuevamente.");
+      console.error("Error al enviar el mensaje:", err);
+      setError(err.message || "Ocurrió un error desconocido al enviar el mensaje.");
+
     } finally {
       setCargando(false);
     }
   };
 
   const contadorPalabras = mensaje.trim() === "" ? 0 : mensaje.trim().split(/\s+/).length;
+
   return (
     <Container className="my-5" style={{ maxWidth: "600px" }}>
       <h2 className="text-center mb-4">Contáctanos</h2>
