@@ -46,3 +46,38 @@
 .form-container button {
   margin-right: 0.5rem;
 }
+
+
+.form-check {
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.form-check-input {
+  cursor: pointer;
+  margin-top: 0;
+}
+
+.form-check-label {
+  cursor: pointer;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+
+fieldset {
+  background-color: #f8f9fa;
+}
+
+fieldset legend {
+  font-weight: 600;
+  color: #495057;
+  padding: 0 0.5rem;
+}
+
+
+@media (max-width: 768px) {
+  .form-check-label {
+    font-size: 0.9rem;
+  }
+}

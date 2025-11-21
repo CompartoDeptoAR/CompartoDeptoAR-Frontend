@@ -3,13 +3,14 @@ import { Navbar, Nav, Form, FormControl, Button, NavDropdown, Badge } from "reac
 import { Bell, MessageCircle, Settings } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { TokenService } from "../../services/auth/tokenService";
+import apiAuth from "../../api/endpoints/auth";
 
 const NavbarApp: React.FC = () => {
   const navigate = useNavigate();
   const authData = TokenService.getAuthData(); 
   const isLoggedIn = !!authData; 
     function cerrarSesion() {
-        TokenService.clearAuthData()
+        apiAuth.auth.logout();
         navigate("/");
     }
   return (

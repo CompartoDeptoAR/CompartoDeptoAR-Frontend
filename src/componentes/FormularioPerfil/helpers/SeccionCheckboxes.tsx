@@ -1,4 +1,5 @@
 
+
 interface ConfigCheckbox<T> {
   key: keyof T;
   label: string;
@@ -13,7 +14,7 @@ interface SeccionCheckboxesProps<T> {
   textoVacio?: string;
 }
 
-function SeccionCheckboxes<T extends Record<string, boolean | undefined>>({
+function SeccionCheckboxes<T>({
   titulo,
   config,
   datos,
@@ -35,16 +36,26 @@ function SeccionCheckboxes<T extends Record<string, boolean | undefined>>({
             {!tieneAlgunValorTrue && <li>{textoVacio}</li>}
           </ul>
         ) : (
-          <div className="row">
+          <div className="row g-2">
             {config.map(({ key, label }) => (
-              <div key={String(key)} className="col-6 form-check">
-                <input
-                  type="checkbox"
-                  className="form-check-input"
-                  checked={datos?.[key] || false}
-                  onChange={() => onToggle(key)}
-                />
-                <label className="form-check-label">{label}</label>
+              <div key={String(key)} className="col-12 col-md-6">
+                <div className="form-check d-flex align-items-center">
+                  <input
+                    type="checkbox"
+                    id={`checkbox-${String(key)}`}
+                    className="form-check-input me-2 flex-shrink-0"
+                    style={{ width: '20px', height: '20px' }}
+                    checked={Boolean(datos?.[key])}
+                    onChange={() => onToggle(key)}
+                  />
+                  <label 
+                    htmlFor={`checkbox-${String(key)}`}
+                    className="form-check-label mb-0"
+                    style={{ cursor: 'pointer', userSelect: 'none' }}
+                  >
+                    {label}
+                  </label>
+                </div>
               </div>
             ))}
           </div>

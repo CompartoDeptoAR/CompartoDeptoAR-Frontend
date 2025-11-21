@@ -66,8 +66,11 @@ const apiAuth = {
         throw new Error("Error de conexión");
       }
     },
-    logout: () => {
+    logout: (mostrarMensaje=false) => {
       TokenService.clearAuthData();
+      if(mostrarMensaje){
+        window.alert('Tu sesión ha expirado. Por favor, inicia sesión nuevamente.')
+      }
     },
   },
 };

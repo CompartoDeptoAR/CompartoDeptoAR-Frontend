@@ -1,84 +1,134 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+
 import apiAuth from "../../../api/endpoints/auth";
 import type { LoginRequest } from "../../../api/types/auth.types";
 import { TokenService } from "../../../services/auth/tokenService";
+import { useToast } from "../../../componentes/ToastNotification/useToast";
+import ToastNotification from "../../../componentes/ToastNotification/ToastNotification";
 
 const LoginPage = ({ onSwitch }: { onSwitch: () => void }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [mostrarPassword, setMostrarPassword] = useState(false);
-  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const { saveAuthData }= TokenService;
+  const { saveAuthData } = TokenService;
+  const { toast, showSuccess, showError, hideToast } = useToast();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    setErrorMsg(null);
+    setLoading(true);
 
     try {
       const req: LoginRequest = { correo: email, contrasena: password };
       const data = await apiAuth.auth.login(req);
 
-      saveAuthData( data );
-      navigate("/", { replace: true });
+      saveAuthData(data);
+      
+      showSuccess("¡Inicio de sesión exitoso!");
+
+      
+      setTimeout(() => {
+        navigate("/", { replace: true });
+      }, 1000);
     } catch (err: any) {
       console.error(err);
-      setErrorMsg(err.message || "Error al iniciar sesión");
+      
+      
+      let errorMessage = "Error al iniciar sesión";
+      
+      if (err.response) {
+       
+        const backendError = err.response.data?.error || err.response.data?.message;
+        const statusCode = err.response.status;
+        
+        errorMessage = `Error ${statusCode}: ${backendError || "No se pudo iniciar sesión"}`;
+      } else if (err.message) {
+        
+        errorMessage = err.message;
+      }
+      
+      showError(errorMessage);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <form onSubmit={handleLogin} className="form-container page-transition">
-      <h2 className="form-title">Iniciar sesión</h2>
+    <>
+      <form onSubmit={handleLogin} className="form-container page-transition">
+        <h2 className="form-title">Iniciar sesión</h2>
 
-      {errorMsg && <p className="error">{errorMsg}</p>}
-
-      <div>
-        <label>Email</label>
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="Email"
-          required
-        />
-      </div>
-
-      <div>
-        <label>Contraseña</label>
         <div>
+          <label>Email</label>
           <input
-            type={mostrarPassword ? "text" : "password"}
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="********"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Email"
             required
-            minLength={8}
-            pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$"
-            title="La contraseña debe tener al menos 8 caracteres, incluyendo mayúsculas, minúsculas y un número"
+            disabled={loading}
           />
-          <button type="button" onClick={() => setMostrarPassword(!mostrarPassword)}>
-            {mostrarPassword ? "Ocultar" : "Ver"}
-          </button>
         </div>
-      </div>
 
-      <button type="submit">Ingresar</button>
+        <div>
+          <label>Contraseña</label>
+          <div>
+            <input
+              type={mostrarPassword ? "text" : "password"}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="********"
+              required
+              minLength={8}
+              pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$"
+              title="La contraseña debe tener al menos 8 caracteres, incluyendo mayúsculas, minúsculas y un número"
+              disabled={loading}
+            />
+            <button 
+              type="button" 
+              onClick={() => setMostrarPassword(!mostrarPassword)}
+              disabled={loading}
+            >
+              {mostrarPassword ? "Ocultar" : "Ver"}
+            </button>
+          </div>
+        </div>
 
-      <p>
-        ¿No tenés cuenta?
-        <button type="button" onClick={onSwitch} >
-          Registrate
+        <button type="submit" disabled={loading}>
+          {loading ? "Ingresando..." : "Ingresar"}
         </button>
-      </p>
-      <p>
-        ¿Olvidaste tu contraseña?
-         <a href="#" onClick={e => { e.preventDefault(); onSwitch(); }}>
-          Recuperar contraseña
-        </a>
-      </p>
-    </form>
+
+        <p>
+          ¿No tenés cuenta?
+          <button type="button" onClick={onSwitch} disabled={loading}>
+            Registrate
+          </button>
+        </p>
+        
+
+        <p>
+          ¿Olvidaste tu contraseña?
+          <a
+            href="#"
+            onClick={(e) => {
+              e.preventDefault();
+              onSwitch();
+            }}
+          >
+            Recuperar contraseña
+          </a>
+        </p>
+      </form>
+
+      <ToastNotification
+        show={toast.show}
+        message={toast.message}
+        type={toast.type}
+        onClose={hideToast}
+      />
+    </>
   );
 };
 

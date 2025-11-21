@@ -1,0 +1,51 @@
+.sticky-top {
+  position: sticky;
+  top: 20px;
+  z-index: 10;
+}
+
+.text-justify {
+  text-align: justify;
+}
+
+.star-interactive {
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.star-interactive:hover {
+  transform: scale(1.2);
+}
+
+
+.card {
+  border: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card-body {
+  padding: 1.5rem;
+}
+
+
+@media (max-width: 991px) {
+  .sticky-top {
+    position: relative;
+    top: 0;
+  }
+}
+
+
+.img-fluid {
+  transition: transform 0.3s ease;
+}
+
+.img-fluid:hover {
+  transform: scale(1.02);
+}
+
+/* Info badges */
+.alert-info {
+  background-color: #e7f3ff;
+  border-color: #b3d9ff;
+  color: #004085;
+}

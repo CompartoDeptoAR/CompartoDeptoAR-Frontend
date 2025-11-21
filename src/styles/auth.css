@@ -1,6 +1,6 @@
 @import './variables.css';
 
-/* ===== Raíz de login/register ===== */
+
 .auth-page {
   margin: 0;
   font-family: var(--fuente-principal);
@@ -21,7 +21,7 @@
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* === Botón base dentro de auth === */
+/* === Boton base dentro de auth === */
 .auth-page button {
   width: 100%;
   padding: 0.8rem;

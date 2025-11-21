@@ -1,6 +1,5 @@
 @import './variables.css';
 
-/* Estilos globales */
 body {
   margin: 0;
   font-family: var(--fuente-principal);
@@ -11,7 +10,7 @@ body {
   height: 100vh;
 }
 
-/* Transiciones entre páginas */
+
 .page-transition {
   animation: fadeIn 0.5s ease-in-out;
 }

@@ -1,11 +1,12 @@
 import { Navigate, Route, Routes } from "react-router-dom";
-import Publicacion from "../paginas/Publicacion/Publicacion";
+import Publicacion from "../paginas/Publicacion/VerPublicacion";
 import CrearPublicacion from "../paginas/Publicacion/CrearPublicacion";
 import AdminPage from "../paginas/Admin/AdminPage";
 import PerfilView from "../paginas/Perfil/PerfilView";
 import { TokenService } from "../services/auth/tokenService";
 import { Rol } from "../modelos/Roles";
 import PerfilEdit from "../paginas/Perfil/PerfilEdit";
+import EditarPublicacion from "../paginas/Publicacion/EditarPublicacion";
 
 const ProtectedRouter = () => {
   const  loggedIn = TokenService.getAuthData();
@@ -25,6 +26,9 @@ const ProtectedRouter = () => {
           <Route path="crear-publicacion" element={<CrearPublicacion />} />
           <Route path="mi-perfil" element={<PerfilView />} />
           <Route path="editar-perfil" element={<PerfilEdit />} />
+          <Route path="editar-publicacion" element={<EditarPublicacion/>}/>
+          <Route path="favoritos" />
+          <Route path="mis-publicaciones" />
         </>
       )}
 

@@ -87,6 +87,7 @@ export class TokenService {
     LocalStorageService.remove(STORAGE_KEYS.USER_ROL);
     LocalStorageService.remove(STORAGE_KEYS.USER_MAIL);
     LocalStorageService.remove(STORAGE_KEYS.REFRESH_TOKEN);
+    LocalStorageService.remove(STORAGE_KEYS.PREFERENCES);
   }
 
  

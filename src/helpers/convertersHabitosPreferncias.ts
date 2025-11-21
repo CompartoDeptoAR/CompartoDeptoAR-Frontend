@@ -1,8 +1,7 @@
 import { OPCIONES_HABITOS, OPCIONES_PREFERENCIAS, type HabitoKey, type HabitosUsuario, type PreferenciaKey, type PreferenciasUsuario } from "../modelos/Usuario";
 
-/**
- * Convierte un array de strings a objeto de hábitos
- */
+
+
 export const arrayToHabitos = (arr: string[]): HabitosUsuario => {
   const habitos: HabitosUsuario = {};
   arr.forEach(item => {
@@ -13,9 +12,7 @@ export const arrayToHabitos = (arr: string[]): HabitosUsuario => {
   return habitos;
 };
 
-/**
- * Convierte objeto de hábitos a array de strings
- */
+
 export const habitosToArray = (habitos?: HabitosUsuario): HabitoKey[] => {
   if (!habitos) return [];
   return Object.entries(habitos)
@@ -23,9 +20,7 @@ export const habitosToArray = (habitos?: HabitosUsuario): HabitoKey[] => {
     .map(([key]) => key as HabitoKey);
 };
 
-/**
- * Convierte un array de strings a objeto de preferencias
- */
+
 export const arrayToPreferencias = (arr: string[]): PreferenciasUsuario => {
   const preferencias: PreferenciasUsuario = {};
   arr.forEach(item => {
@@ -36,9 +31,7 @@ export const arrayToPreferencias = (arr: string[]): PreferenciasUsuario => {
   return preferencias;
 };
 
-/**
- * Convierte objeto de preferencias a array de strings
- */
+
 export const preferenciasToArray = (preferencias?: PreferenciasUsuario): PreferenciaKey[] => {
   if (!preferencias) return [];
   return Object.entries(preferencias)
