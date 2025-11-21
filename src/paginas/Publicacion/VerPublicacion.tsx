@@ -67,11 +67,10 @@ const VerPublicacion = () => {
       return;
     }
 
-
     navigate(`/chat/${publicacion?.usuarioId}`);
   };
 
-  const handleSubmitCalificacion = async (calificacion: number, comentario: string) => {
+  const handleEnviarCalificacion = async (calificacion: number, comentario: string) => {
     if (!usuarioActualId) {
       showError("Debes iniciar sesión para calificar");
       return;
@@ -102,11 +101,7 @@ const VerPublicacion = () => {
   if (loading) {
     return (
       <div className="container mt-5 text-center">
-        <div
-          className="spinner-border text-primary"
-          role="status"
-          style={{ width: "3rem", height: "3rem" }}
-        >
+        <div className="spinner-border text-primary" role="status" style={{ width: "3rem", height: "3rem" }}>
           <span className="visually-hidden">Cargando...</span>
         </div>
         <p className="mt-3 text-muted">Cargando publicación...</p>
@@ -128,7 +123,10 @@ const VerPublicacion = () => {
     );
   }
 
-  const puedeCalificar =usuarioActualId && usuarioActualId !== publicacion.usuarioId;
+  const puedeCalificar =
+    !!usuarioActualId &&
+    usuarioActualId !== publicacion.usuarioId &&
+    !publicacion.yaCalifico; // opcional, si lo manejás en backend
 
   return (
     <>
@@ -138,6 +136,8 @@ const VerPublicacion = () => {
         usuarioId={publicacion.usuarioId!}
         calificacionPromedio={promedio}
         onContactar={handleContactar}
+        puedeCalificar={puedeCalificar}
+        onEnviarCalificacion={handleEnviarCalificacion}
       />
 
       <ToastNotification

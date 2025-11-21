@@ -87,6 +87,13 @@ const EditarPublicacion = () => {
     setPublicacion((prev) => ({ ...prev, localidad }));
   };
 
+  const handleFotoChange = (fotos: string[]) => {
+  setPublicacion((prev) => ({
+    ...prev,
+    foto: fotos,
+  }));
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -163,7 +170,6 @@ const EditarPublicacion = () => {
       </div>
     );
   }
-
   return (
     <>
       <FormularioPublicacion

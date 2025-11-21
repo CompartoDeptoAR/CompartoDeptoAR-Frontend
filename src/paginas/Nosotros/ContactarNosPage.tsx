@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { Container, Form, Button, Alert } from "react-bootstrap";
 import { TokenService } from "../../services/auth/tokenService";
+import axiosApi from "../../api/config/axios.config";
 
 const ContactarNosPage: React.FC = () => {
   const authData = TokenService.getAuthData();
@@ -28,7 +28,7 @@ const ContactarNosPage: React.FC = () => {
     setError("");
 
     try {
-      await axios.post("http://localhost:3000/api/contacto", {
+      await axiosApi.post("/api/contacto", { //Local: http://localhost:3000/api/contacto
         mail: email,
         mensaje: mensaje,
       });
@@ -40,6 +40,8 @@ const ContactarNosPage: React.FC = () => {
       setError("Error al enviar el mensaje. Intenta nuevamente.");
     }
   };
+
+  const palabrasCount = mensaje.trim() === "" ? 0 : mensaje.trim().split(/\s+/).length;
 
   return (
     <Container className="my-5" style={{ maxWidth: "600px" }}>
@@ -83,7 +85,7 @@ const ContactarNosPage: React.FC = () => {
             required
           />
           <Form.Text className="text-muted">
-            {mensaje.trim().split(/\s+/).length} / 300 palabras
+            {palabrasCount} / 300 palabras
           </Form.Text>
         </Form.Group>
 

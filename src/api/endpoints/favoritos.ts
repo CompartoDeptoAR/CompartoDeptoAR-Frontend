@@ -10,7 +10,7 @@ const apiFavorito = {
                     throw new Error('No hay token de autenticación');
                 }
 
-                const response = await fetch(`${API_BASE_URL}/favoritos`, {
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/favoritos`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -42,7 +42,7 @@ const apiFavorito = {
                     throw new Error('No hay token de autenticación');
                 }
 
-                const response = await fetch(`${API_BASE_URL}/favoritos/${publicacionId}`, {
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/favoritos/${publicacionId}`, {
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json',
@@ -73,7 +73,7 @@ const apiFavorito = {
                     throw new Error('No hay token de autenticación');
                 }
 
-                const response = await fetch(`${API_BASE_URL}/favoritos`, {
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/favoritos`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',

@@ -4,6 +4,7 @@ import type { HabitosUsuario, PreferenciasUsuario, Usuario } from "./Usuario";
 export type EstadoPublicacion = "activa" | "pausada" | "eliminada";
 
 export interface PublicacionResponce {
+  [x: string]: any;
   id: string;
   titulo: string;
   descripcion: string;

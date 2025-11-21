@@ -3,7 +3,7 @@ import React, { createContext, useState, useContext } from "react";
 
 const LoadingContext = createContext({
   loading: false,
-  setLoading: (state: boolean) => {}
+  setLoading: (_state: boolean) => {}
 });
 
 export const LoadingProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
