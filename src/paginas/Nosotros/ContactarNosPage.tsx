@@ -28,20 +28,21 @@ const ContactarNosPage: React.FC = () => {
     setError("");
 
     try {
-      await axiosApi.post("/api/contacto", { //Local: http://localhost:3000/api/contacto
+      await axiosApi.post("/api/contacto", {
         mail: email,
         mensaje: mensaje,
       });
 
       setEnviado(true);
       setMensaje("");
-
     } catch (err: any) {
+      console.error("Error al enviar:", err);
       setError("Error al enviar el mensaje. Intenta nuevamente.");
     }
   };
 
-  const palabrasCount = mensaje.trim() === "" ? 0 : mensaje.trim().split(/\s+/).length;
+  const palabrasCount =
+    mensaje.trim() === "" ? 0 : mensaje.trim().split(/\s+/).length;
 
   return (
     <Container className="my-5" style={{ maxWidth: "600px" }}>
