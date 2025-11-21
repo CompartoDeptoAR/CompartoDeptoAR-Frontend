@@ -11,7 +11,7 @@ const axiosApi = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
-  timeout: 15000,
+  timeout: 45000,
 });
 
 export default axiosApi;
