@@ -1,8 +1,8 @@
-import type { Publicacion, PublicacionResponce,  } from "../../modelos/Publicacion";
+import type { Publicacion, PublicacionResponce, PublicacionResumida,  } from "../../modelos/Publicacion";
 import axiosApi from "../config/axios.config";
 
 interface ResultadoPaginado {
-  publicaciones: Publicacion[];
+  publicaciones: PublicacionResumida[];
   lastId?: string;
 }
 
@@ -19,7 +19,7 @@ const apiPublicacion = {
   
     publicacion:{
 
-        crearPublicacion: async (data: Publicacion):Promise<Publicacion> => {
+        crearPublicacion: async (data: Partial<Publicacion>):Promise<Publicacion> => {
         try {
             const result = await axiosApi.post<Publicacion>(`${urlApi}/`, data);
             return result.data;
@@ -27,8 +27,8 @@ const apiPublicacion = {
             throw new Error(error.response?.data?.error || "Error al crear publicación");
         }
         },
-        misPublicaciones: async (): Promise<Publicacion[]> => {
-            const res = await axiosApi.get<Publicacion[]>(`${urlApi}/misPublicaciones`);
+        misPublicaciones: async (): Promise<PublicacionResumida[]> => {
+            const res = await axiosApi.get<PublicacionResumida[]>(`${urlApi}/misPublicaciones`);
             return res.data;
         },
         

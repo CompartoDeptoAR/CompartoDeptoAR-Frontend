@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import TodasLasPublicaciones from "../Publicacion/Listar/TodasLasPublicaciones";
 
 
 const HomePage =()=>{
@@ -11,6 +12,7 @@ const HomePage =()=>{
             <button className="btn btn-primary" onClick={() => navigate("/crear-publicacion")}>
                 Nueva Publicación
             </button>
+            <TodasLasPublicaciones/>
         </div>
     )
 }

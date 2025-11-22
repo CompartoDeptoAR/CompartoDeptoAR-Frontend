@@ -1,0 +1,56 @@
+.publicacion-card {
+  transition: all 0.3s ease;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.publicacion-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2) !important;
+}
+
+.publicacion-card .card-img-top {
+  transition: transform 0.3s ease;
+}
+
+.publicacion-card:hover .card-img-top {
+  transform: scale(1.05);
+}
+
+.publicacion-card .card-body {
+  min-height: 200px;
+}
+
+.publicacion-card .card-title {
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 0.5rem;
+}
+
+.publicacion-card .card-text {
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+/* Animación para los botones de acción */
+.publicacion-card .btn {
+  transition: all 0.2s ease;
+}
+
+.publicacion-card .btn:hover {
+  transform: scale(1.05);
+}
+
+/* Efecto para el badge de precio */
+.publicacion-card .badge {
+  font-weight: 600;
+  padding: 0.5rem 0.75rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .publicacion-card .card-body {
+    min-height: auto;
+  }
+}

@@ -13,8 +13,8 @@ const Footer: React.FC = () => {
             <a href="/nosotros" className="text-light text-decoration-none me-3">
               Nosotros
             </a>
-            <a href="/contact" className="text-light text-decoration-none">
-              Contacto
+            <a href="/contactanos" className="text-light text-decoration-none">
+              Contactanos
             </a>
           </Col>
         </Row>

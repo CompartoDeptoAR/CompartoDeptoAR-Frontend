@@ -56,9 +56,10 @@ const NavbarApp: React.FC = () => {
           <NavDropdown title="Mi Cuenta" align="end" id="dropdown-usuario">
             <NavDropdown.Item onClick={() => navigate("/mi-perfil")}>Perfil</NavDropdown.Item>
             <NavDropdown.Item onClick={() => navigate("/contactos")}>Contactos</NavDropdown.Item>
-            <NavDropdown.Item onClick={() => navigate("/crear-publicacion")}>Mis publicaciones</NavDropdown.Item>
+            <NavDropdown.Item onClick={() => navigate("/mis-publicaciones")}>Mis publicaciones</NavDropdown.Item>
+            <NavDropdown.Item onClick={() => navigate("mis-favorito")}>Mis Favoritos</NavDropdown.Item>
             <NavDropdown.Divider />
-            <NavDropdown.Item onClick={() => navigate("/configuración")}>
+            <NavDropdown.Item onClick={() => navigate("/configuracion")}>
               <Settings size={16} className="me-2" /> Configuración
             </NavDropdown.Item>
             <NavDropdown.Divider />

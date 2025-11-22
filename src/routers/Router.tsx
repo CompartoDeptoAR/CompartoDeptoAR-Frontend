@@ -6,6 +6,7 @@ import HomePage from "../paginas/Home/HomePage";
 import { TokenService } from "../services/auth/tokenService";
 import ContactarNosPage from "../paginas/Nosotros/ContactarNosPage";
 import NosotrosPage from "../paginas/Nosotros/NosotosPage";
+import TodasLasPublicaciones from "../paginas/Publicacion/Listar/TodasLasPublicaciones";
 
 
 
@@ -19,8 +20,9 @@ const Router: React.FC = () => {
       
       <Route element={<Layout />}>
         <Route path="/" element={<HomePage />} />
-        <Route path="/contact" element={<ContactarNosPage />}/>
+        <Route path="/contactanos" element={<ContactarNosPage />}/>
         <Route path="/nosotros" element={<NosotrosPage />} />
+        <Route path="/todaslasPublicaciones" element={<TodasLasPublicaciones/>}/>
         <Route path="/*" element={<ProtectedRouter />} />
       </Route>
 

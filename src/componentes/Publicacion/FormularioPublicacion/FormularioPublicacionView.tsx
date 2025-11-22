@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import type {  PublicacionResponce } from "../../modelos/Publicacion";
-import "../../styles/publicacionView.css";
+import type {  PublicacionResponce } from "../../../modelos/Publicacion";
+import "../../../styles/publicacionView.css";
 
 interface FormularioPublicacionViewProps {
   publicacion: PublicacionResponce;

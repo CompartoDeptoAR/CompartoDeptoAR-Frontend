@@ -1,12 +1,15 @@
 import { Navigate, Route, Routes } from "react-router-dom";
-import Publicacion from "../paginas/Publicacion/VerPublicacion";
-import CrearPublicacion from "../paginas/Publicacion/CrearPublicacion";
+import Publicacion from "../paginas/Publicacion/Funcionalidades/VerPublicacion";
+import CrearPublicacion from "../paginas/Publicacion/Funcionalidades/CrearPublicacion";
 import AdminPage from "../paginas/Admin/AdminPage";
 import PerfilView from "../paginas/Perfil/PerfilView";
 import { TokenService } from "../services/auth/tokenService";
 import { Rol } from "../modelos/Roles";
 import PerfilEdit from "../paginas/Perfil/PerfilEdit";
-import EditarPublicacion from "../paginas/Publicacion/EditarPublicacion";
+import EditarPublicacion from "../paginas/Publicacion/Funcionalidades/EditarPublicacion";
+import MisPublicaciones from "../paginas/Publicacion/Listar/MisPublicaciones";
+import MisFavoritos from "../paginas/Publicacion/Listar/MisFavoritos";
+import Configuracion from "../paginas/Configuracion/Configuracion";
 
 const ProtectedRouter = () => {
   const  loggedIn = TokenService.getAuthData();
@@ -22,13 +25,13 @@ const ProtectedRouter = () => {
       
       {hasRole(Rol.USUARIO) && (
         <>
-          <Route path="publicacion" element={<Publicacion />} />
+          <Route path="publicacion/:id" element={<Publicacion />} />
           <Route path="crear-publicacion" element={<CrearPublicacion />} />
           <Route path="mi-perfil" element={<PerfilView />} />
           <Route path="editar-perfil" element={<PerfilEdit />} />
-          <Route path="editar-publicacion" element={<EditarPublicacion/>}/>
-          <Route path="favoritos" />
-          <Route path="mis-publicaciones" />
+          <Route path="editar-publicacion/:id" element={<EditarPublicacion/>}/>
+          <Route path="mis-favoritos" element={<MisFavoritos/>}/>
+          <Route path="mis-publicaciones" element={<MisPublicaciones/>}/>
         </>
       )}
 
@@ -36,7 +39,10 @@ const ProtectedRouter = () => {
         <Route path="admin" element={<AdminPage />} />
       )}
 
+      <Route path="configuracion" element={<Configuracion/>}/>
       <Route path="*" element={<Navigate to="/" replace />} />
+
+      
     </Routes>
   );
 };

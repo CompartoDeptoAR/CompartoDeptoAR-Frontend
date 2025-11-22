@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-
-import ToastNotification from "../../componentes/ToastNotification/ToastNotification";
-import apiPublicacion from "../../api/endpoints/publicaciones";
-import apiCalificacion from "../../api/endpoints/calificacion";
-import { LocalStorageService, STORAGE_KEYS } from "../../services/storage/localStorage.service";
-import type { PublicacionResponce } from "../../modelos/Publicacion";
-import { useToast } from "../../componentes/ToastNotification/useToast";
-import FormularioPublicacionView from "../../componentes/FormularioPublicacion/FormularioPublicacionView";
+import ToastNotification from "../../../componentes/ToastNotification/ToastNotification";
+import apiPublicacion from "../../../api/endpoints/publicaciones";
+import apiCalificacion from "../../../api/endpoints/calificacion";
+import { LocalStorageService, STORAGE_KEYS } from "../../../services/storage/localStorage.service";
+import type { PublicacionResponce } from "../../../modelos/Publicacion";
+import { useToast } from "../../../componentes/ToastNotification/useToast";
+import FormularioPublicacionView from "../../../componentes/Publicacion/FormularioPublicacion/FormularioPublicacionView";
 
 const VerPublicacion = () => {
   const { id } = useParams<{ id: string }>();
@@ -23,7 +22,7 @@ const VerPublicacion = () => {
   useEffect(() => {
     if (!id) {
       showError("No se encontró la publicación");
-      navigate("/");
+      navigate(-1);
       return;
     }
 
