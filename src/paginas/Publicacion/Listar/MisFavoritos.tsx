@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+
 import type { PublicacionResumida } from "../../../modelos/Publicacion";
 import { useToast } from "../../../componentes/ToastNotification/useToast";
 import apiPublicacion from "../../../api/endpoints/publicaciones";
 import ListarPublicaciones from "../../../componentes/Publicacion/ListarPublicacion/ListarPublicacion";
 import ToastNotification from "../../../componentes/ToastNotification/ToastNotification";
 
+
 const MisFavoritos: React.FC = () => {
   const [publicaciones, setPublicaciones] = useState<PublicacionResumida[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [favoritos, setFavoritos] = useState<string[]>([]);
-  const navigate = useNavigate();
+
   const { toast, showSuccess, showError, hideToast } = useToast();
 
   useEffect(() => {
@@ -104,9 +105,7 @@ const MisFavoritos: React.FC = () => {
     showSuccess("🗑️ Todos los favoritos han sido eliminados");
   };
 
-  const handleExplorar = () => {
-    navigate("/publicaciones");
-  };
+
 
   return (
     <>
@@ -131,11 +130,7 @@ const MisFavoritos: React.FC = () => {
                 🗑️ Limpiar todo
               </button>
             )}
-            {publicaciones.length === 0 && !loading && (
-              <button className="btn btn-primary" onClick={handleExplorar}>
-                🔍 Explorar Publicaciones
-              </button>
-            )}
+            
           </div>
         </div>
 

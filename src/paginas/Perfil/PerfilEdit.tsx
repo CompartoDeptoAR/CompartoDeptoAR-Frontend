@@ -6,7 +6,8 @@ import { LocalStorageService, STORAGE_KEYS } from "../../services/storage/localS
 import apiUsuario from "../../api/endpoints/usuario";
 import { useToast } from "../../componentes/ToastNotification/useToast";
 import ToastNotification from "../../componentes/ToastNotification/ToastNotification";
-import { useNavigate } from "react-router-dom";
+import { Navigation } from "../../navigation/navigationService";
+
 
 const PerfilEdit: React.FC = () => {
   const [perfil, setPerfil] = useState<UsuarioPerfil | null>(
@@ -14,8 +15,7 @@ const PerfilEdit: React.FC = () => {
   );
   const [loading, setLoading] = useState(!perfil);
   const { toast, showSuccess, showError, hideToast } = useToast();
-  const navigate = useNavigate();
-  
+
   useEffect(() => {
     if (!perfil) {
       const token = LocalStorageService.get(STORAGE_KEYS.TOKEN);
@@ -57,8 +57,8 @@ const PerfilEdit: React.FC = () => {
       
       showSuccess("¡Perfil actualizado correctamente!");
       setTimeout(() => {
-      navigate("/mi-perfil"); 
-    }, 1000);
+        Navigation.miPerfil;
+      }, 1000);
     } catch (error: any) {
       showError(error.message || "Error al guardar el perfil");
       throw error; 

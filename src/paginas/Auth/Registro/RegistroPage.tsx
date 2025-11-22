@@ -1,13 +1,14 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import SegundoFormRegistro from "../../../componentes/FormularioRegistro/SegundoFormRegistro";
-import PrimerFormRegistro from "../../../componentes/FormularioRegistro/PrimerFormRegistro";
+
+import SegundoFormRegistro from "../../../componentes/FormAuth/FormularioRegistro/SegundoFormRegistro";
+import PrimerFormRegistro from "../../../componentes/FormAuth/FormularioRegistro/PrimerFormRegistro";
 
 import apiAuth from "../../../api/endpoints/auth";
 import type { Genero, HabitoKey, PreferenciaKey } from "../../../modelos/Usuario";
 import { arrayToHabitos, arrayToPreferencias } from "../../../helpers/convertersHabitosPreferncias";
 import { useToast } from "../../../componentes/ToastNotification/useToast";
 import ToastNotification from "../../../componentes/ToastNotification/ToastNotification";
+import { Navigation } from "../../../navigation/navigationService";
 
 const RegistroPage = ({ onSwitch }: { onSwitch: () => void }) => {
   // Primer formulario
@@ -24,7 +25,7 @@ const RegistroPage = ({ onSwitch }: { onSwitch: () => void }) => {
   const [preferencias, setPreferencias] = useState<PreferenciaKey[]>([]);
 
   const [paso, setPaso] = useState<1 | 2>(1);
-  const navigate = useNavigate();
+
   const { toast, showSuccess, showError, showWarning, hideToast } = useToast();
 
   const togglePassword = () => setMostrarPassword(!mostrarPassword);
@@ -74,7 +75,7 @@ const RegistroPage = ({ onSwitch }: { onSwitch: () => void }) => {
 
  
       setTimeout(() => {
-        navigate("/auth/login");
+        Navigation.auth
       }, 1500);
     } catch (err: any) {
       console.error(err);

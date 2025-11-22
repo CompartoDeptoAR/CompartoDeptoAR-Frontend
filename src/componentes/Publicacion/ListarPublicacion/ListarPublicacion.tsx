@@ -1,7 +1,8 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+
 import "./ListarPublicacion.css";
 import type { PublicacionResumida } from "../../../modelos/Publicacion";
+import { Navigation } from "../../../navigation/navigationService";
 
 interface ListarPublicacionesProps {
   publicaciones: PublicacionResumida[];
@@ -26,7 +27,6 @@ const ListarPublicaciones: React.FC<ListarPublicacionesProps> = ({
   onToggleFavorite,
   favoriteIds = [],
 }) => {
-  const navigate = useNavigate();
 
   if (loading) {
     return (
@@ -65,7 +65,7 @@ const ListarPublicaciones: React.FC<ListarPublicacionesProps> = ({
   }
 
   const handleVerDetalle = (id: string) => {
-    navigate(`/publicacion/${id}`);
+    Navigation.verPublicacion(id!);
   };
 
   const handleEdit = (e: React.MouseEvent, id: string) => {

@@ -27,7 +27,7 @@ const MiniListarPublicaciones: React.FC<MiniListarPublicacionesProps> = ({
         >
           {pub.foto && (
             <img
-              src={pub.foto}
+              src={pub.foto[0]}
               className="card-img-top"
               alt={pub.titulo}
               style={{ height: "120px", objectFit: "cover" }}

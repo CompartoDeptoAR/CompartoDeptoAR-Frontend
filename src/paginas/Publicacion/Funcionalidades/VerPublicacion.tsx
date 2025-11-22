@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import ToastNotification from "../../../componentes/ToastNotification/ToastNotification";
 import apiPublicacion from "../../../api/endpoints/publicaciones";
 import apiCalificacion from "../../../api/endpoints/calificacion";
@@ -7,10 +7,11 @@ import { LocalStorageService, STORAGE_KEYS } from "../../../services/storage/loc
 import type { PublicacionResponce } from "../../../modelos/Publicacion";
 import { useToast } from "../../../componentes/ToastNotification/useToast";
 import FormularioPublicacionView from "../../../componentes/Publicacion/FormularioPublicacion/FormularioPublicacionView";
+import { Navigation } from "../../../navigation/navigationService";
+
 
 const VerPublicacion = () => {
   const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
   const { toast, showSuccess, showError, showInfo, hideToast } = useToast();
 
   const [publicacion, setPublicacion] = useState<PublicacionResponce | null>(null);
@@ -22,7 +23,7 @@ const VerPublicacion = () => {
   useEffect(() => {
     if (!id) {
       showError("No se encontró la publicación");
-      navigate(-1);
+      Navigation.volverAtras;
       return;
     }
 
@@ -37,7 +38,7 @@ const VerPublicacion = () => {
     } catch (err: any) {
       console.error("Error cargando publicación:", err);
       showError("No se pudo cargar la publicación");
-      setTimeout(() => navigate("/"), 2000);
+      setTimeout(() => Navigation.home, 2000);
     } finally {
       setLoading(false);
     }
@@ -57,7 +58,7 @@ const VerPublicacion = () => {
   const handleContactar = () => {
     if (!usuarioActualId) {
       showInfo("Debes iniciar sesión para contactar al anunciante");
-      setTimeout(() => navigate("/auth/login"), 1500);
+      setTimeout(() => Navigation.auth, 1500);
       return;
     }
 
@@ -66,8 +67,8 @@ const VerPublicacion = () => {
       return;
     }
 
-
-    navigate(`/chat/${publicacion?.usuarioId}`);
+    Navigation.chat(publicacion?.usuarioId!)
+  
   };
 
   const handleSubmitCalificacion = async (calificacion: number, comentario: string) => {
@@ -119,7 +120,7 @@ const VerPublicacion = () => {
         <div className="alert alert-danger text-center">
           <h4>Publicación no encontrada</h4>
           <p>La publicación que buscas no existe o ha sido eliminada.</p>
-          <button className="btn btn-primary" onClick={() => navigate("/")}>
+          <button className="btn btn-primary" onClick={() => Navigation.home}>
             Volver al inicio
           </button>
         </div>

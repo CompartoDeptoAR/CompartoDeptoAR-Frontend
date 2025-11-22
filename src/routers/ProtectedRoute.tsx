@@ -1,5 +1,4 @@
 import { Navigate, Route, Routes } from "react-router-dom";
-import Publicacion from "../paginas/Publicacion/Funcionalidades/VerPublicacion";
 import CrearPublicacion from "../paginas/Publicacion/Funcionalidades/CrearPublicacion";
 import AdminPage from "../paginas/Admin/AdminPage";
 import PerfilView from "../paginas/Perfil/PerfilView";
@@ -10,13 +9,16 @@ import EditarPublicacion from "../paginas/Publicacion/Funcionalidades/EditarPubl
 import MisPublicaciones from "../paginas/Publicacion/Listar/MisPublicaciones";
 import MisFavoritos from "../paginas/Publicacion/Listar/MisFavoritos";
 import Configuracion from "../paginas/Configuracion/Configuracion";
+import VerPublicacion from "../paginas/Publicacion/Funcionalidades/VerPublicacion";
+import { ADMIN_ROUTES, GENERAL, USER_ROUTES } from "./Routes";
+
 
 const ProtectedRouter = () => {
   const  loggedIn = TokenService.getAuthData();
   const userRol = TokenService.getUserRol();
   
   if (!loggedIn) {
-    return <Navigate to="/auth" replace />;
+     return <Navigate to="/auth" replace />
   }
   const hasRole = (role: Rol) => 
   Array.isArray(userRol) && userRol.includes(role);
@@ -25,22 +27,22 @@ const ProtectedRouter = () => {
       
       {hasRole(Rol.USUARIO) && (
         <>
-          <Route path="publicacion/:id" element={<Publicacion />} />
-          <Route path="crear-publicacion" element={<CrearPublicacion />} />
-          <Route path="mi-perfil" element={<PerfilView />} />
-          <Route path="editar-perfil" element={<PerfilEdit />} />
-          <Route path="editar-publicacion/:id" element={<EditarPublicacion/>}/>
-          <Route path="mis-favoritos" element={<MisFavoritos/>}/>
-          <Route path="mis-publicaciones" element={<MisPublicaciones/>}/>
+          <Route path={USER_ROUTES.VIEW_PUBLICACION()} element={<VerPublicacion />} />
+          <Route path={USER_ROUTES.CREAR_PUBLICACION}element={<CrearPublicacion />} />
+          <Route path={USER_ROUTES.MI_PERFIL} element={<PerfilView />} />
+          <Route path={USER_ROUTES.EDITAR_PERFIL} element={<PerfilEdit />} />
+          <Route path={USER_ROUTES.EDITAR_PUBLICACION()} element={<EditarPublicacion/>}/>
+          <Route path={USER_ROUTES.MIS_FAVORITOS} element={<MisFavoritos/>}/>
+          <Route path={USER_ROUTES.MIS_PUBLICACIONES} element={<MisPublicaciones/>}/>
         </>
       )}
 
       {hasRole(Rol.ADMIN) && (
-        <Route path="admin" element={<AdminPage />} />
+        <Route path={ADMIN_ROUTES.PANEL} element={<AdminPage />} />
       )}
 
-      <Route path="configuracion" element={<Configuracion/>}/>
-      <Route path="*" element={<Navigate to="/" replace />} />
+      <Route path={GENERAL.CONFIGURACION} element={<Configuracion/>}/>
+      <Route path={GENERAL.NOT_FOUND} element={<Navigate to="/" replace />} />
 
       
     </Routes>
@@ -48,3 +50,5 @@ const ProtectedRouter = () => {
 };
 
 export default ProtectedRouter;
+
+

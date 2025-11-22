@@ -1,7 +1,7 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
 import type {  PublicacionResponce } from "../../../modelos/Publicacion";
 import "../../../styles/publicacionView.css";
+import { Navigation } from "../../../navigation/navigationService";
 
 interface FormularioPublicacionViewProps {
   publicacion: PublicacionResponce;
@@ -20,7 +20,7 @@ const FormularioPublicacionView: React.FC<FormularioPublicacionViewProps> = ({
   cantidadCalificaciones = 0,
   onContactar,
 }) => {
-  const navigate = useNavigate();
+
 
   const formatearPrecio = (precio: number) => {
     return new Intl.NumberFormat("es-AR", {
@@ -226,7 +226,7 @@ const FormularioPublicacionView: React.FC<FormularioPublicacionViewProps> = ({
 
               <button
                 className="btn btn-outline-primary w-100 mb-2"
-                onClick={() => navigate(`/perfil/${usuarioId}`)}
+                onClick={() => Navigation.usuarioPerfil(usuarioId!)}
               >
                 <i className="bi bi-person me-2"></i>
                 Ver perfil

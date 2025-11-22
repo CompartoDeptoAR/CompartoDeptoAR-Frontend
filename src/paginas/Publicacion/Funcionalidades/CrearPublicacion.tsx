@@ -1,47 +1,15 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import FormularioPublicacion from "../../../componentes/Publicacion/FormularioPublicacion/FormularioPublicacion";
 import { useToast } from "../../../componentes/ToastNotification/useToast";
 import apiPublicacion from "../../../api/endpoints/publicaciones";
 import ToastNotification from "../../../componentes/ToastNotification/ToastNotification";
-import type { Publicacion } from "../../../modelos/Publicacion";
+import type { Publicacion, PublicacionFormulario } from "../../../modelos/Publicacion";
+import { Navigation } from "../../../navigation/navigationService";
 
 
-interface FormularioState {
-  titulo: string;
-  descripcion: string;
-  precio: number;
-  provincia: string;
-  localidad: string;
-  direccion: string;
-  foto: string[];
-  reglas: string[];
-  preferencias: {
-    fumador?: boolean;
-    mascotas?: boolean;
-    musicaFuerte?: boolean;
-    horariosNocturno?: boolean;
-    visitas?: boolean;
-    orden?: boolean;
-    tranquilo?: boolean;
-    social?: boolean;
-  };
-  habitos: {
-    fumador?: boolean;
-    mascotas?: boolean;
-    musicaFuerte?: boolean;
-    horariosNocturno?: boolean;
-    visitas?: boolean;
-    orden?: boolean;
-    tranquilo?: boolean;
-    social?: boolean;
-    cocino?: boolean;
-    ejercicio?: boolean;
-  };
-}
 
 const CrearPublicacion = () => {
-  const [formData, setFormData] = useState<FormularioState>({
+  const [formData, setFormData] = useState<PublicacionFormulario>({
     titulo: "",
     descripcion: "",
     precio: 0,
@@ -55,7 +23,7 @@ const CrearPublicacion = () => {
   });
 
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
+  
   const { toast, showSuccess, showError, showWarning, hideToast } = useToast();
 
   const handleChange = (
@@ -161,7 +129,7 @@ const CrearPublicacion = () => {
     setLoading(true);
 
     try {
-      // Construir ubicación completa
+
       const ubicacionCompleta = formData.direccion?.trim()
         ? `${formData.direccion}, ${formData.localidad}, ${formData.provincia}`
         : `${formData.localidad}, ${formData.provincia}`;
@@ -192,7 +160,7 @@ const CrearPublicacion = () => {
       showSuccess("¡Publicación creada exitosamente!");
 
       setTimeout(() => {
-        navigate("/mis-publicaciones");
+        Navigation.misPublicaciones;
       }, 1500);
     } catch (error: any) {
       console.error("Error al crear publicación:", error);
@@ -212,7 +180,7 @@ const CrearPublicacion = () => {
           }`;
         } else if (status === 401) {
           errorMessage = "No autorizado. Por favor inicia sesión nuevamente";
-          //setTimeout(() => navigate("/login"), 2000);
+          setTimeout(() => Navigation.auth, 2000);
         } else if (status === 413) {
           errorMessage =
             "Los datos son demasiado grandes. Reduce el número de fotos o la descripción";
@@ -235,13 +203,13 @@ const CrearPublicacion = () => {
   };
 
   const handleCancel = () => {
-    navigate(-1);
+    Navigation.volverAtras;
   };
 
   return (
     <>
       <FormularioPublicacion
-        formData={formData}
+        publicacion={formData}
         handleChange={handleChange}
         onProvinciaChange={handleProvinciaChange}
         onLocalidadChange={handleLocalidadChange}

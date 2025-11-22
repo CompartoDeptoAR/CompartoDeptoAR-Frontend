@@ -1,11 +1,16 @@
-
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { setNavigator } from "./navigation/navigationService";
 import Router from "./routers/Router";
 
+const App = () => {
+  const navigate = useNavigate();
 
-const App: React.FC =()=>{
-    return(
-        <Router /> 
-    );
+  useEffect(() => {
+    setNavigator(navigate);
+  }, []);
+
+  return <Router />;
 };
 
 export default App;

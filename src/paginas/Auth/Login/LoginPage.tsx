@@ -1,18 +1,20 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-
 import apiAuth from "../../../api/endpoints/auth";
 import type { LoginRequest } from "../../../api/types/auth.types";
 import { TokenService } from "../../../services/auth/tokenService";
+import { Navigation } from "../../../navigation/navigationService";
 import { useToast } from "../../../componentes/ToastNotification/useToast";
+import FormularioLogin from "../../../componentes/FormAuth/FormularioLogin/FormularioLogin";
 import ToastNotification from "../../../componentes/ToastNotification/ToastNotification";
+
+
+
 
 const LoginPage = ({ onSwitch }: { onSwitch: () => void }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [mostrarPassword, setMostrarPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
   const { saveAuthData } = TokenService;
   const { toast, showSuccess, showError, hideToast } = useToast();
 
@@ -25,30 +27,17 @@ const LoginPage = ({ onSwitch }: { onSwitch: () => void }) => {
       const data = await apiAuth.auth.login(req);
 
       saveAuthData(data);
-      
       showSuccess("¡Inicio de sesión exitoso!");
-
-      
-      setTimeout(() => {
-        navigate("/", { replace: true });
-      }, 1000);
+      Navigation.home();
     } catch (err: any) {
-      console.error(err);
-      
-      
       let errorMessage = "Error al iniciar sesión";
-      
       if (err.response) {
-       
         const backendError = err.response.data?.error || err.response.data?.message;
         const statusCode = err.response.status;
-        
         errorMessage = `Error ${statusCode}: ${backendError || "No se pudo iniciar sesión"}`;
       } else if (err.message) {
-        
         errorMessage = err.message;
       }
-      
       showError(errorMessage);
     } finally {
       setLoading(false);
@@ -57,71 +46,17 @@ const LoginPage = ({ onSwitch }: { onSwitch: () => void }) => {
 
   return (
     <>
-      <form onSubmit={handleLogin} className="form-container page-transition">
-        <h2 className="form-title">Iniciar sesión</h2>
-
-        <div>
-          <label>Email</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Email"
-            required
-            disabled={loading}
-          />
-        </div>
-
-        <div>
-          <label>Contraseña</label>
-          <div>
-            <input
-              type={mostrarPassword ? "text" : "password"}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="********"
-              required
-              minLength={8}
-              pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$"
-              title="La contraseña debe tener al menos 8 caracteres, incluyendo mayúsculas, minúsculas y un número"
-              disabled={loading}
-            />
-            <button 
-              type="button" 
-              onClick={() => setMostrarPassword(!mostrarPassword)}
-              disabled={loading}
-            >
-              {mostrarPassword ? "Ocultar" : "Ver"}
-            </button>
-          </div>
-        </div>
-
-        <button type="submit" disabled={loading}>
-          {loading ? "Ingresando..." : "Ingresar"}
-        </button>
-
-        <p>
-          ¿No tenés cuenta?
-          <button type="button" onClick={onSwitch} disabled={loading}>
-            Registrate
-          </button>
-        </p>
-        
-
-        <p>
-          ¿Olvidaste tu contraseña?
-          <a
-            href="#"
-            onClick={(e) => {
-              e.preventDefault();
-              onSwitch();
-            }}
-          >
-            Recuperar contraseña
-          </a>
-        </p>
-      </form>
-
+      <FormularioLogin
+        email={email}
+        password={password}
+        mostrarPassword={mostrarPassword}
+        loading={loading}
+        onEmailChange={setEmail}
+        onPasswordChange={setPassword}
+        onTogglePassword={() => setMostrarPassword(!mostrarPassword)}
+        onSubmit={handleLogin}
+        onSwitch={onSwitch}
+      />
       <ToastNotification
         show={toast.show}
         message={toast.message}

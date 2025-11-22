@@ -1,9 +1,9 @@
-
 import React from "react";
-import { useNavigate } from "react-router-dom";
+
 
 import "../../../styles/CartaPublicacion.css";
 import type { EstadoPublicacion, PublicacionResumida } from "../../../modelos/Publicacion";
+import { Navigation } from "../../../navigation/navigationService";
 
 interface CartaPublicacionProps {
   publicacion: PublicacionResumida;
@@ -22,10 +22,11 @@ const CartaPublicacion: React.FC<CartaPublicacionProps> = ({
   onDelete,
   onToggleFavorite,
 }) => {
-  const navigate = useNavigate();
+
 
   const handleVerDetalle = () => {
-    navigate(`/publicacion/${publicacion.id}`);
+    Navigation.verPublicacion(publicacion.id!);
+
   };
 
   const handleEdit = (e: React.MouseEvent) => {
@@ -52,18 +53,6 @@ const CartaPublicacion: React.FC<CartaPublicacionProps> = ({
     return badges[estado] || badges.activa;
   };
 
-  const formatFecha = (fecha: string) => {
-    const date = new Date(fecha);
-    const now = new Date();
-    const diffTime = Math.abs(now.getTime() - date.getTime());
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-    if (diffDays === 0) return "Hoy";
-    if (diffDays === 1) return "Ayer";
-    if (diffDays < 7) return `Hace ${diffDays} días`;
-    if (diffDays < 30) return `Hace ${Math.floor(diffDays / 7)} semanas`;
-    return date.toLocaleDateString("es-AR", { day: "2-digit", month: "short", year: "numeric" });
-  };
 
   const imagenUrl = publicacion.foto || "https://via.placeholder.com/400x300?text=Sin+Imagen";
   const estadoBadge = getEstadoBadge(publicacion.estado);
@@ -76,7 +65,7 @@ const CartaPublicacion: React.FC<CartaPublicacionProps> = ({
       {/* Imagen */}
       <div className="carta-publicacion__imagen-container position-relative">
         <img
-          src={imagenUrl}
+          src={imagenUrl[0]}
           className="card-img-top carta-publicacion__imagen"
           alt={publicacion.titulo}
           onError={(e) => {
@@ -115,9 +104,7 @@ const CartaPublicacion: React.FC<CartaPublicacionProps> = ({
           {publicacion.titulo}
         </h5>
 
-        <p className="text-muted small carta-publicacion__fecha">
-          📅 {formatFecha(publicacion.createdAt)}
-        </p>
+
 
         {/* Acciones (solo para Mis Publicaciones) */}
         {showActions && (

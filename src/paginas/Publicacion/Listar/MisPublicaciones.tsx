@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+
 import type { PublicacionResumida } from "../../../modelos/Publicacion";
 import { useToast } from "../../../componentes/ToastNotification/useToast";
 import apiPublicacion from "../../../api/endpoints/publicaciones";
 import ListarPublicaciones from "../../../componentes/Publicacion/ListarPublicacion/ListarPublicacion";
 import ToastNotification from "../../../componentes/ToastNotification/ToastNotification";
+import { Navigation } from "../../../navigation/navigationService";
 
 const MisPublicaciones: React.FC = () => {
   const [publicaciones, setPublicaciones] = useState<PublicacionResumida[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const navigate = useNavigate();
+
   const { toast, showSuccess, showError, hideToast } = useToast();
 
   useEffect(() => {
@@ -33,7 +34,7 @@ const MisPublicaciones: React.FC = () => {
   };
 
   const handleEdit = (id: string) => {
-    navigate(`/editar-publicacion/${id}`);
+    Navigation.editarPublicacion(id!)
   };
 
   const handleDelete = async (id: string) => {
@@ -56,7 +57,7 @@ const MisPublicaciones: React.FC = () => {
   };
 
   const handleCrearNueva = () => {
-    navigate("/crear-publicacion");
+    Navigation.crearPublicacion;
   };
 
   return (

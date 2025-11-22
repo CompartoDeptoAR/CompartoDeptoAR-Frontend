@@ -1,31 +1,20 @@
 import { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import FormularioPublicacion from "../../../componentes/Publicacion/FormularioPublicacion/FormularioPublicacion";
 import ToastNotification from "../../../componentes/ToastNotification/ToastNotification";
-import type { PublicacionResponce } from "../../../modelos/Publicacion";
+import type { PublicacionFormulario, PublicacionResponce } from "../../../modelos/Publicacion";
 import apiPublicacion from "../../../api/endpoints/publicaciones";
 import { useToast } from "../../../componentes/ToastNotification/useToast";
-import type { HabitosUsuario, PreferenciasUsuario } from "../../../modelos/Usuario";
+import { Navigation } from "../../../navigation/navigationService";
 
-interface FormularioState {
-  titulo: string;
-  descripcion: string;
-  precio: number;
-  provincia: string;
-  localidad: string;
-  direccion: string;
-  foto: string[];
-  reglas: string[];
-  preferencias: PreferenciasUsuario;
-  habitos: HabitosUsuario;
-}
+
+
 
 const EditarPublicacion = () => {
   const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
   const { toast, showSuccess, showError, showWarning, hideToast } = useToast();
 
-  const [formData, setFormData] = useState<FormularioState>({
+  const [formData, setFormData] = useState<PublicacionFormulario>({
     titulo: "",
     descripcion: "",
     precio: 0,
@@ -45,7 +34,7 @@ const EditarPublicacion = () => {
     const fetchPublicacion = async () => {
       if (!id) {
         showError("ID de publicación no válido");
-        navigate("/mis-publicaciones");
+        Navigation.misPublicaciones;
         return;
       }
 
@@ -74,14 +63,14 @@ const EditarPublicacion = () => {
       } catch (error: any) {
         console.error("Error al cargar publicación:", error);
         showError("No se pudo cargar la publicación");
-        setTimeout(() => navigate("/mis-publicaciones"), 2000);
+        setTimeout(() => Navigation.misPublicaciones, 2000);
       } finally {
         setLoadingData(false);
       }
     };
 
     fetchPublicacion();
-  }, [id, navigate, showError]);
+  }, []);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -204,7 +193,7 @@ const EditarPublicacion = () => {
       showSuccess("¡Publicación actualizada exitosamente!");
 
       setTimeout(() => {
-        navigate(`/publicacion/${id}`);
+        Navigation.verPublicacion(id!);
       }, 1500);
     } catch (error: any) {
       console.error("❌ Error al editar publicación:", error);
@@ -245,7 +234,7 @@ const EditarPublicacion = () => {
   };
 
   const handleCancel = () => {
-    navigate(`/publicacion/${id}`);
+    Navigation.volverAtras;
   };
 
   if (loadingData) {
@@ -266,7 +255,7 @@ const EditarPublicacion = () => {
   return (
     <>
       <FormularioPublicacion
-        formData={formData}
+        publicacion={formData}
         handleChange={handleChange}
         onProvinciaChange={handleProvinciaChange}
         onLocalidadChange={handleLocalidadChange}

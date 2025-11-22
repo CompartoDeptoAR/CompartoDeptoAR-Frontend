@@ -7,7 +7,6 @@ export interface Publicacion {
   titulo: string;
   descripcion: string;
   precio: number;
-  direccion?: string;
   ubicacion?: string;
   foto: string[];
   preferencias?: PreferenciasUsuario; 
@@ -24,6 +23,7 @@ export interface PublicacionResumida {
   ubicacion: string;
   precio: number;
   foto?: string[];
+  estado:EstadoPublicacion;
 }
 
 export interface PublicacionResponce extends Publicacion {
@@ -42,4 +42,17 @@ export interface FiltrosBusqueda {
   precioMax?: number;
   preferencias?: string[];
   [key: string]: any;
+}
+
+export interface PublicacionFormulario {
+  titulo: string;
+  descripcion: string;
+  precio: number;
+  provincia: string;
+  localidad: string;
+  direccion: string;
+  foto: string[];
+  reglas: string[];
+  preferencias: PreferenciasUsuario;
+  habitos: HabitosUsuario;
 }
