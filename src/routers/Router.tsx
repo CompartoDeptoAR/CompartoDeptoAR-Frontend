@@ -3,7 +3,7 @@ import Layout from "../componentes/Layout/Layout";
 import ProtectedRouter from "./ProtectedRoute";
 import AuthPage from "../paginas/Auth/AuthPage";
 import HomePage from "../paginas/Home/HomePage";
-import ContactarNosPage from "../paginas/Nosotros/ContactarNosPage";
+import ContactanosPage from "../paginas/Nosotros/ContactanosPage";
 import NosotrosPage from "../paginas/Nosotros/NosotosPage";
 import TodasLasPublicaciones from "../paginas/Publicacion/Listar/TodasLasPublicaciones";
 import {  PUBLIC_ROUTES, GENERAL } from "./Routes";
@@ -24,7 +24,7 @@ const Router: React.FC = () => {
       <Route element={<Layout />}>
         
         <Route path={PUBLIC_ROUTES.HOME} element={<HomePage />} />
-        <Route path={PUBLIC_ROUTES.CONTACTANOS} element={<ContactarNosPage />} />
+        <Route path={PUBLIC_ROUTES.CONTACTANOS} element={<ContactanosPage />} />
         <Route path={PUBLIC_ROUTES.NOSOTROS} element={<NosotrosPage />} />
         <Route path={PUBLIC_ROUTES.TODAS_PUBLICACIONES} element={<TodasLasPublicaciones />} />
 

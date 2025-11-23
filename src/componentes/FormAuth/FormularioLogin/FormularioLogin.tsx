@@ -22,6 +22,7 @@ const FormularioLogin: React.FC<FormLoginProps> = ({
   onSubmit,
   onSwitch,
 }) => (
+  
   <form onSubmit={onSubmit} className="form-container page-transition">
     <h2 className="form-title">Iniciar sesión</h2>
 

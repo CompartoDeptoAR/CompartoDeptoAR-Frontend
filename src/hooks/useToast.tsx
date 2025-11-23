@@ -1,11 +1,13 @@
 import { useState, useCallback } from "react";
-import type { ToastType } from "./ToastNotification";
+import type { ToastType } from "../componentes/ToastNotification/ToastNotification";
 
 
 interface Toast {
   show: boolean;
   message: string;
   type: ToastType;
+  actionLabel?: string;
+  onAction?: () => void;
 }
 
 export const useToast = () => {
@@ -46,6 +48,19 @@ export const useToast = () => {
     showToast(message, "info");
   }, [showToast]);
 
+  const showToastWithAction = useCallback((message: string, type: ToastType, actionLabel: string,
+    onAction: () => void ) => {
+    setToast({
+      show: true,
+      message,
+      type,
+      actionLabel,
+      onAction,
+    });
+  },
+  []
+);
+
   return {
     toast,
     showToast,
@@ -54,5 +69,6 @@ export const useToast = () => {
     showError,
     showWarning,
     showInfo,
+    showToastWithAction,
   };
 };

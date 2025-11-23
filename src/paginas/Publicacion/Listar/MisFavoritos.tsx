@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import type { PublicacionResumida } from "../../../modelos/Publicacion";
-import { useToast } from "../../../componentes/ToastNotification/useToast";
+import { useToast } from "../../../hooks/useToast";
 import apiPublicacion from "../../../api/endpoints/publicaciones";
 import ListarPublicaciones from "../../../componentes/Publicacion/ListarPublicacion/ListarPublicacion";
 import ToastNotification from "../../../componentes/ToastNotification/ToastNotification";

@@ -1,28 +1,44 @@
-import type { HabitosUsuario, PreferenciasUsuario } from "./Usuario";
+import type { HabitosUsuario, PreferenciasUsuario, Usuario } from "./Usuario";
 
 export type EstadoPublicacion = "activa" | "pausada" | "inactiva";
 
-export interface Publicacion {
-  id?: string;
+export interface PublicacionResponce {
+  [x: string]: any;
+  id: string;
   titulo: string;
   descripcion: string;
   precio: number;
-  ubicacion?: string;
-  foto: string[];
-  preferencias?: PreferenciasUsuario; 
+  ubicacion:string; 
+  foto: string[]; 
+  reglas?: string[]; 
+  preferencias?: PreferenciasUsuario;
   habitos?: HabitosUsuario;
-  reglas?: string[];
-  usuarioId?: string;
-  estado?: EstadoPublicacion;
-  createdAt?: string;
-  updatedAt?: string;
+  usuarioId: Usuario["id"];
+  nombreUsuario?: string; 
+  estado: EstadoPublicacion;
+  createdAt: string;
+  updatedAt: string;
 }
+
+export interface Publicacion {
+  titulo: string;
+  descripcion: string;
+  precio: number;
+  provincia: string;
+  localidad: string;
+  direccion: string;
+  foto: string[]; 
+  reglas?: string[];
+  preferencias?: PreferenciasUsuario;
+  habitos?: HabitosUsuario;
+}
+
 export interface PublicacionResumida {
   id: string ;
   titulo: string;
   ubicacion: string;
   precio: number;
-  foto?: string[];
+  foto?: string;
   estado:EstadoPublicacion;
 }
 
@@ -44,15 +60,3 @@ export interface FiltrosBusqueda {
   [key: string]: any;
 }
 
-export interface PublicacionFormulario {
-  titulo: string;
-  descripcion: string;
-  precio: number;
-  provincia: string;
-  localidad: string;
-  direccion: string;
-  foto: string[];
-  reglas: string[];
-  preferencias: PreferenciasUsuario;
-  habitos: HabitosUsuario;
-}

@@ -2,15 +2,14 @@ import type { PublicacionResumida } from "../../modelos/Publicacion";
 import axiosApi from "../config/axios.config";
 
 
-const urlApi = import.meta.env.VITE_URL_FABORITO;
+const urlApi = import.meta.env.VITE_URL_FAVORITO;
 
 
 const apiFavorito = {
     favorito: {
-        // Agregar publicación a favoritos
         agregarFavorito: async (publicacionId: string): Promise<any> => {
             try {
-                const response = await axiosApi.post(`${urlApi}/favoritos`, {
+                const response = await axiosApi.post(`${urlApi}`, {
                     publicacionId
                 });
 
@@ -22,10 +21,9 @@ const apiFavorito = {
             }
         },
 
-        // Eliminar publicación de favoritos
         eliminarFavorito: async (publicacionId: string): Promise<any> => {
             try {
-                const response = await axiosApi.delete(`${urlApi}/favoritos/${publicacionId}`);
+                const response = await axiosApi.delete(`${urlApi}/${publicacionId}`);
 
                 return response.data;
 
@@ -35,10 +33,9 @@ const apiFavorito = {
             }
         },
 
-        // Listar todas las publicaciones favoritas del usuario
         listarFavoritos: async (): Promise<PublicacionResumida[]> => {
             try {
-                const response = await axiosApi.get<PublicacionResumida[]>(`${urlApi}/favoritos`);
+                const response = await axiosApi.get<PublicacionResumida[]>(`${urlApi}`);
 
                 return response.data;
 
@@ -48,7 +45,6 @@ const apiFavorito = {
             }
         },
 
-        // Verificar si una publicación está en favoritos
         esFavorito: async (publicacionId: string): Promise<boolean> => {
             try {
                 const favoritos = await apiFavorito.favorito.listarFavoritos();

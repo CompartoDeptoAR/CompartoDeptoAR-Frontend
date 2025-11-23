@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import "../../styles/FormularioPerfil.css";
+import "../../../styles/FormularioPerfil.css";
+import type { Publicacion } from "../../../modelos/Publicacion";
 import SelectorUbicacionArgentina from "../../SelectorUbicacionArgentina/SelectorUbicacionArgentina";
-import type { PublicacionFormulario } from "../../../modelos/Publicacion";
 
 interface FormularioPublicacionProps {
-  publicacion: PublicacionFormulario;
+  publicacion: Publicacion;
   handleChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   onProvinciaChange: (provincia: string) => void;
   onLocalidadChange: (localidad: string) => void;
@@ -26,7 +26,6 @@ const FormularioPublicacion: React.FC<FormularioPublicacionProps> = ({
   modo,
   loading = false,
   onCancel,
-
   onFotosChange,
   onPreferenciasChange,
   onHabitosChange,
@@ -34,36 +33,51 @@ const FormularioPublicacion: React.FC<FormularioPublicacionProps> = ({
   const [nuevaFotoUrl, setNuevaFotoUrl] = useState("");
   const [errorUrl, setErrorUrl] = useState("");
 
-  // Reglas como textarea
+  // Helper para mostrar reglas como textarea
   const reglasTexto = publicacion.reglas?.join("\n") ?? "";
 
+  // Validar URL
   const esUrlValida = (url: string): boolean => {
     if (!url.trim()) return false;
     try {
-      const u = new URL(url);
-      return u.protocol === "http:" || u.protocol === "https:";
+      const urlObj = new URL(url);
+      return urlObj.protocol === "http:" || urlObj.protocol === "https:";
     } catch {
       return false;
     }
   };
 
+  // Agregar foto
   const handleAgregarFoto = () => {
-    const url = nuevaFotoUrl.trim();
-    if (!esUrlValida(url)) {
-      setErrorUrl("URL inválida. Debe comenzar con http:// o https://");
+    const urlLimpia = nuevaFotoUrl.trim();
+    
+    if (!esUrlValida(urlLimpia)) {
+      setErrorUrl("Por favor ingresa una URL válida (debe comenzar con http:// o https://)");
       return;
     }
-    if (publicacion.foto.includes(url)) {
-      setErrorUrl("Esta foto ya está agregada");
+
+    if (publicacion.foto.includes(urlLimpia)) {
+      setErrorUrl("Esta foto ya fue agregada");
       return;
     }
-    onFotosChange([...publicacion.foto, url]);
+
+    onFotosChange([...publicacion.foto, urlLimpia]);
     setNuevaFotoUrl("");
     setErrorUrl("");
   };
 
-  const handleEliminarFoto = (i: number) => {
-    onFotosChange(publicacion.foto.filter((_, idx) => idx !== i));
+  // Eliminar foto
+  const handleEliminarFoto = (index: number) => {
+    const nuevasFotos = publicacion.foto.filter((_, i) => i !== index);
+    onFotosChange(nuevasFotos);
+  };
+
+  // Manejar Enter en el input
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      handleAgregarFoto();
+    }
   };
 
   return (
@@ -75,20 +89,26 @@ const FormularioPublicacion: React.FC<FormularioPublicacionProps> = ({
           </h2>
 
           <form onSubmit={handleSubmit}>
-
             {/* TÍTULO */}
             <div className="mb-3">
-              <label className="form-label">Título *</label>
+              <label htmlFor="titulo" className="form-label">
+                Título del anuncio <span className="text-danger">*</span>
+              </label>
               <input
                 type="text"
                 className="form-control"
+                id="titulo"
                 name="titulo"
                 value={publicacion.titulo}
                 onChange={handleChange}
+                placeholder="Ej: Habitación luminosa en Palermo"
                 required
-                maxLength={100}
                 disabled={loading}
+                maxLength={100}
               />
+              <small className="text-muted">
+                {publicacion.titulo.length}/100 caracteres
+              </small>
             </div>
 
             {/* UBICACIÓN */}
@@ -101,40 +121,53 @@ const FormularioPublicacion: React.FC<FormularioPublicacionProps> = ({
               required
             />
 
-            {/* DIRECCIÓN */}
+            {/* DIRECCION */}
             <div className="mb-3">
-              <label className="form-label">Dirección (opcional)</label>
+              <label htmlFor="direccion" className="form-label">
+                Dirección (opcional)
+              </label>
               <input
                 type="text"
                 className="form-control"
+                id="direccion"
                 name="direccion"
                 value={publicacion.direccion || ""}
                 onChange={handleChange}
+                placeholder="Ej: Av. Santa Fe 1234"
                 disabled={loading}
               />
             </div>
 
             {/* PRECIO */}
             <div className="mb-3">
-              <label className="form-label">Precio mensual *</label>
-              <input
-                type="number"
-                className="form-control"
-                name="precio"
-                value={publicacion.precio}
-                onChange={handleChange}
-                min={0}
-                step={1000}
-                required
-                disabled={loading}
-              />
+              <label htmlFor="precio" className="form-label">
+                Precio mensual <span className="text-danger">*</span>
+              </label>
+              <div className="input-group">
+                <span className="input-group-text">$</span>
+                <input
+                  type="number"
+                  className="form-control"
+                  id="precio"
+                  name="precio"
+                  value={publicacion.precio}
+                  onChange={handleChange}
+                  min={0}
+                  step={1000}
+                  required
+                  disabled={loading}
+                />
+              </div>
             </div>
 
             {/* DESCRIPCIÓN */}
             <div className="mb-3">
-              <label className="form-label">Descripción *</label>
+              <label htmlFor="descripcion" className="form-label">
+                Descripción de la vivienda <span className="text-danger">*</span>
+              </label>
               <textarea
                 className="form-control"
+                id="descripcion"
                 name="descripcion"
                 value={publicacion.descripcion}
                 onChange={handleChange}
@@ -143,13 +176,19 @@ const FormularioPublicacion: React.FC<FormularioPublicacionProps> = ({
                 required
                 disabled={loading}
               />
+              <small className="text-muted">
+                {publicacion.descripcion.length}/1000 caracteres
+              </small>
             </div>
 
             {/* REGLAS */}
             <div className="mb-3">
-              <label className="form-label">Reglas</label>
+              <label htmlFor="reglas" className="form-label">
+                Reglas o condiciones
+              </label>
               <textarea
                 className="form-control"
+                id="reglas"
                 name="reglas"
                 value={reglasTexto}
                 onChange={handleChange}
@@ -162,17 +201,22 @@ const FormularioPublicacion: React.FC<FormularioPublicacionProps> = ({
 
             {/* FOTOS */}
             <div className="mb-3">
-              <label className="form-label">Fotos</label>
-
+              <label className="form-label">
+                Fotos de la propiedad
+              </label>
+              
+              {/* Input para agregar fotos */}
               <div className="input-group mb-2">
                 <input
+                  type="text"
                   className={`form-control ${errorUrl ? "is-invalid" : ""}`}
                   value={nuevaFotoUrl}
                   onChange={(e) => {
                     setNuevaFotoUrl(e.target.value);
                     setErrorUrl("");
                   }}
-                  placeholder="URL de la imagen"
+                  onKeyPress={handleKeyPress}
+                  placeholder="https://ejemplo.com/imagen.jpg"
                   disabled={loading}
                 />
                 <button
@@ -184,29 +228,50 @@ const FormularioPublicacion: React.FC<FormularioPublicacionProps> = ({
                   + Agregar
                 </button>
               </div>
+              
+              {errorUrl && (
+                <div className="text-danger small mb-2">{errorUrl}</div>
+              )}
+              
+              <small className="text-muted d-block mb-3">
+                Puedes agregar varias fotos. Pega la URL y presiona "Agregar" o Enter.
+              </small>
 
-              {errorUrl && <small className="text-danger">{errorUrl}</small>}
-
+              {/* Lista de fotos agregadas */}
               {publicacion.foto.length > 0 && (
-                <div className="row g-3 mt-2">
-                  {publicacion.foto.map((url, idx) => (
-                    <div className="col-md-4" key={idx}>
+                <div className="row g-3">
+                  {publicacion.foto.map((url, index) => (
+                    <div key={index} className="col-md-6 col-lg-4">
                       <div className="card">
-                        <img src={url} className="card-img-top" />
-                        <button
-                          type="button"
-                          className="btn btn-danger btn-sm mt-1"
-                          onClick={() => handleEliminarFoto(idx)}
-                        >
-                          Eliminar
-                        </button>
+                        <img
+                          src={url}
+                          alt={`Foto ${index + 1}`}
+                          className="card-img-top"
+                          style={{
+                            height: "200px",
+                            objectFit: "cover",
+                          }}
+                          onError={(e) => {
+                            (e.target as HTMLImageElement).src =
+                              "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Crect fill='%23ddd' width='100' height='100'/%3E%3Ctext fill='%23999' x='50%25' y='50%25' text-anchor='middle' dominant-baseline='middle'%3EImagen no disponible%3C/text%3E%3C/svg%3E";
+                          }}
+                        />
+                        <div className="card-body p-2">
+                          <button
+                            type="button"
+                            className="btn btn-sm btn-danger w-100"
+                            onClick={() => handleEliminarFoto(index)}
+                            disabled={loading}
+                          >
+                            Eliminar
+                          </button>
+                        </div>
                       </div>
                     </div>
                   ))}
                 </div>
               )}
             </div>
-
             {/* PREFERENCIAS */}
             <div className="mb-3">
               <label className="form-label">Preferencias del compañero ideal</label>
@@ -242,21 +307,29 @@ const FormularioPublicacion: React.FC<FormularioPublicacionProps> = ({
                 ))}
               </div>
             </div>
-
+            
             {/* BOTONES */}
-            <div className="d-flex justify-content-end gap-2 mt-4">
+            <div className="d-flex gap-2 justify-content-end mt-4">
               {onCancel && (
-                <button type="button" className="btn btn-secondary" onClick={onCancel}>
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  onClick={onCancel}
+                  disabled={loading}
+                >
                   Cancelar
                 </button>
               )}
-
-              <button type="submit" className="btn btn-primary">
+              <button
+                type="submit"
+                className="btn btn-primary"
+                disabled={loading}
+              >
                 {loading
                   ? "Guardando..."
                   : modo === "crear"
                   ? "Publicar"
-                  : "Guardar cambios"}
+                  : "Guardar Cambios"}
               </button>
             </div>
           </form>

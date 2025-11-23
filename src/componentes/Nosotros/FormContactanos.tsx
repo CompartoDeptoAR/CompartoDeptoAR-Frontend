@@ -1,46 +1,31 @@
-import React, { useState } from "react";
-import axios from "axios";
+import React from "react";
 import { Container, Form, Button, Alert } from "react-bootstrap";
-import { TokenService } from "../../services/auth/tokenService";
 
-const ContactarNosPage: React.FC = () => {
-  const authData = TokenService.getAuthData();
+interface FormContactanosProps {
+  email: string;
+  mensaje: string;
+  enviado: boolean;
+  error: string;
+  palabras: number;
+  setEmail: (email: string) => void;
+  setMensaje: (mensaje: string) => void;
+  setEnviado: (enviado: boolean) => void;
+  setError: (error: string) => void;
+  manejarEnvio: (e: React.FormEvent) => void;
+}
 
-  const [email, setEmail] = useState(authData?.mail || "");
-  const [mensaje, setMensaje] = useState("");
-  const [enviado, setEnviado] = useState(false);
-  const [error, setError] = useState("");
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!mensaje.trim()) {
-      setError("El mensaje no puede estar vacío.");
-      return;
-    }
-
-    const palabras = mensaje.trim().split(/\s+/).length;
-    if (palabras > 300) {
-      setError("El mensaje no puede superar las 300 palabras.");
-      return;
-    }
-
-    setError("");
-
-    try {
-      await axios.post("http://localhost:3000/api/contacto", {
-        mail: email,
-        mensaje: mensaje,
-      });
-
-      setEnviado(true);
-      setMensaje("");
-
-    } catch (err: any) {
-      setError("Error al enviar el mensaje. Intenta nuevamente.");
-    }
-  };
-
+const FormContactanos: React.FC<FormContactanosProps> = ({
+  email,
+  mensaje,
+  enviado,
+  error,
+  palabras,
+  setEmail,
+  setMensaje,
+  setEnviado,
+  setError,
+  manejarEnvio,
+}) => {
   return (
     <Container className="my-5" style={{ maxWidth: "600px" }}>
       <h2 className="text-center mb-4">Contáctanos</h2>
@@ -57,9 +42,9 @@ const ContactarNosPage: React.FC = () => {
         </Alert>
       )}
 
-      <Form onSubmit={handleSubmit} className="shadow p-4 rounded bg-light">
+      <Form onSubmit={manejarEnvio} className="shadow p-4 rounded bg-light">
         {/* 📧 Correo */}
-        <Form.Group className="mb-3" controlId="formEmail">
+        <Form.Group className="mb-3">
           <Form.Label>Correo electrónico</Form.Label>
           <Form.Control
             type="email"
@@ -67,12 +52,12 @@ const ContactarNosPage: React.FC = () => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            disabled={!!authData?.mail}
+            disabled={!!email}
           />
         </Form.Group>
 
         {/* 📝 Mensaje */}
-        <Form.Group className="mb-3" controlId="formMensaje">
+        <Form.Group className="mb-3">
           <Form.Label>Mensaje</Form.Label>
           <Form.Control
             as="textarea"
@@ -83,7 +68,7 @@ const ContactarNosPage: React.FC = () => {
             required
           />
           <Form.Text className="text-muted">
-            {mensaje.trim().split(/\s+/).length} / 300 palabras
+            {palabras} / 300 palabras
           </Form.Text>
         </Form.Group>
 
@@ -97,4 +82,4 @@ const ContactarNosPage: React.FC = () => {
   );
 };
 
-export default ContactarNosPage;
+export default FormContactanos;

@@ -37,11 +37,12 @@ const apiPublicacion = {
             const res = await axiosApi.get<ResultadoPaginado>(`${urlApi}/`, {
               params: { limit, startAfterId },
             });
+            console.log(res.data)
             return res.data;
           } catch (error: any) {
             throw new Error(error.response?.data?.error || "Error al obtener publicaciones");
           }
-      },
+        },
         actualizarPublicacion: async (idPublicacion: string, data: Partial<Publicacion>): Promise<void> => {
             try {
               await axiosApi.put(`${urlApi}/actualizar/${idPublicacion}`, data);

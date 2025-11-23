@@ -1,95 +1,42 @@
-import React, { useState } from "react";
-
 import SegundoFormRegistro from "../../../componentes/FormAuth/FormularioRegistro/SegundoFormRegistro";
 import PrimerFormRegistro from "../../../componentes/FormAuth/FormularioRegistro/PrimerFormRegistro";
 
-import apiAuth from "../../../api/endpoints/auth";
-import type { Genero, HabitoKey, PreferenciaKey } from "../../../modelos/Usuario";
-import { arrayToHabitos, arrayToPreferencias } from "../../../helpers/convertersHabitosPreferncias";
-import { useToast } from "../../../componentes/ToastNotification/useToast";
 import ToastNotification from "../../../componentes/ToastNotification/ToastNotification";
-import { Navigation } from "../../../navigation/navigationService";
+import { useRegistro } from "../../../hooks/auth/useRegistro";
+
 
 const RegistroPage = ({ onSwitch }: { onSwitch: () => void }) => {
-  // Primer formulario
-  const [nombreCompleto, setNombreCompleto] = useState<string>("");
-  const [correo, setCorreo] = useState<string>("");
-  const [contraseña, setContraseña] = useState<string>("");
-  const [mostrarPassword, setMostrarPassword] = useState<boolean>(false);
-
-  // Segundo formulario (opcional)
-  const [edad, setEdad] = useState<number>(0);
-  const [genero, setGenero] = useState<Genero>("Prefiero no decir");
-  const [descripcion, setDescripcion] = useState<string>("");
-  const [habitos, setHabitos] = useState<HabitoKey[]>([]);
-  const [preferencias, setPreferencias] = useState<PreferenciaKey[]>([]);
-
-  const [paso, setPaso] = useState<1 | 2>(1);
-
-  const { toast, showSuccess, showError, showWarning, hideToast } = useToast();
-
-  const togglePassword = () => setMostrarPassword(!mostrarPassword);
-
-  // Paso 1:  primer formulario
-  const handlePaso1Submit = (e: React.FormEvent) => {
-    e.preventDefault();
-
-  
-    if (!nombreCompleto.trim()) {
-      showWarning("Por favor ingresa tu nombre completo");
-      return;
-    }
-    if (!correo.trim() || !correo.includes("@")) {
-      showWarning("Por favor ingresa un email válido");
-      return;
-    }
-    if (contraseña.length < 6) {
-      showWarning("La contraseña debe tener al menos 6 caracteres");
-      return;
-    }
-
-    setPaso(2); // pasa al formulario opcional
-  };
-
-  // Paso 2: enviar registro completo
-  const handleRegistroFinal = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    try {
-      const habitosObj = arrayToHabitos(habitos);
-      const preferenciasObj = arrayToPreferencias(preferencias);
-
-      await apiAuth.auth.registrar({
-        nombreCompleto,
-        correo,
-        contraseña,
-        edad,
-        genero: genero !== "Prefiero no decir" ? genero : undefined,
-        descripcion: descripcion.trim() || undefined,
-        habitos: Object.keys(habitosObj).length > 0 ? habitosObj : undefined,
-        preferencias:
-          Object.keys(preferenciasObj).length > 0 ? preferenciasObj : undefined,
-      });
-
-      showSuccess("¡Registro exitoso! Redirigiendo al login...");
-
- 
-      setTimeout(() => {
-        Navigation.auth
-      }, 1500);
-    } catch (err: any) {
-      console.error(err);
-      showError(err.message || "Error al crear la cuenta");
-    }
-  };
-
-  const handleCancelarPaso2 = () => {
-    setPaso(1);
-  };
+  const {
+    paso,
+    nombreCompleto,
+    correo,
+    contraseña,
+    mostrarPassword,
+    edad,
+    genero,
+    descripcion,
+    habitos,
+    preferencias,
+    toast,
+    setNombreCompleto,
+    setCorreo,
+    setContraseña,
+    togglePassword,
+    setEdad,
+    setGenero,
+    setDescripcion,
+    setHabitos,
+    setPreferencias,
+    handlePaso1Submit,
+    handlePaso2Submit,
+    handleCancelarPaso2,
+    hideToast
+  } = useRegistro();
 
   return (
     <>
       <div className={`registro-pasos-container paso-${paso}`}>
+
         <div className="registro-step paso-1">
           <PrimerFormRegistro
             nombreCompleto={nombreCompleto}
@@ -117,10 +64,11 @@ const RegistroPage = ({ onSwitch }: { onSwitch: () => void }) => {
             setDescripcion={setDescripcion}
             setHabitos={setHabitos}
             setPreferencias={setPreferencias}
-            handleSubmit={handleRegistroFinal}
+            handleSubmit={handlePaso2Submit}
             onCancelar={handleCancelarPaso2}
           />
         </div>
+
       </div>
 
       <ToastNotification
