@@ -81,7 +81,6 @@ const LoginPage = ({ onSwitch }: { onSwitch: () => void }) => {
               placeholder="********"
               required
               minLength={8}
-              pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$"
               title="La contraseña debe tener al menos 8 caracteres, incluyendo mayúsculas, minúsculas y un número"
               disabled={loading}
             />
@@ -90,7 +89,7 @@ const LoginPage = ({ onSwitch }: { onSwitch: () => void }) => {
               type="button"
               onClick={() => setMostrarPassword(!mostrarPassword)}
               disabled={loading}
-              style={{ marginTop: "8px" }} // separación del botón Ver
+              style={{ marginTop: "8px" }} 
             >
               {mostrarPassword ? "Ocultar" : "Ver"}
             </button>
