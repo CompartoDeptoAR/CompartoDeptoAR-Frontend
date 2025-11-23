@@ -7,7 +7,7 @@ import {
   type Genero, 
   type HabitoKey, 
   type PreferenciaKey 
-} from "../../modelos/Usuario";
+} from "../../../modelos/Usuario";
 
 interface SegundoFormRegistroProps {
   edad: number;

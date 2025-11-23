@@ -1,8 +1,7 @@
-// componentes/FormularioPublicacion/FormularioPublicacion.tsx
 import React, { useState } from "react";
-import "../../styles/FormularioPerfil.css";
-import SelectorUbicacionArgentina from "../SelectorUbicacionArgentina/SelectorUbicacionArgentina";
-import type { Publicacion } from "../../modelos/Publicacion";
+import "../../../styles/FormularioPerfil.css";
+import type { Publicacion } from "../../../modelos/Publicacion";
+import SelectorUbicacionArgentina from "../../SelectorUbicacionArgentina/SelectorUbicacionArgentina";
 
 interface FormularioPublicacionProps {
   publicacion: Publicacion;
@@ -13,7 +12,9 @@ interface FormularioPublicacionProps {
   modo: "crear" | "editar";
   loading?: boolean;
   onCancel?: () => void;
-  onFotosChange: (fotos: string[]) => void; // Nueva prop para manejar el array de fotos
+  onFotosChange: (fotos: string[]) => void;
+  onPreferenciasChange: (key: string, value: boolean) => void;
+  onHabitosChange: (key: string, value: boolean) => void;
 }
 
 const FormularioPublicacion: React.FC<FormularioPublicacionProps> = ({
@@ -26,6 +27,8 @@ const FormularioPublicacion: React.FC<FormularioPublicacionProps> = ({
   loading = false,
   onCancel,
   onFotosChange,
+  onPreferenciasChange,
+  onHabitosChange,
 }) => {
   const [nuevaFotoUrl, setNuevaFotoUrl] = useState("");
   const [errorUrl, setErrorUrl] = useState("");
@@ -196,7 +199,7 @@ const FormularioPublicacion: React.FC<FormularioPublicacionProps> = ({
               />
             </div>
 
-            {/* FOTOS - NUEVA SECCIÓN MEJORADA */}
+            {/* FOTOS */}
             <div className="mb-3">
               <label className="form-label">
                 Fotos de la propiedad
@@ -269,7 +272,42 @@ const FormularioPublicacion: React.FC<FormularioPublicacionProps> = ({
                 </div>
               )}
             </div>
+            {/* PREFERENCIAS */}
+            <div className="mb-3">
+              <label className="form-label">Preferencias del compañero ideal</label>
+              <div className="d-flex flex-wrap gap-3">
+                {Object.entries(publicacion.preferencias || {}).map(([key, val]) => (
+                  <label key={key}>
+                    <input
+                      type="checkbox"
+                      checked={!!val}
+                      onChange={(e) => onPreferenciasChange(key, e.target.checked)}
+                      disabled={loading}
+                    />
+                    {" "}{key}
+                  </label>
+                ))}
+              </div>
+            </div>
 
+            {/* HÁBITOS */}
+            <div className="mb-3">
+              <label className="form-label">Tus hábitos</label>
+              <div className="d-flex flex-wrap gap-3">
+                {Object.entries(publicacion.habitos || {}).map(([key, val]) => (
+                  <label key={key}>
+                    <input
+                      type="checkbox"
+                      checked={!!val}
+                      onChange={(e) => onHabitosChange(key, e.target.checked)}
+                      disabled={loading}
+                    />
+                    {" "}{key}
+                  </label>
+                ))}
+              </div>
+            </div>
+            
             {/* BOTONES */}
             <div className="d-flex gap-2 justify-content-end mt-4">
               {onCancel && (

@@ -1,31 +1,19 @@
+import type { PublicacionResumida } from "../../modelos/Publicacion";
+import axiosApi from "../config/axios.config";
+
+
+const urlApi = import.meta.env.VITE_URL_FAVORITO;
+
 
 const apiFavorito = {
     favorito: {
-        // Agregar publicación a favoritos
         agregarFavorito: async (publicacionId: string): Promise<any> => {
             try {
-                const token = localStorage.getItem('token');
-                
-                if (!token) {
-                    throw new Error('No hay token de autenticación');
-                }
-
-                const response = await fetch(`${import.meta.env.VITE_API_URL}/favoritos`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
-                    },
-                    body: JSON.stringify({ publicacionId })
+                const response = await axiosApi.post(`${urlApi}`, {
+                    publicacionId
                 });
 
-                const data = await response.json();
-
-                if (!response.ok) {
-                    throw new Error(data.error || 'Error al agregar favorito');
-                }
-
-                return data;
+                return response.data;
 
             } catch (error: any) {
                 console.error('Error al agregar favorito:', error);
@@ -33,30 +21,11 @@ const apiFavorito = {
             }
         },
 
-        // Eliminar publicación de favoritos
         eliminarFavorito: async (publicacionId: string): Promise<any> => {
             try {
-                const token = localStorage.getItem('token');
-                
-                if (!token) {
-                    throw new Error('No hay token de autenticación');
-                }
+                const response = await axiosApi.delete(`${urlApi}/${publicacionId}`);
 
-                const response = await fetch(`${import.meta.env.VITE_API_URL}/favoritos/${publicacionId}`, {
-                    method: 'DELETE',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
-
-                const data = await response.json();
-
-                if (!response.ok) {
-                    throw new Error(data.error || 'Error al eliminar favorito');
-                }
-
-                return data;
+                return response.data;
 
             } catch (error: any) {
                 console.error('Error al eliminar favorito:', error);
@@ -64,37 +33,28 @@ const apiFavorito = {
             }
         },
 
-        // Listar todas las publicaciones favoritas del usuario
-        listarFavoritos: async (): Promise<any> => {
+        listarFavoritos: async (): Promise<PublicacionResumida[]> => {
             try {
-                const token = localStorage.getItem('token');
-                
-                if (!token) {
-                    throw new Error('No hay token de autenticación');
-                }
+                const response = await axiosApi.get<PublicacionResumida[]>(`${urlApi}`);
 
-                const response = await fetch(`${import.meta.env.VITE_API_URL}/favoritos`, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
-
-                const data = await response.json();
-
-                if (!response.ok) {
-                    throw new Error(data.error || 'Error al obtener favoritos');
-                }
-
-                return data.favoritos;
+                return response.data;
 
             } catch (error: any) {
                 console.error('Error al listar favoritos:', error);
                 throw error;
             }
+        },
+
+        esFavorito: async (publicacionId: string): Promise<boolean> => {
+            try {
+                const favoritos = await apiFavorito.favorito.listarFavoritos();
+                return favoritos.some((fav: any) => fav.publicacionId === publicacionId || fav.id === publicacionId);
+            } catch (error: any) {
+                console.error('Error al verificar favorito:', error);
+                return false;
+            }
         }
     }
-}
+};
 
 export default apiFavorito;

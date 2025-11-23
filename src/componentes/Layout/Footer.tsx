@@ -1,5 +1,6 @@
 import React from "react";
 import { Container, Row, Col } from "react-bootstrap";
+import { Navigation } from "../../navigation/navigationService";
 
 const Footer: React.FC = () => {
   return (
@@ -10,11 +11,11 @@ const Footer: React.FC = () => {
             <p className="mb-0">© 2025 — CompartoDeptoAR | Proyecto Académico CIU General Belgrano</p>
           </Col>
           <Col md={6} className="text-md-end">
-            <a href="/nosotros" className="text-light text-decoration-none me-3">
+            <a onClick={() => Navigation.nosotros()} className="text-light text-decoration-none me-3">
               Nosotros
             </a>
-            <a href="/contact" className="text-light text-decoration-none">
-              Contacto
+            <a onClick={() => Navigation.contactanos()} className="text-light text-decoration-none">
+              Contactanos
             </a>
           </Col>
         </Row>

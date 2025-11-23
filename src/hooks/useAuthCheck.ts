@@ -1,12 +1,11 @@
 
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { estaTokenExpirado, getTiempoRestante } from '../utils/jwtUtils';
 import apiAuth from '../api/endpoints/auth';
+import { Navigation } from '../navigation/navigationService';
 
 
 export const useAuthCheck = () => {
-  const navigate = useNavigate();
   const [advertenciaExpiracion, setAdvertenciaExpiracion] = useState(false);
 
   useEffect(() => {
@@ -16,7 +15,7 @@ export const useAuthCheck = () => {
       const token = localStorage.getItem('token');
       
       if (!token) {
-        navigate('/login');
+        Navigation.auth;
         return;
       }
 
@@ -24,7 +23,7 @@ export const useAuthCheck = () => {
         console.log('Token expirado, cerrando sesión...');
         apiAuth.auth.logout(true); 
         sessionStorage.setItem('mensajeSesion', 'Tu sesión ha expirado.');
-        navigate('/login');
+        Navigation.auth;
         return;
       }
 

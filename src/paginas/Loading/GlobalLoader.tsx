@@ -1,10 +1,10 @@
-
 import React from "react";
-import { useLoading } from "../../contexts/LoadingContext";
+import { useGlobalLoader } from "../../hooks/sistema/useGlobalLoader";
 
 
 const GlobalLoader: React.FC = () => {
-  const { loading } = useLoading();
+   const { loading } = useGlobalLoader();   // 👈 necesitamos el estado, no las funciones
+
   if (!loading) return null;
 
   return (

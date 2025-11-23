@@ -1,30 +1,11 @@
-import { useEffect, useState } from "react";
-import api from "../../api/endpoints/usuario";
+import React from "react";
 import FormularioPerfil from "../../componentes/FormularioPerfil/FormularioPerfil";
-
-import type { UsuarioPerfil } from "../../modelos/Usuario";
-import { TokenService } from "../../services/auth/tokenService";
+import { usePerfilView } from "../../hooks/usuario/usePerfilView";
 
 const PerfilView: React.FC = () => {
-  const  userId  = TokenService.getUserId();  
-  const [perfil, setPerfil] = useState<UsuarioPerfil>();
+  const { perfil } = usePerfilView();
 
-  useEffect(() => {
-    if (!userId) return; 
-
-    const fetchData = async () => {
-      try {
-        const data = await api.usuario.perfil(); 
-        setPerfil(data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  if (!perfil) return <div>Cargando...</div>;
+  if (!perfil) return null;
 
   return <FormularioPerfil perfil={perfil} modo="view" />;
 };

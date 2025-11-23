@@ -1,7 +1,6 @@
-
 import type { HabitosUsuario, PreferenciasUsuario, Usuario } from "./Usuario";
 
-export type EstadoPublicacion = "activa" | "pausada" | "eliminada";
+export type EstadoPublicacion = "activa" | "pausada" | "inactiva";
 
 export interface PublicacionResponce {
   [x: string]: any;
@@ -21,15 +20,6 @@ export interface PublicacionResponce {
   updatedAt: string;
 }
 
-export interface PublicacionResumida {
-  id: string;
-  titulo: string;
-  precio: number;
-  foto: string | null;
-  estado: EstadoPublicacion;
-  createdAt: string;
-}
-
 export interface Publicacion {
   titulo: string;
   descripcion: string;
@@ -37,18 +27,36 @@ export interface Publicacion {
   provincia: string;
   localidad: string;
   direccion: string;
-  foto: string[]; // enviar como array
-  reglas?: string[]; // opcional
+  foto: string[]; 
+  reglas?: string[];
   preferencias?: PreferenciasUsuario;
   habitos?: HabitosUsuario;
 }
 
-export interface UpdatePublicacion {
+export interface PublicacionResumida {
+  id: string ;
   titulo: string;
-  descripcion: string;
-  precio: number;
   ubicacion: string;
-  foto?: string[];
-  reglas?: string[];
-  preferencias?: PreferenciasUsuario;
+  precio: number;
+  foto?: string;
+  estado:EstadoPublicacion;
 }
+
+export interface PublicacionResponce extends Publicacion {
+  nombreUsuario?: string;
+  calificacionPromedio?: number;
+}
+
+export interface ResultadoPaginado {
+  publicaciones: Publicacion[];
+  lastId?: string;
+}
+
+export interface FiltrosBusqueda {
+  ubicacion?: string;
+  precioMin?: number;
+  precioMax?: number;
+  preferencias?: string[];
+  [key: string]: any;
+}
+
