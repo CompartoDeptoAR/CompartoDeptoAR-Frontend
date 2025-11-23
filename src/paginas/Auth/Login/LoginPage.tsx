@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
 import apiAuth from "../../../api/endpoints/auth";
 import type { LoginRequest } from "../../../api/types/auth.types";
 import { TokenService } from "../../../services/auth/tokenService";
@@ -25,30 +24,29 @@ const LoginPage = ({ onSwitch }: { onSwitch: () => void }) => {
       const data = await apiAuth.auth.login(req);
 
       saveAuthData(data);
-      
+
       showSuccess("¡Inicio de sesión exitoso!");
 
-      
       setTimeout(() => {
         navigate("/", { replace: true });
       }, 1000);
     } catch (err: any) {
       console.error(err);
-      
-      
+
       let errorMessage = "Error al iniciar sesión";
-      
+
       if (err.response) {
-       
-        const backendError = err.response.data?.error || err.response.data?.message;
+        const backendError =
+          err.response.data?.error || err.response.data?.message;
         const statusCode = err.response.status;
-        
-        errorMessage = `Error ${statusCode}: ${backendError || "No se pudo iniciar sesión"}`;
+
+        errorMessage = `Error ${statusCode}: ${
+          backendError || "No se pudo iniciar sesión"
+        }`;
       } else if (err.message) {
-        
         errorMessage = err.message;
       }
-      
+
       showError(errorMessage);
     } finally {
       setLoading(false);
@@ -74,6 +72,7 @@ const LoginPage = ({ onSwitch }: { onSwitch: () => void }) => {
 
         <div>
           <label>Contraseña</label>
+
           <div>
             <input
               type={mostrarPassword ? "text" : "password"}
@@ -82,21 +81,27 @@ const LoginPage = ({ onSwitch }: { onSwitch: () => void }) => {
               placeholder="********"
               required
               minLength={8}
-              pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$"
+              pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$"
               title="La contraseña debe tener al menos 8 caracteres, incluyendo mayúsculas, minúsculas y un número"
               disabled={loading}
             />
-            <button 
-              type="button" 
+
+            <button
+              type="button"
               onClick={() => setMostrarPassword(!mostrarPassword)}
               disabled={loading}
+              style={{ marginTop: "8px" }} // separación del botón Ver
             >
               {mostrarPassword ? "Ocultar" : "Ver"}
             </button>
           </div>
         </div>
 
-        <button type="submit" disabled={loading}>
+        <button
+          type="submit"
+          disabled={loading}
+          style={{ marginTop: "12px" }}
+        >
           {loading ? "Ingresando..." : "Ingresar"}
         </button>
 
@@ -106,7 +111,6 @@ const LoginPage = ({ onSwitch }: { onSwitch: () => void }) => {
             Registrate
           </button>
         </p>
-        
 
         <p>
           ¿Olvidaste tu contraseña?
