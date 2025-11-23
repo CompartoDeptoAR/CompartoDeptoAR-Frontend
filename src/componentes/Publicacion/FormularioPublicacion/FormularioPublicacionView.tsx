@@ -9,7 +9,12 @@ interface FormularioPublicacionViewProps {
   usuarioId: string;
   calificacionPromedio?: number;
   cantidadCalificaciones?: number;
+
   onContactar: () => void;
+
+  /** Props nuevos */
+  puedeCalificar?: boolean;
+  onEnviarCalificacion?: (calificacion: number, comentario: string) => void;
 }
 
 const FormularioPublicacionView: React.FC<FormularioPublicacionViewProps> = ({
@@ -19,6 +24,8 @@ const FormularioPublicacionView: React.FC<FormularioPublicacionViewProps> = ({
   calificacionPromedio = 0,
   cantidadCalificaciones = 0,
   onContactar,
+  puedeCalificar = false,
+  onEnviarCalificacion,
 }) => {
 
 
@@ -49,24 +56,29 @@ const FormularioPublicacionView: React.FC<FormularioPublicacionViewProps> = ({
             style={{ color: star <= rating ? "#FFB800" : "#ddd" }}
           ></i>
         ))}
-        <span className="text-muted ms-1">
-          ({cantidadCalificaciones})
-        </span>
+        <span className="text-muted ms-1">({cantidadCalificaciones})</span>
       </div>
     );
+  };
+
+  const enviarCalificacion = () => {
+    if (!onEnviarCalificacion) return;
+    if (rating === 0) return;
+    onEnviarCalificacion(rating, comentario);
+    setComentario("");
+    setRating(0);
   };
 
   return (
     <div className="container mt-4">
       <div className="row">
-        {/* Columna izquierda - Imagen y detalles */}
+        {/* Columna izquierda */}
         <div className="col-lg-8">
           <div className="card mb-3">
             <div className="card-body">
               <h1 className="h3 mb-3">{publicacion.titulo}</h1>
 
-
-              {/* Carrusel de imágenes */}
+              {/* Carrusel */}
               {publicacion.foto && publicacion.foto.length > 0 ? (
                 <div id="carouselFotos" className="carousel slide mb-4">
                   <div className="carousel-inner">
@@ -78,48 +90,18 @@ const FormularioPublicacionView: React.FC<FormularioPublicacionViewProps> = ({
                         <img
                           src={foto}
                           className="d-block w-100 rounded"
-                          alt={`${publicacion.titulo} - Foto ${index + 1}`}
+                          alt={`Foto ${index + 1}`}
                           style={{ maxHeight: "500px", objectFit: "cover" }}
-                          onError={(e) => {
-                            (e.target as HTMLImageElement).src =
-                              "https://via.placeholder.com/800x600?text=Sin+Imagen";
-                          }}
                         />
                       </div>
                     ))}
                   </div>
-                  {publicacion.foto.length > 1 && (
-                    <>
-                      <button
-                        className="carousel-control-prev"
-                        type="button"
-                        data-bs-target="#carouselFotos"
-                        data-bs-slide="prev"
-                      >
-                        <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span className="visually-hidden">Anterior</span>
-                      </button>
-                      <button
-                        className="carousel-control-next"
-                        type="button"
-                        data-bs-target="#carouselFotos"
-                        data-bs-slide="next"
-                      >
-                        <span className="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span className="visually-hidden">Siguiente</span>
-                      </button>
-                    </>
-                  )}
                 </div>
               ) : (
-                <div className="mb-4">
-                  <img
-                    src="https://via.placeholder.com/800x600?text=Sin+Imagen"
-                    alt="Sin imagen"
-                    className="img-fluid rounded shadow-sm"
-                    style={{ width: "100%", maxHeight: "500px", objectFit: "cover" }}
-                  />
-                </div>
+                <img
+                  src="https://via.placeholder.com/800x600?text=Sin+Imagen"
+                  className="img-fluid rounded mb-4"
+                />
               )}
 
               {/* Información básica */}
@@ -135,6 +117,7 @@ const FormularioPublicacionView: React.FC<FormularioPublicacionViewProps> = ({
                       </div>
                     </div>
                   </div>
+
                   <div className="col-md-6">
                     <div className="d-flex align-items-center">
                       <i className="bi bi-calendar3 text-primary me-2 fs-5"></i>
@@ -154,9 +137,7 @@ const FormularioPublicacionView: React.FC<FormularioPublicacionViewProps> = ({
               {/* Descripción */}
               <div className="mb-4">
                 <h5 className="text-muted mb-3">Descripción</h5>
-                <p className="text-justify" style={{ whiteSpace: "pre-wrap" }}>
-                  {publicacion.descripcion}
-                </p>
+                <p style={{ whiteSpace: "pre-wrap" }}>{publicacion.descripcion}</p>
               </div>
 
               {/* Reglas */}
@@ -167,46 +148,65 @@ const FormularioPublicacionView: React.FC<FormularioPublicacionViewProps> = ({
                     Reglas y condiciones
                   </h5>
                   <div className="alert alert-info">
-                    <p className="mb-0" style={{ whiteSpace: "pre-wrap" }}>
-                      {publicacion.reglas}
-                    </p>
+                    <p className="mb-0">{publicacion.reglas}</p>
                   </div>
+                </div>
+              )}
+
+              {/* ★ Calificar */}
+              {puedeCalificar && (
+                <div className="card p-3 mt-4">
+                  <h6>Calificar al anunciante</h6>
+
+                  {/* Estrellas */}
+                  <div className="d-flex gap-1 mb-2">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <i
+                        key={star}
+                        className={`bi bi-star${star <= rating ? "-fill" : ""} fs-4`}
+                        style={{ cursor: "pointer", color: star <= rating ? "#FFB800" : "#aaa" }}
+                        onClick={() => setRating(star)}
+                      ></i>
+                    ))}
+                  </div>
+
+                  {/* Comentario */}
+                  <textarea
+                    className="form-control mb-2"
+                    placeholder="Escribe un comentario (opcional)"
+                    value={comentario}
+                    onChange={(e) => setComentario(e.target.value)}
+                    rows={3}
+                  ></textarea>
+
+                  <button
+                    className="btn btn-primary"
+                    disabled={rating === 0}
+                    onClick={enviarCalificacion}
+                  >
+                    Enviar calificación
+                  </button>
                 </div>
               )}
             </div>
           </div>
         </div>
 
-        {/* Columna derecha - Precio y vendedor */}
+        {/* Columna derecha */}
         <div className="col-lg-4">
-          {/* Card de precio */}
           <div className="card mb-3 sticky-top" style={{ top: "20px" }}>
             <div className="card-body">
-              <div className="mb-3">
-                <h2 className="text-success mb-0">
-                  {formatearPrecio(publicacion.precio)}
-                </h2>
-                <small className="text-muted">por mes</small>
-              </div>
+              <h2 className="text-success mb-0">{formatearPrecio(publicacion.precio)}</h2>
+              <small className="text-muted">por mes</small>
 
-              <button
-                className="btn btn-primary w-100 mb-2"
-                onClick={onContactar}
-              >
+              <button className="btn btn-primary w-100 mt-3" onClick={onContactar}>
                 <i className="bi bi-chat-dots me-2"></i>
                 Contactar
               </button>
-
-              <div className="text-center mt-3">
-                <small className="text-muted">
-                  <i className="bi bi-shield-check me-1"></i>
-                  Protegemos tu información
-                </small>
-              </div>
             </div>
           </div>
 
-          {/* Card del vendedor */}
+          {/* Perfil del anunciante */}
           <div className="card">
             <div className="card-body">
               <h6 className="card-title mb-3">Información del anunciante</h6>
@@ -231,13 +231,6 @@ const FormularioPublicacionView: React.FC<FormularioPublicacionViewProps> = ({
                 <i className="bi bi-person me-2"></i>
                 Ver perfil
               </button>
-
-              <div className="mt-3 pt-3 border-top">
-                <small className="text-muted">
-                  <i className="bi bi-info-circle me-1"></i>
-                  Verifica el perfil antes de contactar
-                </small>
-              </div>
             </div>
           </div>
         </div>
