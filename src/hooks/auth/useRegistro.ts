@@ -3,7 +3,7 @@ import type { Genero, HabitoKey, PreferenciaKey } from "../../modelos/Usuario";
 import { useToast } from "../useToast";
 import { arrayToHabitos, arrayToPreferencias } from "../../helpers/convertersHabitosPreferncias";
 import apiAuth from "../../api/endpoints/auth";
-import { Navigation } from "../../navigation/navigationService";
+import { Navegar } from "../../navigation/navigationService";
 
 
 export function useRegistro() {
@@ -65,7 +65,7 @@ export function useRegistro() {
 
       showSuccess("¡Registro exitoso! Redirigiendo al login...");
 
-      setTimeout(() => Navigation.auth(), 1500);
+      setTimeout(() => Navegar.auth(), 1500);
 
     } catch (err: any) {
       console.error(err);

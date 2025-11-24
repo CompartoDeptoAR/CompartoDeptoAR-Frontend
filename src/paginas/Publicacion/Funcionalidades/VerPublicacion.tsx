@@ -3,7 +3,7 @@ import FormularioPublicacionView from "../../../componentes/Publicacion/Formular
 import { useToast } from "../../../hooks/useToast";
 import { usePublicacionDetalle } from "../../../hooks/publicacion/Ver/usePublicacionDetalle";
 import { useAccionesPublicacion } from "../../../hooks/publicacion/Ver/useAccionesPublicacion";
-import { Navigation } from "../../../navigation/navigationService";
+import { Navegar } from "../../../navigation/navigationService";
 
 
 const VerPublicacion = () => {
@@ -17,7 +17,7 @@ const VerPublicacion = () => {
         <div className="alert alert-danger text-center">
           <h4>Publicación no encontrada</h4>
           <p>La publicación que buscas no existe o ha sido eliminada.</p>
-          <button className="btn btn-primary" onClick={() => Navigation.home()}>
+          <button className="btn btn-primary" onClick={() => Navegar.home()}>
             Volver al inicio
           </button>
         </div>

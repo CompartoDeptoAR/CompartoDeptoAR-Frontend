@@ -1,11 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import ListarPublicaciones from "../../../componentes/Publicacion/ListarPublicacion/ListarPublicacion";
 import ToastNotification from "../../../componentes/ToastNotification/ToastNotification";
 
 import { useToast } from "../../../hooks/useToast";
 import { usePublicacionesPaginadas } from "../../../hooks/publicacion/listar/usePublicacionesPaginadas";
-import { useFavoritos } from "../../../hooks/publicacion/useFavoritos";
-
+import { useFavoritos } from "../../../hooks/favorito/useFavoritos";
 
 const TodasLasPublicaciones: React.FC = () => {
   const { toast, hideToast } = useToast();
@@ -20,6 +19,10 @@ const TodasLasPublicaciones: React.FC = () => {
   } = usePublicacionesPaginadas();
 
   const { favoritos, toggleFavorito } = useFavoritos();
+
+  const favoritosIds = useMemo(() => {
+    return favoritos.map(pub => pub.id);
+  }, [favoritos]);
 
   useEffect(() => {
     cargarPublicaciones();
@@ -42,7 +45,7 @@ const TodasLasPublicaciones: React.FC = () => {
           loading={loading && total === 0}
           error={error}
           emptyMessage="No hay publicaciones disponibles"
-          favoriteIds={favoritos}
+          favoriteIds={favoritosIds}
           onToggleFavorite={toggleFavorito}
           showActions={false}
         />

@@ -2,7 +2,7 @@ import { useState } from "react";
 import type { Publicacion, PublicacionFormulario } from "../../../modelos/Publicacion";
 import { useToast } from "../../useToast";
 import apiPublicacion from "../../../api/endpoints/publicaciones";
-import { Navigation } from "../../../navigation/navigationService";
+import { Navegar } from "../../../navigation/navigationService";
 
 
 export const usePublicacionSubmit = (formData: PublicacionFormulario) => {
@@ -47,7 +47,7 @@ export const usePublicacionSubmit = (formData: PublicacionFormulario) => {
       console.log("Publicación creada:", response);
       showSuccess("¡Publicación creada exitosamente!");
 
-      setTimeout(() => Navigation.misPublicaciones(), 1500);
+      setTimeout(() => Navegar.misPublicaciones(), 1500);
     } catch (error: any) {
       console.error("Error al crear publicación:", error);
 
@@ -63,7 +63,7 @@ export const usePublicacionSubmit = (formData: PublicacionFormulario) => {
         if (status === 400) mensaje = backendMsg ?? "Datos inválidos";
         else if (status === 401) {
           mensaje = "No autorizado. Inicia sesión";
-          setTimeout(() => Navigation.auth(), 2000);
+          setTimeout(() => Navegar.auth(), 2000);
         } else if (status === 413) mensaje = "Datos demasiado grandes";
         else if (status >= 500) mensaje = "Error del servidor";
         else mensaje = backendMsg || `Error ${status}`;

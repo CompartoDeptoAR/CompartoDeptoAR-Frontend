@@ -3,7 +3,7 @@ import { TokenService } from "../../services/auth/tokenService";
 import { useToast } from "../useToast";
 import type { LoginRequest } from "../../api/types/auth.types";
 import apiAuth from "../../api/endpoints/auth";
-import { Navigation } from "../../navigation/navigationService";
+import { Navegar } from "../../navigation/navigationService";
 
 
 export function useLogin() {
@@ -27,7 +27,7 @@ export function useLogin() {
 
       saveAuthData(data);
       showSuccess("¡Inicio de sesión exitoso!");
-      Navigation.home();
+      Navegar.home();
 
     } catch (err: any) {
       let errorMessage = "Error al iniciar sesión";

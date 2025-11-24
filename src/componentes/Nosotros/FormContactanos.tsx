@@ -66,7 +66,7 @@ const FormContactanos: React.FC<FormContactanosProps> = ({
             value={mensaje}
             onChange={(e) => setMensaje(e.target.value)}
             required
-            disabled={cargando}
+      
           />
           <Form.Text className="text-muted">
             {palabras} / 300 palabras
@@ -74,8 +74,8 @@ const FormContactanos: React.FC<FormContactanosProps> = ({
         </Form.Group>
 
         <div className="text-center">
-          <Button variant="primary" type="submit" disabled={cargando}>
-            {cargando ? 'Enviando...' : 'Enviar mensaje'}
+          <Button variant="primary" type="submit" >
+            { 'Enviar mensaje'}
           </Button>
         </div>
       </Form>

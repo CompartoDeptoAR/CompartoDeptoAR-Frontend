@@ -1,17 +1,17 @@
-import { Navigation } from "../../navigation/navigationService";
+import { Navegar } from "../../navigation/navigationService";
 
 export const useNavigationActions = () => {
 
   const handleCancel = () => {
-    Navigation.volverAtras();
+    Navegar.volverAtras();
   };
 
   const goToMisPublicaciones = () => {
-    Navigation.misPublicaciones();
+    Navegar.misPublicaciones();
   };
 
   const goToAuth = () => {
-    Navigation.auth();
+    Navegar.auth();
   };
 
   return {

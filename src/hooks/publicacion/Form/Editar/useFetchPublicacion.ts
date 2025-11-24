@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import type { PublicacionFormulario, PublicacionResponce } from "../../../../modelos/Publicacion";
 import { useToast } from "../../../useToast";
-import { Navigation } from "../../../../navigation/navigationService";
+import { Navegar } from "../../../../navigation/navigationService";
 import apiPublicacion from "../../../../api/endpoints/publicaciones";
 
 export const useFetchPublicacion = (
@@ -15,7 +15,7 @@ export const useFetchPublicacion = (
     const fetchData = async () => {
       if (!id) {
         showError("ID de publicación no válido");
-        Navigation.misPublicaciones();
+        Navegar.misPublicaciones();
         return;
       }
 
@@ -44,7 +44,7 @@ export const useFetchPublicacion = (
       } catch (e) {
         console.error("Error al cargar publicación:", e);
         showError("No se pudo cargar la publicación");
-        setTimeout(() => Navigation.misPublicaciones(), 2000);
+        setTimeout(() => Navegar.misPublicaciones(), 2000);
       } finally {
         setLoadingData(false);
       }

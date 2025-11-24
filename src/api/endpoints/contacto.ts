@@ -11,12 +11,12 @@ interface RespuestaContacto {
     mensaje?: string; 
 }
 
+const rutaEndpoint = import.meta.env.VITE_URL_CONTACTO;
 
 const apiContacto = {
   contacto: {
     enviarMensaje: async (data: SolicitudContacto): Promise<RespuestaContacto> => {
-      const rutaEndpoint = import.meta.env.VITE_URL_CONTACTO;
-      
+
       if (!rutaEndpoint) {
           throw new Error("Error de Configuración: VITE_URL_CONTACTO no está definido. Revisa tu archivo .env y asegúrate de reiniciar el servidor de desarrollo.");
       }

@@ -1,8 +1,7 @@
 import React from "react";
-
 import "./ListarPublicacion.css";
 import type { PublicacionResumida } from "../../../modelos/Publicacion";
-import { Navigation } from "../../../navigation/navigationService";
+import { useListarPublicaciones } from "../../hooks/publicacion/useListarPublicaciones";
 
 interface ListarPublicacionesProps {
   publicaciones: PublicacionResumida[];
@@ -27,6 +26,20 @@ const ListarPublicaciones: React.FC<ListarPublicacionesProps> = ({
   onToggleFavorite,
   favoriteIds = [],
 }) => {
+  const {
+    handleVerDetalle,
+    handleEdit,
+    handleDelete,
+    handleToggleFavorite,
+    isFavorite,
+    obtenerPrimeraFoto,
+    handleImageError,
+  } = useListarPublicaciones({
+    onEdit,
+    onDelete,
+    onToggleFavorite,
+    favoriteIds,
+  });
 
   if (loading) {
     return (
@@ -64,35 +77,11 @@ const ListarPublicaciones: React.FC<ListarPublicacionesProps> = ({
     );
   }
 
-  const handleVerDetalle = (id: string) => {
-    Navigation.verPublicacion(id!);
-  };
-
-  const handleEdit = (e: React.MouseEvent, id: string) => {
-    e.stopPropagation();
-    if (onEdit) onEdit(id);
-  };
-
-  const handleDelete = (e: React.MouseEvent, id: string) => {
-    e.stopPropagation();
-    if (onDelete) onDelete(id);
-  };
-
-  const handleToggleFavorite = (e: React.MouseEvent, id: string) => {
-    e.stopPropagation();
-    if (onToggleFavorite) onToggleFavorite(id);
-  };
-
-  const isFavorite = (id: string) => favoriteIds.includes(id);
-
   return (
     <div className="container mt-4">
       <div className="row g-4">
         {publicaciones.map((pub) => {
-          // El backend devuelve foto como array de strings
-          const primeraFoto = Array.isArray(pub.foto) && pub.foto.length > 0
-            ? pub.foto[0]
-            : "https://via.placeholder.com/400x300?text=Sin+Imagen";
+          const primeraFoto = obtenerPrimeraFoto(pub);
 
           return (
             <div key={pub.id} className="col-12 col-md-6 col-lg-4">
@@ -111,12 +100,9 @@ const ListarPublicaciones: React.FC<ListarPublicacionesProps> = ({
                       height: "200px",
                       objectFit: "cover",
                     }}
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).src =
-                        "https://via.placeholder.com/400x300?text=Sin+Imagen";
-                    }}
+                    onError={handleImageError}
                   />
-                  
+
                   {/* Badge de precio */}
                   <span className="badge bg-success position-absolute top-0 end-0 m-2 fs-6">
                     ${pub.precio?.toLocaleString("es-AR")}
@@ -145,9 +131,7 @@ const ListarPublicaciones: React.FC<ListarPublicacionesProps> = ({
                   </h5>
 
                   {/* Ubicación */}
-                  <p className="text-muted small mb-2">
-                    📍 {pub.ubicacion}
-                  </p>
+                  <p className="text-muted small mb-2">📍 {pub.ubicacion}</p>
 
                   {/* Acciones (solo para Mis Publicaciones) */}
                   {showActions && (

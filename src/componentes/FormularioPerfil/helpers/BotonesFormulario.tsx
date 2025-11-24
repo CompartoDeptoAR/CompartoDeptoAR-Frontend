@@ -1,4 +1,4 @@
-import { Navigation } from "../../../navigation/navigationService";
+import { Navegar } from "../../../navigation/navigationService";
 
 
 interface BotonesFormularioProps {
@@ -11,7 +11,7 @@ const BotonesFormulario: React.FC<BotonesFormularioProps> = ({ modo }) => {
   if (modo === "view") {
     return (
       <div className="mt-3 d-flex justify-content-between">
-        <button type="button" className="btn btn-primary" onClick={() => Navigation.editarPerfil}>
+        <button type="button" className="btn btn-primary" onClick={() => Navegar.editarPerfil}>
           Editar Perfil
         </button>
       </div>
@@ -24,7 +24,7 @@ const BotonesFormulario: React.FC<BotonesFormularioProps> = ({ modo }) => {
         <button type="submit" className="btn btn-success">
           Guardar Cambios
         </button>
-        <button type="button" className="btn btn-secondary" onClick={() => Navigation.volverAtras}>
+        <button type="button" className="btn btn-secondary" onClick={() => Navegar.volverAtras}>
           Cancelar
         </button>
       </div>
@@ -34,7 +34,7 @@ const BotonesFormulario: React.FC<BotonesFormularioProps> = ({ modo }) => {
   if (modo === "verOtro") {
     return (
       <div className="mt-3 d-flex justify-content-between">
-        <button type="button" className="btn btn-outline-secondary" onClick={() => Navigation.volverAtras}>
+        <button type="button" className="btn btn-outline-secondary" onClick={() => Navegar.volverAtras}>
           Volver
         </button>
       </div>

@@ -1,11 +1,11 @@
 import TodasLasPublicaciones from "../Publicacion/Listar/TodasLasPublicaciones";
-import { Navigation } from "../../navigation/navigationService";
+import { Navegar } from "../../navigation/navigationService";
 
 const HomePage = () => {
     return (
         <div className="text-center">
             <h1 className="mb-4">Bienvenido a CompartoDeptoAR</h1>
-            <button className="btn btn-primary" onClick={() => Navigation.crearPublicacion()}>
+            <button className="btn btn-primary" onClick={() => Navegar.crearPublicacion()}>
                 Nueva Publicación
             </button>
             <TodasLasPublicaciones/>

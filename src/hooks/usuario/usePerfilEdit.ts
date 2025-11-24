@@ -3,7 +3,7 @@ import type { UsuarioPerfil } from "../../modelos/Usuario";
 import { LocalStorageService, STORAGE_KEYS } from "../../services/storage/localStorage.service";
 import { useToast } from "../useToast";
 import apiUsuario from "../../api/endpoints/usuario";
-import { Navigation } from "../../navigation/navigationService";
+import { Navegar } from "../../navigation/navigationService";
 
 
 export const usePerfilEdit = () => {
@@ -59,7 +59,7 @@ export const usePerfilEdit = () => {
       showSuccess("¡Perfil actualizado correctamente!");
 
       setTimeout(() => {
-        Navigation.miPerfil();
+        Navegar.miPerfil();
       }, 1000);
     } catch (error: any) {
       showError(error.message || "Error al guardar el perfil");

@@ -2,7 +2,7 @@ import { useState } from "react";
 import type { PublicacionFormulario } from "../../../../modelos/Publicacion";
 import { useToast } from "../../../useToast";
 import apiPublicacion from "../../../../api/endpoints/publicaciones";
-import { Navigation } from "../../../../navigation/navigationService";
+import { Navegar } from "../../../../navigation/navigationService";
 
 
 export const useEditarPublicacionSubmit = (
@@ -47,7 +47,7 @@ export const useEditarPublicacionSubmit = (
 
       showSuccess("¡Publicación actualizada exitosamente!");
 
-      setTimeout(() => Navigation.verPublicacion(id), 1500);
+      setTimeout(() => Navegar.verPublicacion(id), 1500);
     } catch (error: any) {
       let msg = "Error al actualizar la publicación";
 

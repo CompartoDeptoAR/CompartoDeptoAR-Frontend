@@ -19,7 +19,7 @@ const go = (path: string) => {
 };
 
 
-export const Navigation = {
+export const Navegar = {
     home: () => go(PUBLIC_ROUTES.HOME),
     auth: () => go(PUBLIC_ROUTES.AUTH),
     contactanos: () => go(PUBLIC_ROUTES.CONTACTANOS),

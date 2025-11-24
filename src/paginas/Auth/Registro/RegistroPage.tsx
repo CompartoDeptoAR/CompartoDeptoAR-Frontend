@@ -1,6 +1,5 @@
 import SegundoFormRegistro from "../../../componentes/FormAuth/FormularioRegistro/SegundoFormRegistro";
 import PrimerFormRegistro from "../../../componentes/FormAuth/FormularioRegistro/PrimerFormRegistro";
-
 import ToastNotification from "../../../componentes/ToastNotification/ToastNotification";
 import { useRegistro } from "../../../hooks/auth/useRegistro";
 

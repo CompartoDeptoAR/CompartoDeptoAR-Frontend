@@ -1,6 +1,6 @@
 import apiCalificacion from "../../../api/endpoints/calificacion";
 import { useToast } from "../../useToast";
-import { Navigation } from "../../../navigation/navigationService";
+import { Navegar } from "../../../navigation/navigationService";
 import { LocalStorageService, STORAGE_KEYS } from "../../../services/storage/localStorage.service";
 
 export const useAccionesPublicacion = (publicacion: any, fetchPromedio: () => void) => {
@@ -10,7 +10,7 @@ export const useAccionesPublicacion = (publicacion: any, fetchPromedio: () => vo
   const handleContactar = () => {
     if (!usuarioActualId) {
       showInfo("Debes iniciar sesión para contactar al anunciante");
-      setTimeout(() => Navigation.auth(), 1500);
+      setTimeout(() => Navegar.auth(), 1500);
       return;
     }
 
@@ -19,7 +19,7 @@ export const useAccionesPublicacion = (publicacion: any, fetchPromedio: () => vo
       return;
     }
 
-    Navigation.chat(publicacion?.usuarioId!);
+    Navegar.chat(publicacion?.usuarioId!);
   };
 
   const handleSubmitCalificacion = async (calificacion: number, comentario: string) => {

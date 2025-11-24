@@ -3,7 +3,7 @@ import React from "react";
 
 import "../../../styles/CartaPublicacion.css";
 import type { EstadoPublicacion, PublicacionResumida } from "../../../modelos/Publicacion";
-import { Navigation } from "../../../navigation/navigationService";
+import { Navegar } from "../../../navigation/navigationService";
 
 interface CartaPublicacionProps {
   publicacion: PublicacionResumida;
@@ -25,7 +25,7 @@ const CartaPublicacion: React.FC<CartaPublicacionProps> = ({
 
 
   const handleVerDetalle = () => {
-    Navigation.verPublicacion(publicacion.id!);
+    Navegar.verPublicacion(publicacion.id!);
 
   };
 

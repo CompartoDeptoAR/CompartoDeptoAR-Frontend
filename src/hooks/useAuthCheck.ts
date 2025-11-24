@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import { estaTokenExpirado, getTiempoRestante } from '../utils/jwtUtils';
 import apiAuth from '../api/endpoints/auth';
-import { Navigation } from '../navigation/navigationService';
+import { Navegar } from '../navigation/navigationService';
 
 
 export const useAuthCheck = () => {
@@ -15,7 +15,7 @@ export const useAuthCheck = () => {
       const token = localStorage.getItem('token');
       
       if (!token) {
-        Navigation.auth;
+        Navegar.auth;
         return;
       }
 
@@ -23,7 +23,7 @@ export const useAuthCheck = () => {
         console.log('Token expirado, cerrando sesión...');
         apiAuth.auth.logout(true); 
         sessionStorage.setItem('mensajeSesion', 'Tu sesión ha expirado.');
-        Navigation.auth;
+        Navegar.auth;
         return;
       }
 

@@ -1,7 +1,7 @@
 import React from "react";
 import type {  PublicacionResponce } from "../../../modelos/Publicacion";
 import "../../../styles/publicacionView.css";
-import { Navigation } from "../../../navigation/navigationService";
+import { Navegar } from "../../../navigation/navigationService";
 
 interface FormularioPublicacionViewProps {
   publicacion: PublicacionResponce;
@@ -226,7 +226,7 @@ const FormularioPublicacionView: React.FC<FormularioPublicacionViewProps> = ({
 
               <button
                 className="btn btn-outline-primary w-100 mb-2"
-                onClick={() => Navigation.usuarioPerfil(usuarioId!)}
+                onClick={() => Navegar.usuarioPerfil(usuarioId!)}
               >
                 <i className="bi bi-person me-2"></i>
                 Ver perfil

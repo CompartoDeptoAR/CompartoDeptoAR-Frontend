@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import apiPublicacion from "../../../api/endpoints/publicaciones";
 import apiCalificacion from "../../../api/endpoints/calificacion";
 import type { PublicacionResponce } from "../../../modelos/Publicacion";
-import { Navigation } from "../../../navigation/navigationService";
+import { Navegar } from "../../../navigation/navigationService";
 import { useToast } from "../../useToast";
 import { useParams } from "react-router-dom";
 import { useGlobalLoader } from "../../sistema/useGlobalLoader";
@@ -18,7 +18,7 @@ export const usePublicacionDetalle = () => {
   useEffect(() => {
     if (!id) {
       showError("No se encontró la publicación");
-      Navigation.volverAtras();
+      Navegar.volverAtras();
       return;
     }
 
@@ -34,7 +34,7 @@ export const usePublicacionDetalle = () => {
     } catch (err) {
       console.error("Error cargando publicación:", err);
       showError("No se pudo cargar la publicación");
-      setTimeout(() => Navigation.home(), 2000);
+      setTimeout(() => Navegar.home(), 2000);
     } finally {
       hideLoader();
     }
