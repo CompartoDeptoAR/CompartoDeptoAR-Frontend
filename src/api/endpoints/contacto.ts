@@ -1,5 +1,4 @@
 import axiosApi from "../config/axios.config";
-// Si handleApiError no está definida, borra esta importación:
 import { handleApiError } from "../../helpers/handleApiError"; 
 
 interface SolicitudContacto {

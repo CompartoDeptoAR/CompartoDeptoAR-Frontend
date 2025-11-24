@@ -1,18 +1,41 @@
 import { useState } from "react";
-import axios from "axios";
 import { TokenService } from "../../services/auth/tokenService";
+import apiContacto from "../../api/endpoints/contacto";
 
-export function useContactanos() {
-  const authData = TokenService.getAuthData();
+export interface ContactanosReturn {
+  email: string;
+  mensaje: string;
+  enviado: boolean;
+  error: string;
+  palabras: number;
+  cargando: boolean;
 
-  const [email, setEmail] = useState(authData?.mail || "");
+  emailBloqueado: boolean; // ⬅ NUEVO
+
+  setEmail: (email: string) => void;
+  setMensaje: (mensaje: string) => void;
+  resetEnviado: () => void;
+  resetError: () => void;
+  manejarEnvio: (e: React.FormEvent) => Promise<void>;
+}
+
+export function useContactanos(): ContactanosReturn {
+
+  const emailUsuario = TokenService.getUserEmail(); 
+  const emailInicial = emailUsuario || "";
+
+  const [email, setEmail] = useState(emailInicial);
   const [mensaje, setMensaje] = useState("");
   const [enviado, setEnviado] = useState(false);
   const [error, setError] = useState("");
+  const [cargando, setCargando] = useState(false);
 
-  const palabras = mensaje.trim().length > 0
-    ? mensaje.trim().split(/\s+/).length
-    : 0;
+  const emailBloqueado = !!emailUsuario; // ⬅ si hay usuario logueado → input disabled
+
+  const palabras =
+    mensaje.trim().length > 0
+      ? mensaje.trim().split(/\s+/).length
+      : 0;
 
   const manejarEnvio = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,18 +51,26 @@ export function useContactanos() {
     }
 
     setError("");
+    setCargando(true);
 
     try {
-      await axios.post("http://localhost:3000/api/contacto", {
+      const respuesta = await apiContacto.contacto.enviarMensaje({
         mail: email,
-        mensaje
+        mensaje: mensaje.trim(),
       });
 
       setEnviado(true);
       setMensaje("");
 
-    } catch (_) {
-      setError("Error al enviar el mensaje. Intenta nuevamente.");
+      if (respuesta.mensaje) {
+        console.log(respuesta.mensaje);
+      }
+
+    } catch (err: any) {
+      console.error("Error al enviar mensaje:", err);
+      setError(err.message || "Error al enviar el mensaje. Intenta nuevamente.");
+    } finally {
+      setCargando(false);
     }
   };
 
@@ -49,10 +80,14 @@ export function useContactanos() {
     enviado,
     error,
     palabras,
+    cargando,
+
+    emailBloqueado, 
+
     setEmail,
     setMensaje,
-    setEnviado,
-    setError,
-    manejarEnvio
+    resetEnviado: () => setEnviado(false),
+    resetError: () => setError(""),
+    manejarEnvio,
   };
 }

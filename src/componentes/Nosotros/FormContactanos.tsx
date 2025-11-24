@@ -7,10 +7,12 @@ interface FormContactanosProps {
   enviado: boolean;
   error: string;
   palabras: number;
+  cargando: boolean;
+  emailBloqueado: boolean;
   setEmail: (email: string) => void;
   setMensaje: (mensaje: string) => void;
-  setEnviado: (enviado: boolean) => void;
-  setError: (error: string) => void;
+  resetEnviado: () => void;
+  resetError: () => void;
   manejarEnvio: (e: React.FormEvent) => void;
 }
 
@@ -20,10 +22,12 @@ const FormContactanos: React.FC<FormContactanosProps> = ({
   enviado,
   error,
   palabras,
+  cargando,
+  emailBloqueado,
   setEmail,
   setMensaje,
-  setEnviado,
-  setError,
+  resetEnviado,
+  resetError,
   manejarEnvio,
 }) => {
   return (
@@ -31,13 +35,13 @@ const FormContactanos: React.FC<FormContactanosProps> = ({
       <h2 className="text-center mb-4">Contáctanos</h2>
 
       {enviado && (
-        <Alert variant="success" onClose={() => setEnviado(false)} dismissible>
+        <Alert variant="success" onClose={resetEnviado} dismissible>
           ✅ ¡Tu mensaje fue enviado correctamente! Te responderemos pronto.
         </Alert>
       )}
 
       {error && (
-        <Alert variant="danger" onClose={() => setError("")} dismissible>
+        <Alert variant="danger" onClose={resetError} dismissible>
           {error}
         </Alert>
       )}
@@ -52,8 +56,9 @@ const FormContactanos: React.FC<FormContactanosProps> = ({
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            disabled={!!email}
+            disabled={emailBloqueado}   
           />
+
         </Form.Group>
 
         {/* 📝 Mensaje */}
@@ -66,7 +71,6 @@ const FormContactanos: React.FC<FormContactanosProps> = ({
             value={mensaje}
             onChange={(e) => setMensaje(e.target.value)}
             required
-      
           />
           <Form.Text className="text-muted">
             {palabras} / 300 palabras
@@ -74,8 +78,8 @@ const FormContactanos: React.FC<FormContactanosProps> = ({
         </Form.Group>
 
         <div className="text-center">
-          <Button variant="primary" type="submit" >
-            { 'Enviar mensaje'}
+          <Button variant="primary" type="submit" disabled={cargando}>
+            {cargando ? "Enviando..." : "Enviar mensaje"}
           </Button>
         </div>
       </Form>
