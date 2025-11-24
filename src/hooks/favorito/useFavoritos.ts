@@ -24,7 +24,7 @@ export const useFavoritos = () => {
     setError("");
 
     try {
-      const publicacionesData = await apiFavorito.favorito.listarFavoritos();
+      const publicacionesData = (await apiFavorito.favorito.listarFavoritos()).publicaciones;
       setFavoritos(publicacionesData);
     } catch (err: any) {
       console.error("Error al cargar favoritos:", err);
