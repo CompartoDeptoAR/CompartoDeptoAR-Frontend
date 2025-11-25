@@ -3,11 +3,16 @@
 .auth-page {
   margin: 0;
   font-family: var(--fuente-principal);
-  background: linear-gradient(135deg, var(--violeta-secundario), var(--violeta-fondo));
+
+  /* ⬇ Fondo con tu imagen */
+  background: url("/ciudad.jpg") no-repeat center center fixed;
+  background-size: cover;
+
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
+  overflow: hidden;
 }
 
 /* Transiciones entre páginas */
@@ -42,8 +47,7 @@
 .auth-page .auth-wrapper {
   width: 100vw;
   height: 100vh;
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow: hidden;
 }
 
 .auth-page .auth-slider {
@@ -65,6 +69,11 @@
   width: 50%;
   padding: var(--padding);
   box-sizing: border-box;
+
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 /* ===== Formulario base ===== */
@@ -145,14 +154,12 @@
   flex: 1;
 }
 
-/* botón Ver/Ocultar separado del siguiente */
 .toggle-password {
   margin-bottom: 1rem !important;
   width: auto !important;
   padding: 0.5rem 0.8rem !important;
 }
 
-/* separa botones normales de formularios */
 .auth-page .form-container button + button {
   margin-top: 1rem;
 }
@@ -187,7 +194,6 @@
   transition: transform 0.6s ease, opacity 0.6s ease;
 }
 
-/* Paso 1 */
 .auth-page .registro-pasos-container.paso-1 .registro-step.paso-1 {
   transform: translateY(0%);
   opacity: 1;
@@ -200,7 +206,6 @@
   z-index: 1;
 }
 
-/* Paso 2 */
 .auth-page .registro-pasos-container.paso-1 .registro-step.paso-2 {
   transform: translateY(100%);
   opacity: 0;
@@ -232,5 +237,5 @@
 }
 
 .auth-page .form-container input[type="password"] + * {
-  margin-bottom: 1.0rem !important;
+  margin-bottom: 1rem !important;
 }

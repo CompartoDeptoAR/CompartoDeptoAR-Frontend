@@ -1,28 +1,29 @@
 import type React from "react";
-import { 
-  OPCIONES_HABITOS, 
+import {
+  OPCIONES_HABITOS,
   OPCIONES_PREFERENCIAS,
   LABELS_HABITOS,
   LABELS_PREFERENCIAS,
-  type Genero, 
-  type HabitoKey, 
-  type PreferenciaKey 
+  type Genero,
+  type HabitoKey,
+  type PreferenciaKey
 } from "../../../modelos/Usuario";
+import "../../../styles/auth.css";
 
 interface SegundoFormRegistroProps {
   edad: number;
   genero: Genero;
   descripcion: string;
   habitos: HabitoKey[];
-  preferencias: PreferenciaKey[]; 
+  preferencias: PreferenciaKey[];
   setEdad: (value: number) => void;
   setGenero: (value: Genero) => void;
   setDescripcion: (value: string) => void;
   setHabitos: (value: HabitoKey[]) => void;
-  setPreferencias: (value: PreferenciaKey[]) => void; 
+  setPreferencias: (value: PreferenciaKey[]) => void;
   handleSubmit: (e: React.FormEvent) => void;
   onCancelar: () => void;
-  loading?: boolean; 
+  loading?: boolean;
 }
 
 const SegundoFormRegistro: React.FC<SegundoFormRegistroProps> = ({
@@ -30,47 +31,48 @@ const SegundoFormRegistro: React.FC<SegundoFormRegistroProps> = ({
   genero,
   descripcion,
   habitos,
-  preferencias, 
+  preferencias,
   setEdad,
   setGenero,
   setDescripcion,
   setHabitos,
-  setPreferencias, 
+  setPreferencias,
   handleSubmit,
   onCancelar,
   loading = false,
 }) => {
-  
+
   const toggleOpcionHabito = (opcion: HabitoKey) => {
-    const nuevasOpciones = habitos.includes(opcion)
-      ? habitos.filter(o => o !== opcion)
-      : [...habitos, opcion];
-    setHabitos(nuevasOpciones);
+    setHabitos(
+      habitos.includes(opcion)
+        ? habitos.filter(o => o !== opcion)
+        : [...habitos, opcion]
+    );
   };
 
   const toggleOpcionPreferencia = (opcion: PreferenciaKey) => {
-    const nuevasOpciones = preferencias.includes(opcion)
-      ? preferencias.filter(o => o !== opcion)
-      : [...preferencias, opcion];
-    setPreferencias(nuevasOpciones);
+    setPreferencias(
+      preferencias.includes(opcion)
+        ? preferencias.filter(o => o !== opcion)
+        : [...preferencias, opcion]
+    );
   };
 
   const MAX_DESCRIPCION = 500;
-  const caracteresRestantes = MAX_DESCRIPCION - descripcion.length;
+  const restantes = MAX_DESCRIPCION - descripcion.length;
 
   return (
-    <div className="form-container-segundo">
-      <h2>Completá tu perfil</h2>
-      <p className="form-subtitle">Esta información es opcional pero ayuda a encontrar mejores compañeros</p>
-      
+    <div className="form-container-segundo page-transition">
+      <h2 className="form-title">Completá tu perfil</h2>
+      <p className="form-subtitle">
+        Esta información ayuda a encontrar mejores compañeros
+      </p>
+
       <form onSubmit={handleSubmit}>
         {/* Edad */}
         <div className="form-group">
-          <label htmlFor="edad">
-            Edad <span className="required">*</span>
-          </label>
+          <label>Edad *</label>
           <input
-            id="edad"
             type="number"
             placeholder="Ej: 25"
             value={edad}
@@ -84,9 +86,8 @@ const SegundoFormRegistro: React.FC<SegundoFormRegistroProps> = ({
 
         {/* Género */}
         <div className="form-group">
-          <label htmlFor="genero">Género</label>
+          <label>Género</label>
           <select
-            id="genero"
             value={genero}
             onChange={(e) => setGenero(e.target.value as Genero)}
             disabled={loading}
@@ -100,90 +101,78 @@ const SegundoFormRegistro: React.FC<SegundoFormRegistroProps> = ({
 
         {/* Descripción */}
         <div className="form-group">
-          <label htmlFor="descripcion">Descripción</label>
+          <label>Descripción</label>
           <textarea
-            id="descripcion"
-            placeholder="Ej: Hola, soy Juan. Estoy buscando compañero de alquiler en La Plata. Me gusta la música, soy ordenado y respetuoso..."
+            placeholder="Ej: Hola, soy Juan..."
             value={descripcion}
             onChange={(e) => setDescripcion(e.target.value)}
             maxLength={MAX_DESCRIPCION}
             rows={4}
             disabled={loading}
           />
-          <small className={caracteresRestantes < 50 ? "warning" : ""}>
-            {caracteresRestantes} caracteres restantes
+          <small className={restantes < 50 ? "warning" : ""}>
+            {restantes} caracteres restantes
           </small>
         </div>
 
         {/* Hábitos */}
         <div className="form-section">
           <h4>Tus hábitos</h4>
-          <p className="section-description">
-            Seleccioná solo lo que realmente hacés o te describe
-          </p>
+          <p className="section-description">Seleccioná lo que realmente te describe</p>
+
           <div className="opciones-grid">
-            {OPCIONES_HABITOS.map((opcion) => (
-              <label 
-                key={opcion} 
-                className={`opcion-item ${habitos.includes(opcion) ? 'selected' : ''}`}
+            {OPCIONES_HABITOS.map((op) => (
+              <label
+                key={op}
+                className={`opcion-item ${habitos.includes(op) ? "selected" : ""}`}
               >
                 <input
                   type="checkbox"
-                  checked={habitos.includes(opcion)}
-                  onChange={() => toggleOpcionHabito(opcion)}
+                  checked={habitos.includes(op)}
+                  onChange={() => toggleOpcionHabito(op)}
                   disabled={loading}
                 />
-                <span>{LABELS_HABITOS[opcion]}</span>
+                <span>{LABELS_HABITOS[op]}</span>
               </label>
             ))}
           </div>
-          {habitos.length > 0 && (
-            <small className="selected-count">
-              {habitos.length} {habitos.length === 1 ? 'hábito seleccionado' : 'hábitos seleccionados'}
-            </small>
-          )}
         </div>
 
         {/* Preferencias */}
         <div className="form-section">
           <h4>Tus preferencias</h4>
-          <p className="section-description">
-            Seleccioná las características que aceptás en tu compañero
-          </p>
+          <p className="section-description">Seleccioná lo que aceptás en tu compañero</p>
+
           <div className="opciones-grid">
-            {OPCIONES_PREFERENCIAS.map((opcion) => (
-              <label 
-                key={opcion} 
-                className={`opcion-item ${preferencias.includes(opcion) ? 'selected' : ''}`}
+            {OPCIONES_PREFERENCIAS.map((op) => (
+              <label
+                key={op}
+                className={`opcion-item ${preferencias.includes(op) ? "selected" : ""}`}
               >
                 <input
                   type="checkbox"
-                  checked={preferencias.includes(opcion)}
-                  onChange={() => toggleOpcionPreferencia(opcion)}
+                  checked={preferencias.includes(op)}
+                  onChange={() => toggleOpcionPreferencia(op)}
                   disabled={loading}
                 />
-                <span>{LABELS_PREFERENCIAS[opcion]}</span>
+                <span>{LABELS_PREFERENCIAS[op]}</span>
               </label>
             ))}
           </div>
-          {preferencias.length > 0 && (
-            <small className="selected-count">
-              {preferencias.length} {preferencias.length === 1 ? 'preferencia seleccionada' : 'preferencias seleccionadas'}
-            </small>
-          )}
         </div>
 
-        {/* Botones */}
+        {/* BOTONES */}
         <div className="form-actions">
-          <button 
-            type="button" 
+          <button
+            type="button"
             onClick={onCancelar}
             className="btn-secondary"
             disabled={loading}
           >
             Volver
           </button>
-          <button 
+
+          <button
             type="submit"
             className="btn-primary"
             disabled={loading}
