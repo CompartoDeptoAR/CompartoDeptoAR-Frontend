@@ -1,4 +1,3 @@
-
 interface FormLoginProps {
   email: string;
   password: string;
@@ -22,7 +21,6 @@ const FormularioLogin: React.FC<FormLoginProps> = ({
   onSubmit,
   onSwitch,
 }) => (
-  
   <form onSubmit={onSubmit} className="form-container page-transition">
     <h2 className="form-title">Iniciar sesión</h2>
 
@@ -40,7 +38,9 @@ const FormularioLogin: React.FC<FormLoginProps> = ({
 
     <div>
       <label>Contraseña</label>
-      <div>
+
+      {/* WRAPPER AGREGADO PARA PODER SEPARAR EL BOTÓN "VER/OCULTAR" */}
+      <div className="password-wrapper">
         <input
           type={mostrarPassword ? "text" : "password"}
           value={password}
@@ -52,7 +52,13 @@ const FormularioLogin: React.FC<FormLoginProps> = ({
           title="La contraseña debe tener al menos 8 caracteres, incluyendo mayúsculas, minúsculas y un número"
           disabled={loading}
         />
-        <button type="button" onClick={onTogglePassword} disabled={loading}>
+
+        <button
+          type="button"
+          className="toggle-password"
+          onClick={onTogglePassword}
+          disabled={loading}
+        >
           {mostrarPassword ? "Ocultar" : "Ver"}
         </button>
       </div>
