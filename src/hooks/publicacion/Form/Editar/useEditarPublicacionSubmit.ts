@@ -1,13 +1,13 @@
 import { useState } from "react";
-import type { PublicacionFormulario } from "../../../../modelos/Publicacion";
 import { useToast } from "../../../useToast";
 import apiPublicacion from "../../../../api/endpoints/publicaciones";
 import { Navegar } from "../../../../navigation/navigationService";
+import { Publicacion } from "../../../../modelos/Publicacion";
 
 
 export const useEditarPublicacionSubmit = (
   id: string,
-  formData: PublicacionFormulario
+  formData: Publicacion
 ) => {
   const [loading, setLoading] = useState(false);
   const { showSuccess, showError, showWarning } = useToast();
@@ -38,7 +38,7 @@ export const useEditarPublicacionSubmit = (
         precio: Number(formData.precio),
         ubicacion,
         foto: formData.foto.filter((url) => url.trim().length > 0),
-        reglas: formData.reglas.filter((r) => r.trim().length > 0),
+        reglas: formData.reglas!.filter((r) => r.trim().length > 0),
         preferencias: formData.preferencias,
         habitos: formData.habitos,
       };

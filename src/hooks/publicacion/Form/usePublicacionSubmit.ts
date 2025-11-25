@@ -1,11 +1,10 @@
 import { useState } from "react";
-import type { Publicacion, PublicacionFormulario } from "../../../modelos/Publicacion";
+import type { Publicacion } from "../../../modelos/Publicacion";
 import { useToast } from "../../useToast";
 import apiPublicacion from "../../../api/endpoints/publicaciones";
 import { Navegar } from "../../../navigation/navigationService";
 
-
-export const usePublicacionSubmit = (formData: PublicacionFormulario) => {
+export const usePublicacionSubmit = (formData: Publicacion) => {
   const [loading, setLoading] = useState(false);
   const { showSuccess, showError, showWarning } = useToast();
 
@@ -26,19 +25,25 @@ export const usePublicacionSubmit = (formData: PublicacionFormulario) => {
     setLoading(true);
 
     try {
+      
       const ubicacion = formData.direccion?.trim()
         ? `${formData.direccion}, ${formData.localidad}, ${formData.provincia}`
         : `${formData.localidad}, ${formData.provincia}`;
 
+      
       const publicacionParaEnviar: Partial<Publicacion> = {
         titulo: formData.titulo.trim(),
         descripcion: formData.descripcion.trim(),
         precio: Number(formData.precio),
         ubicacion,
-        foto: formData.foto.filter((url) => url.trim().length > 0),
-        reglas: formData.reglas.filter((r) => r.trim().length > 0),
-        preferencias: formData.preferencias,
-        habitos: formData.habitos,
+        foto: Array.isArray(formData.foto)
+          ? formData.foto.filter((url) => url.trim().length > 0)
+          : [],
+        reglas: Array.isArray(formData.reglas)
+          ? formData.reglas.filter((r) => r.trim().length > 0)
+          : [],
+        preferencias: formData.preferencias ?? {},
+        habitos: formData.habitos ?? {},
         estado: "activa",
       };
 

@@ -4,7 +4,6 @@ import { useToast } from "../useToast";
 import apiFavorito from "../../api/endpoints/favoritos";
 import { TokenService } from "../../services/auth/tokenService";
 
-
 export const useFavoritos = () => {
   const [favoritos, setFavoritos] = useState<PublicacionResumida[]>([]);
   const [loading, setLoading] = useState(false);
@@ -13,7 +12,6 @@ export const useFavoritos = () => {
   const { showSuccess, showError } = useToast();
 
   const cargarFavoritos = useCallback(async () => {
-    // Si no está autenticado, no hacer la petición
     if (!TokenService.isAuthenticated()) {
       setFavoritos([]);
       setLoading(false);
@@ -25,12 +23,21 @@ export const useFavoritos = () => {
 
     try {
       const publicacionesData = (await apiFavorito.favorito.listarFavoritos()).publicaciones;
-      setFavoritos(publicacionesData);
+
+      const publicacionesLimpias: PublicacionResumida[] = publicacionesData.map((pub: any) => ({
+        ...pub,
+        fotos: Array.isArray(pub.fotos)
+          ? pub.fotos.filter((f: any) => typeof f === "string")
+          : pub.fotos
+            ? [String(pub.fotos)]
+            : [],
+      }));
+
+      setFavoritos(publicacionesLimpias);
     } catch (err: any) {
       console.error("Error al cargar favoritos:", err);
       const mensajeError = err.message || "Error al cargar tus favoritos";
       setError(mensajeError);
-      // No mostrar error si es un 401 (no autenticado)
       if (err.status !== 401) {
         showError(mensajeError);
       }
@@ -48,7 +55,7 @@ export const useFavoritos = () => {
     try {
       await apiFavorito.favorito.agregarFavorito(publicacionId);
       showSuccess("❤️ Agregado a favoritos");
-      await cargarFavoritos(); 
+      await cargarFavoritos();
       return true;
     } catch (err: any) {
       console.error("Error al agregar favorito:", err);
@@ -65,9 +72,7 @@ export const useFavoritos = () => {
 
     try {
       await apiFavorito.favorito.eliminarFavorito(publicacionId);
-      
       setFavoritos((prev) => prev.filter((pub) => pub.id !== publicacionId));
-      
       showSuccess("💔 Eliminado de favoritos");
       return true;
     } catch (err: any) {
@@ -83,7 +88,7 @@ export const useFavoritos = () => {
       return;
     }
 
-    const esFavorito = favoritos.some(p => p.id === id);
+    const esFavorito = favoritos.some((p) => p.id === id);
 
     if (esFavorito) {
       await eliminarFavorito(id);
@@ -105,12 +110,12 @@ export const useFavoritos = () => {
     if (!confirmar) return false;
 
     try {
-      const promesas = favoritos.map((pub) => 
+      const promesas = favoritos.map((pub) =>
         apiFavorito.favorito.eliminarFavorito(pub.id)
       );
-      
+
       await Promise.all(promesas);
-      
+
       setFavoritos([]);
       showSuccess("🗑️ Todos los favoritos han sido eliminados");
       return true;
@@ -147,6 +152,6 @@ export const useFavoritos = () => {
     limpiarTodosFavoritos,
     verificarEsFavorito,
     cantidadFavoritos: favoritos.length,
-    isAuthenticated: TokenService.isAuthenticated() // Exportar para que los componentes sepan si está autenticado
+    isAuthenticated: TokenService.isAuthenticated(),
   };
 };

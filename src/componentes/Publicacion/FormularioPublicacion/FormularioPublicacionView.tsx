@@ -1,5 +1,5 @@
 import React from "react";
-import type {  PublicacionResponce } from "../../../modelos/Publicacion";
+import type { PublicacionResponce } from "../../../modelos/Publicacion";
 import "../../../styles/publicacionView.css";
 import { Navegar } from "../../../navigation/navigationService";
 
@@ -13,8 +13,8 @@ interface FormularioPublicacionViewProps {
   onContactar: () => void;
 
   /** Props nuevos */
-  puedeCalificar?: boolean;
-  onEnviarCalificacion?: (calificacion: number, comentario: string) => void;
+  // puedeCalificar?: boolean;
+  // onEnviarCalificacion?: (calificacion: number, comentario: string) => void;
 }
 
 const FormularioPublicacionView: React.FC<FormularioPublicacionViewProps> = ({
@@ -24,10 +24,12 @@ const FormularioPublicacionView: React.FC<FormularioPublicacionViewProps> = ({
   calificacionPromedio = 0,
   cantidadCalificaciones = 0,
   onContactar,
-  puedeCalificar = false,
-  onEnviarCalificacion,
+  // puedeCalificar = false,
+  // onEnviarCalificacion,
 }) => {
 
+  // const [rating, setRating] = React.useState(0);
+  // const [comentario, setComentario] = React.useState("");
 
   const formatearPrecio = (precio: number) => {
     return new Intl.NumberFormat("es-AR", {
@@ -61,21 +63,27 @@ const FormularioPublicacionView: React.FC<FormularioPublicacionViewProps> = ({
     );
   };
 
-  const enviarCalificacion = () => {
-    if (!onEnviarCalificacion) return;
-    if (rating === 0) return;
-    onEnviarCalificacion(rating, comentario);
-    setComentario("");
-    setRating(0);
-  };
+  // --- mandar calificación chau ---
+  //
+  // const enviarCalificacion = () => {
+  //   if (!onEnviarCalificacion) return;
+  //   if (rating === 0) return;
+  //   onEnviarCalificacion(rating, comentario);
+  //   setComentario("");
+  //   setRating(0);
+  // };
+  //
+  // --- FIN---
 
   return (
     <div className="container mt-4">
       <div className="row">
+
         {/* Columna izquierda */}
         <div className="col-lg-8">
           <div className="card mb-3">
             <div className="card-body">
+
               <h1 className="h3 mb-3">{publicacion.titulo}</h1>
 
               {/* Carrusel */}
@@ -107,6 +115,7 @@ const FormularioPublicacionView: React.FC<FormularioPublicacionViewProps> = ({
               {/* Información básica */}
               <div className="mb-4">
                 <h5 className="text-muted mb-3">Información básica</h5>
+
                 <div className="row g-3">
                   <div className="col-md-6">
                     <div className="d-flex align-items-center">
@@ -153,12 +162,12 @@ const FormularioPublicacionView: React.FC<FormularioPublicacionViewProps> = ({
                 </div>
               )}
 
-              {/* ★ Calificar */}
+              {/* --- para calificar chau ---
+              
               {puedeCalificar && (
                 <div className="card p-3 mt-4">
                   <h6>Calificar al anunciante</h6>
 
-                  {/* Estrellas */}
                   <div className="d-flex gap-1 mb-2">
                     {[1, 2, 3, 4, 5].map((star) => (
                       <i
@@ -170,7 +179,6 @@ const FormularioPublicacionView: React.FC<FormularioPublicacionViewProps> = ({
                     ))}
                   </div>
 
-                  {/* Comentario */}
                   <textarea
                     className="form-control mb-2"
                     placeholder="Escribe un comentario (opcional)"
@@ -188,6 +196,9 @@ const FormularioPublicacionView: React.FC<FormularioPublicacionViewProps> = ({
                   </button>
                 </div>
               )}
+
+              --- FIN bloque para calificar --- */}
+
             </div>
           </div>
         </div>
@@ -234,6 +245,7 @@ const FormularioPublicacionView: React.FC<FormularioPublicacionViewProps> = ({
             </div>
           </div>
         </div>
+
       </div>
     </div>
   );

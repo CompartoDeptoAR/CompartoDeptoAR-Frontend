@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import type { PublicacionFormulario, PublicacionResponce } from "../../../../modelos/Publicacion";
+import type { Publicacion, PublicacionResponce } from "../../../../modelos/Publicacion";
 import { useToast } from "../../../useToast";
 import { Navegar } from "../../../../navigation/navigationService";
 import apiPublicacion from "../../../../api/endpoints/publicaciones";
 
 export const useFetchPublicacion = (
   id: string | undefined,
-  setFormData: (data: PublicacionFormulario) => void
+  setFormData: (data: Publicacion) => void
 ) => {
   const { showError } = useToast();
   const [loadingData, setLoadingData] = useState(true);
@@ -25,8 +25,8 @@ export const useFetchPublicacion = (
         // Parse ubicación
         const parts = data.ubicacion?.split(",").map((s) => s.trim()) ?? [];
 
-        const provincia = parts.at(-1) || "";
-        const localidad = parts.at(-2) || "";
+        const provincia = parts[parts.length - 1] || "";
+        const localidad = parts[parts.length - 2] || "";
         const direccion = parts.length > 2 ? parts.slice(0, -2).join(", ") : "";
 
         setFormData({
@@ -40,6 +40,8 @@ export const useFetchPublicacion = (
           reglas: Array.isArray(data.reglas) ? data.reglas : [],
           preferencias: data.preferencias || {},
           habitos: data.habitos || {},
+          estado: data.estado,
+          ubicacion: ""
         });
       } catch (e) {
         console.error("Error al cargar publicación:", e);

@@ -1,6 +1,6 @@
 import { useState } from "react";
-import type { Publicacion } from "../../../../modelos/Publicacion";
-
+import type { EstadoPublicacion, Publicacion } from "../../../../modelos/Publicacion";
+import { PreferenciasUsuario, HabitosUsuario } from "../../../../modelos/Usuario";
 
 export const usePublicacionForm = () => {
   const [formData, setFormData] = useState<Publicacion>({
@@ -10,11 +10,14 @@ export const usePublicacionForm = () => {
     provincia: "",
     localidad: "",
     direccion: "",
+    ubicacion: "", 
     foto: [],
     reglas: [],
-    preferencias: {},
-    habitos: {},
+    preferencias: {} as PreferenciasUsuario, 
+    habitos: {} as HabitosUsuario,
+    estado: "activa" as EstadoPublicacion,
   });
+
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>

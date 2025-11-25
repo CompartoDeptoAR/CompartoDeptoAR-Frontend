@@ -27,10 +27,12 @@ export interface Publicacion {
   provincia: string;
   localidad: string;
   direccion: string;
+  ubicacion: string;
   foto: string[]; 
   reglas?: string[];
   preferencias?: PreferenciasUsuario;
   habitos?: HabitosUsuario;
+  estado: EstadoPublicacion;
 }
 
 export interface PublicacionResumida {

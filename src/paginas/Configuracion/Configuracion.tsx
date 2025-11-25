@@ -27,8 +27,15 @@ const Configuracion: React.FC = () => {
         id: pub.id,
         titulo: pub.titulo,
         precio: pub.precio,
-        foto: Array.isArray(pub.foto) && pub.foto.length > 0 ? pub.foto[0] : pub.foto || null,
+        foto:
+          Array.isArray(pub.foto) && pub.foto.length > 0
+            ? pub.foto[0]
+            : pub.foto || null,
         estado: pub.estado || "activa",
+        ubicacion:
+          pub.localidad && pub.provincia
+            ? `${pub.localidad}, ${pub.provincia}`
+            : "",
         createdAt: pub.createdAt || new Date().toISOString(),
       }));
       setMisPublicaciones(publicacionesResumidas);
@@ -45,14 +52,26 @@ const Configuracion: React.FC = () => {
               id: pub.id,
               titulo: pub.titulo,
               precio: pub.precio,
-              foto: Array.isArray(pub.foto) && pub.foto.length > 0 ? pub.foto[0] : pub.foto || null,
+              foto:
+                Array.isArray(pub.foto) && pub.foto.length > 0
+                  ? pub.foto[0]
+                  : pub.foto || null,
               estado: pub.estado || "activa",
+              ubicacion:
+                pub.localidad && pub.provincia
+                  ? `${pub.localidad}, ${pub.provincia}`
+                  : "",
               createdAt: pub.createdAt || new Date().toISOString(),
             }))
             .catch(() => null)
         );
+
         const resultados = await Promise.all(promesas);
-        setMisFavoritos(resultados.filter(Boolean) as PublicacionResumida[]);
+
+        // Filtra nulls y asegura tipo correcto
+        setMisFavoritos(
+          resultados.filter((r) => r !== null) as PublicacionResumida[]
+        );
       }
     } catch (err: any) {
       console.error(err);
@@ -69,7 +88,11 @@ const Configuracion: React.FC = () => {
 
     setFavoritosIds(nuevosFavoritos);
     localStorage.setItem("favoritos", JSON.stringify(nuevosFavoritos));
-    showSuccess(favoritosIds.includes(id) ? "💔 Eliminado de favoritos" : "❤️ Agregado a favoritos");
+    showSuccess(
+      favoritosIds.includes(id)
+        ? "💔 Eliminado de favoritos"
+        : "❤️ Agregado a favoritos"
+    );
   };
 
   return (
