@@ -34,7 +34,7 @@ const BotonesFormulario: React.FC<BotonesFormularioProps> = ({ modo }) => {
   if (modo === "verOtro") {
     return (
       <div className="mt-3 d-flex justify-content-between">
-        <button type="button" className="btn btn-outline-secondary" onClick={() => Navegar.volverAtras()}>
+        <button type="button" className="btn btn-outline-secondary" onClick={() => Navegar.volverAtras}>
           Volver
         </button>
       </div>
