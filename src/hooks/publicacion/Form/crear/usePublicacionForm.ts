@@ -40,6 +40,14 @@ export const usePublicacionForm = () => {
     }));
   };
 
+    const handlePreferenciasChange = (preferencias: PreferenciasUsuario) => {
+    setFormData((prev) => ({ ...prev, preferencias }));
+  };
+
+  const handleHabitosChange = (habitos: HabitosUsuario) => {
+    setFormData((prev) => ({ ...prev, habitos }));
+  };
+
   const handleProvinciaChange = (provincia: string) => {
     setFormData((prev) => ({ ...prev, provincia, localidad: "" }));
   };
@@ -53,12 +61,14 @@ export const usePublicacionForm = () => {
   };
 
 
-  return {
-    formData,
-    setFormData,
-    handleChange,
-    handleProvinciaChange,
-    handleLocalidadChange,
-    handleFotosChange,
-  };
+return {
+  formData,
+  setFormData,
+  handleChange,
+  handleProvinciaChange,
+  handleLocalidadChange,
+  handleFotosChange,
+  handlePreferenciasChange,
+  handleHabitosChange,
+};
 };

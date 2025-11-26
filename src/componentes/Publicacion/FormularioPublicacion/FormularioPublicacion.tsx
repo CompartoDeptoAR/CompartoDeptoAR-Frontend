@@ -15,6 +15,8 @@ interface FormularioPublicacionProps {
   onProvinciaChange: (provincia: string) => void;
   onLocalidadChange: (localidad: string) => void;
   onFotosChange: (fotos: string[]) => void;
+  onPreferenciasChange?: (preferencias: string[]) => void;
+  onHabitosChange?: (habitos: string[]) => void;   
   handleSubmit: (e: React.FormEvent) => void;
   modo: "crear" | "editar";
   loading?: boolean;
