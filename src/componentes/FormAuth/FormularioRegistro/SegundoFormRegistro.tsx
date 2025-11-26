@@ -41,6 +41,7 @@ const SegundoFormRegistro: React.FC<SegundoFormRegistroProps> = ({
   onCancelar,
   loading = false,
 }) => {
+  // Funciones de toggle simplificadas
 
   const toggleOpcionHabito = (opcion: HabitoKey) => {
     setHabitos(
