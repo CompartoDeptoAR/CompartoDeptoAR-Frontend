@@ -1,14 +1,18 @@
 @import './variables.css';
 
-
 .auth-page {
   margin: 0;
   font-family: var(--fuente-principal);
-  background: linear-gradient(135deg, var(--violeta-secundario), var(--violeta-fondo));
+
+  /* ⬇ Fondo con tu imagen */
+  background: url("/ciudad.jpg") no-repeat center center fixed;
+  background-size: cover;
+
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
+  overflow: hidden;
 }
 
 /* Transiciones entre páginas */
@@ -43,8 +47,7 @@
 .auth-page .auth-wrapper {
   width: 100vw;
   height: 100vh;
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow: hidden;
 }
 
 .auth-page .auth-slider {
@@ -66,6 +69,11 @@
   width: 50%;
   padding: var(--padding);
   box-sizing: border-box;
+
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 /* ===== Formulario base ===== */
@@ -84,15 +92,15 @@
 }
 
 .auth-page .form-container-segundo {
-    background: var(--blanco);
+  background: var(--blanco);
   padding: var(--padding);
   border-radius: var(--borde-radius);
   box-shadow: 0 8px 20px var(--sombra);
   width: var(--ancho-form);
-  margin: 0 auto;           /* centra horizontal */
-  text-align: left;         /* textos alineados a la izquierda */
-  overflow-y: auto;         /* solo si querés scroll vertical */
-  max-height: 80vh;     
+  margin: 0 auto;
+  text-align: left;
+  overflow-y: auto;
+  max-height: 80vh;
 }
 
 .auth-page .form-title {
@@ -135,14 +143,25 @@
   background: var(--violeta-hover);
 }
 
-.auth-page .toggle-password {
-  margin-top: -0.5rem;
-  margin-bottom: 1rem;
-  font-size: 0.9rem;
-  background: none;
-  border: none;
-  color: var(--violeta-secundario);
-  cursor: pointer;
+/* ===== FIX REAL ACÁ ===== */
+.password-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.password-wrapper input {
+  flex: 1;
+}
+
+.toggle-password {
+  margin-bottom: 1rem !important;
+  width: auto !important;
+  padding: 0.5rem 0.8rem !important;
+}
+
+.auth-page .form-container button + button {
+  margin-top: 1rem;
 }
 
 .auth-page .form-container p {
@@ -175,7 +194,6 @@
   transition: transform 0.6s ease, opacity 0.6s ease;
 }
 
-/* Paso 1 */
 .auth-page .registro-pasos-container.paso-1 .registro-step.paso-1 {
   transform: translateY(0%);
   opacity: 1;
@@ -188,7 +206,6 @@
   z-index: 1;
 }
 
-/* Paso 2 */
 .auth-page .registro-pasos-container.paso-1 .registro-step.paso-2 {
   transform: translateY(100%);
   opacity: 0;
@@ -217,4 +234,8 @@
   --borde-radius: 12px;
   --padding: 2rem;
   --ancho-form: 350px;
+}
+
+.auth-page .form-container input[type="password"] + * {
+  margin-bottom: 1rem !important;
 }
