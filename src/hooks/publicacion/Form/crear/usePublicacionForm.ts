@@ -52,19 +52,6 @@ export const usePublicacionForm = () => {
     setFormData((prev) => ({ ...prev, foto: fotos }));
   };
 
-  const handlePreferenciasChange = (key: string, value: boolean) => {
-    setFormData((prev) => ({
-      ...prev,
-      preferencias: { ...prev.preferencias, [key]: value },
-    }));
-  };
-
-  const handleHabitosChange = (key: string, value: boolean) => {
-    setFormData((prev) => ({
-      ...prev,
-      habitos: { ...prev.habitos, [key]: value },
-    }));
-  };
 
   return {
     formData,
@@ -73,7 +60,5 @@ export const usePublicacionForm = () => {
     handleProvinciaChange,
     handleLocalidadChange,
     handleFotosChange,
-    handlePreferenciasChange,
-    handleHabitosChange,
   };
 };

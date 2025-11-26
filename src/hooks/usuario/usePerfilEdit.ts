@@ -14,7 +14,7 @@ export const usePerfilEdit = () => {
   const [loading, setLoading] = useState(!perfil);
   const { toast, showSuccess, showError, hideToast } = useToast();
 
-  // 📌 Cargar perfil si no está en localStorage
+
   useEffect(() => {
     if (!perfil) {
       const token = LocalStorageService.get(STORAGE_KEYS.TOKEN);
@@ -45,7 +45,7 @@ export const usePerfilEdit = () => {
     }
   }, [perfil, showError]);
 
-  // 📌 Guardar perfil
+
   const handleSave = async (nuevoPerfil: UsuarioPerfil): Promise<void> => {
     try {
       const token = LocalStorageService.get(STORAGE_KEYS.TOKEN);

@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import "../../../styles/FormularioPerfil.css";
 import type { Publicacion } from "../../../modelos/Publicacion";
 import SelectorUbicacionArgentina from "../../SelectorUbicacionArgentina/SelectorUbicacionArgentina";
+import { useHabitosPreferencias } from "../../../hooks/useHabitosPreferencias";
+import { SelectorHabitosPreferencias } from "../../HabitosPreferencias/SelectorHabitosPreferencias";
 
 interface FormularioPublicacionProps {
   publicacion: Publicacion;
@@ -13,8 +15,6 @@ interface FormularioPublicacionProps {
   loading?: boolean;
   onCancel?: () => void;
   onFotosChange: (fotos: string[]) => void;
-  onPreferenciasChange: (key: string, value: boolean) => void;
-  onHabitosChange: (key: string, value: boolean) => void;
 }
 
 const FormularioPublicacion: React.FC<FormularioPublicacionProps> = ({
@@ -27,40 +27,110 @@ const FormularioPublicacion: React.FC<FormularioPublicacionProps> = ({
   loading = false,
   onCancel,
   onFotosChange,
-  onPreferenciasChange,
-  onHabitosChange,
 }) => {
-  const [nuevaFotoUrl, setNuevaFotoUrl] = useState("");
-  const [errorUrl, setErrorUrl] = useState("");
+  const [arrastrando, setArrastrando] = useState(false);
+  const [errorFoto, setErrorFoto] = useState("");
+  const [arrastrándoFoto, setArrastrandoFoto] = useState<number | null>(null);
+  const [sobreIndiceFoto, setSobreIndiceFoto] = useState<number | null>(null);
+  const inputFileRef = useRef<HTMLInputElement>(null);
+  const [reglasTexto, setReglasTexto] = useState(
+  publicacion.reglas?.join("\n") ?? ""
+);
 
-  const reglasTexto = publicacion.reglas?.join("\n") ?? "";
+  const MAX_FOTOS = 10;
+  const TAMANO_MAX = 5 * 1024 * 1024; 
+  const TIPOS_PERMITIDOS = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
 
-  const esUrlValida = (url: string): boolean => {
-    if (!url.trim()) return false;
-    try {
-      const urlObj = new URL(url);
-      return urlObj.protocol === "http:" || urlObj.protocol === "https:";
-    } catch {
-      return false;
+
+  const {
+  habitos,
+  preferencias,
+  toggleHabito,
+  togglePreferencia,
+  cargando: cargandoPerfil,
+  error: errorPerfil,
+} = useHabitosPreferencias({
+  habitosIniciales: publicacion.habitos,
+  preferenciasIniciales: publicacion.preferencias,
+  cargarDesdePerfil: modo === 'crear',
+});
+ 
+  const convertirABase64 = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  };
+
+  const validarArchivo = (file: File): string | null => {
+    if (!TIPOS_PERMITIDOS.includes(file.type)) {
+      return "Solo se permiten imágenes JPG, PNG o WebP";
+    }
+    if (file.size > TAMANO_MAX) {
+      return "La imagen no debe superar 5MB";
+    }
+    return null;
+  };
+
+  const procesarArchivos = async (files: FileList | null) => {
+    if (!files || files.length === 0) return;
+
+    setErrorFoto("");
+
+    const fotosActuales = publicacion.foto.length;
+    const espacioDisponible = MAX_FOTOS - fotosActuales;
+
+    if (espacioDisponible <= 0) {
+      setErrorFoto(`Ya alcanzaste el límite de ${MAX_FOTOS} fotos`);
+      return;
+    }
+
+    const archivosArray = Array.from(files).slice(0, espacioDisponible);
+    const nuevasFotos: string[] = [];
+
+    for (const file of archivosArray) {
+      const errorValidacion = validarArchivo(file);
+      if (errorValidacion) {
+        setErrorFoto(errorValidacion);
+        continue;
+      }
+
+      try {
+        const base64 = await convertirABase64(file);
+        nuevasFotos.push(base64);
+      } catch (err) {
+        setErrorFoto("Error al procesar la imagen");
+      }
+    }
+
+    if (nuevasFotos.length > 0) {
+      onFotosChange([...publicacion.foto, ...nuevasFotos]);
     }
   };
 
-  const handleAgregarFoto = () => {
-    const urlLimpia = nuevaFotoUrl.trim();
-    
-    if (!esUrlValida(urlLimpia)) {
-      setErrorUrl("Por favor ingresa una URL válida (debe comenzar con http:// o https://)");
-      return;
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    procesarArchivos(e.target.files);
+    if (inputFileRef.current) {
+      inputFileRef.current.value = "";
     }
+  };
 
-    if (publicacion.foto.includes(urlLimpia)) {
-      setErrorUrl("Esta foto ya fue agregada");
-      return;
-    }
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    setArrastrando(true);
+  };
 
-    onFotosChange([...publicacion.foto, urlLimpia]);
-    setNuevaFotoUrl("");
-    setErrorUrl("");
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    setArrastrando(false);
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setArrastrando(false);
+    procesarArchivos(e.dataTransfer.files);
   };
 
   const handleEliminarFoto = (index: number) => {
@@ -68,11 +138,59 @@ const FormularioPublicacion: React.FC<FormularioPublicacionProps> = ({
     onFotosChange(nuevasFotos);
   };
 
-  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      handleAgregarFoto();
+  const handleClickZona = () => {
+    if (!loading && publicacion.foto.length < MAX_FOTOS) {
+      inputFileRef.current?.click();
     }
+  };
+
+
+  const handleDragStartFoto = (index: number) => {
+    setArrastrandoFoto(index);
+  };
+
+  const handleDragOverFoto = (e: React.DragEvent, index: number) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (arrastrándoFoto !== null && arrastrándoFoto !== index) {
+      setSobreIndiceFoto(index);
+    }
+  };
+
+  const handleDragLeaveFoto = () => {
+    setSobreIndiceFoto(null);
+  };
+
+  const handleDropFoto = (e: React.DragEvent, indexDestino: number) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    if (arrastrándoFoto === null || arrastrándoFoto === indexDestino) {
+      setArrastrandoFoto(null);
+      setSobreIndiceFoto(null);
+      return;
+    }
+
+    const nuevasFotos = [...publicacion.foto];
+    const [fotoMovida] = nuevasFotos.splice(arrastrándoFoto, 1);
+    nuevasFotos.splice(indexDestino, 0, fotoMovida);
+    
+    onFotosChange(nuevasFotos);
+    setArrastrandoFoto(null);
+    setSobreIndiceFoto(null);
+  };
+
+  const handleDragEndFoto = () => {
+    setArrastrandoFoto(null);
+    setSobreIndiceFoto(null);
+  };
+
+  const moverFotoAInicio = (index: number) => {
+    if (index === 0) return;
+    const nuevasFotos = [...publicacion.foto];
+    const [fotoMovida] = nuevasFotos.splice(index, 1);
+    nuevasFotos.unshift(fotoMovida);
+    onFotosChange(nuevasFotos);
   };
 
   return (
@@ -208,7 +326,7 @@ const FormularioPublicacion: React.FC<FormularioPublicacionProps> = ({
               </div>
             </div>
 
-            {/* FOTOS */}
+            {/* FOTOS - NUEVA VERSIÓN */}
             <div className="card shadow-sm mb-4">
               <div className="card-header bg-info text-white">
                 <h5 className="mb-0">📸 Fotos de la Propiedad</h5>
@@ -220,76 +338,149 @@ const FormularioPublicacion: React.FC<FormularioPublicacionProps> = ({
                   </small>
                 </div>
 
-                <div className="input-group mb-2">
+                {/* Zona de subida con Drag & Drop */}
+                <div
+                  className={`border-2 border-dashed rounded p-4 mb-3 text-center ${
+                    arrastrando ? "border-primary bg-primary bg-opacity-10" : "border-secondary"
+                  } ${loading || publicacion.foto.length >= MAX_FOTOS ? "opacity-50" : ""}`}
+                  onDragOver={handleDragOver}
+                  onDragLeave={handleDragLeave}
+                  onDrop={handleDrop}
+                  onClick={handleClickZona}
+                  style={{ 
+                    cursor: loading || publicacion.foto.length >= MAX_FOTOS ? "not-allowed" : "pointer",
+                    transition: "all 0.3s ease"
+                  }}
+                >
                   <input
-                    type="text"
-                    className={`form-control ${errorUrl ? "is-invalid" : ""}`}
-                    value={nuevaFotoUrl}
-                    onChange={(e) => {
-                      setNuevaFotoUrl(e.target.value);
-                      setErrorUrl("");
-                    }}
-                    onKeyPress={handleKeyPress}
-                    placeholder="https://ejemplo.com/imagen.jpg"
-                    disabled={loading}
+                    ref={inputFileRef}
+                    type="file"
+                    accept="image/jpeg,image/jpg,image/png,image/webp"
+                    multiple
+                    onChange={handleFileSelect}
+                    style={{ display: "none" }}
+                    disabled={loading || publicacion.foto.length >= MAX_FOTOS}
                   />
-                  <button
-                    type="button"
-                    className="btn btn-primary"
-                    onClick={handleAgregarFoto}
-                    disabled={loading || !nuevaFotoUrl.trim()}
-                  >
-                    ➕ Agregar
-                  </button>
-                </div>
-                
-                {errorUrl && (
-                  <div className="alert alert-danger py-2 mb-2">{errorUrl}</div>
-                )}
-                
-                <div className="form-text mb-3">
-                  Pega la URL de la imagen y presiona "Agregar" o Enter
+                  
+                  <div style={{ fontSize: "3rem" }} className="mb-2">
+                    {arrastrando ? "📂" : "📤"}
+                  </div>
+                  
+                  <h6 className="mb-2">
+                    {arrastrando
+                      ? "¡Suelta las imágenes aquí!"
+                      : "Arrastra imágenes o haz clic para seleccionar"}
+                  </h6>
+                  
+                  <p className="text-muted small mb-0">
+                    JPG, PNG o WebP • Máximo 5MB por imagen • Hasta {MAX_FOTOS} fotos
+                  </p>
+                  
+                  {publicacion.foto.length > 0 && (
+                    <p className="text-primary small mb-0 mt-2">
+                      <strong>{publicacion.foto.length}/{MAX_FOTOS}</strong> fotos agregadas
+                    </p>
+                  )}
                 </div>
 
+                {/* Mensaje de error */}
+                {errorFoto && (
+                  <div className="alert alert-danger py-2 mb-3">
+                    ⚠️ {errorFoto}
+                  </div>
+                )}
+
+                {/* Botón alternativo */}
+                <div className="d-grid mb-3">
+                  <button
+                    type="button"
+                    className="btn btn-outline-primary"
+                    onClick={() => inputFileRef.current?.click()}
+                    disabled={loading || publicacion.foto.length >= MAX_FOTOS}
+                  >
+                    📁 Seleccionar Archivos
+                  </button>
+                </div>
+
+                {/* Vista previa de fotos */}
                 {publicacion.foto.length > 0 ? (
-                  <div className="row g-3">
-                    {publicacion.foto.map((url, index) => (
-                      <div key={index} className="col-sm-6 col-md-4">
-                        <div className="card h-100 border-0 shadow-sm">
-                          <div className="position-relative">
-                            <img
-                              src={url}
-                              alt={`Foto ${index + 1}`}
-                              className="card-img-top"
-                              style={{
-                                height: "180px",
-                                objectFit: "cover",
-                              }}
-                              onError={(e) => {
-                                (e.target as HTMLImageElement).src =
-                                  "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Crect fill='%23ddd' width='100' height='100'/%3E%3Ctext fill='%23999' x='50%25' y='50%25' text-anchor='middle' dominant-baseline='middle'%3EImagen no disponible%3C/text%3E%3C/svg%3E";
-                              }}
-                            />
-                            {index === 0 && (
-                              <span className="badge bg-primary position-absolute top-0 start-0 m-2">
-                                Principal
+                  <>
+                    <div className="alert alert-success py-2 mb-3">
+                      <small>
+                        💡 <strong>Tip:</strong> Arrastra las fotos para cambiar el orden. La primera será la principal.
+                      </small>
+                    </div>
+                    <div className="row g-3">
+                      {publicacion.foto.map((foto, index) => (
+                        <div key={index} className="col-sm-6 col-md-4">
+                          <div 
+                            className={`card h-100 shadow-sm ${
+                              arrastrándoFoto === index ? "opacity-50 border-primary border-2" : ""
+                            } ${
+                              sobreIndiceFoto === index ? "border-success border-3" : "border-0"
+                            }`}
+                            draggable={!loading}
+                            onDragStart={() => handleDragStartFoto(index)}
+                            onDragOver={(e) => handleDragOverFoto(e, index)}
+                            onDragLeave={handleDragLeaveFoto}
+                            onDrop={(e) => handleDropFoto(e, index)}
+                            onDragEnd={handleDragEndFoto}
+                            style={{
+                              cursor: loading ? "default" : "move",
+                              transition: "all 0.2s ease"
+                            }}
+                          >
+                            <div className="position-relative">
+                              <img
+                                src={foto}
+                                alt={`Foto ${index + 1}`}
+                                className="card-img-top"
+                                style={{
+                                  height: "180px",
+                                  objectFit: "cover",
+                                }}
+                                onError={(e) => {
+                                  (e.target as HTMLImageElement).src =
+                                    "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Crect fill='%23ddd' width='100' height='100'/%3E%3Ctext fill='%23999' x='50%25' y='50%25' text-anchor='middle' dominant-baseline='middle'%3EImagen no disponible%3C/text%3E%3C/svg%3E";
+                                }}
+                              />
+                              {index === 0 && (
+                                <span className="badge bg-primary position-absolute top-0 start-0 m-2">
+                                  ⭐ Principal
+                                </span>
+                              )}
+                              <span className="badge bg-dark position-absolute top-0 end-0 m-2">
+                                #{index + 1}
                               </span>
-                            )}
-                          </div>
-                          <div className="card-body p-2">
-                            <button
-                              type="button"
-                              className="btn btn-sm btn-danger w-100"
-                              onClick={() => handleEliminarFoto(index)}
-                              disabled={loading}
-                            >
-                              🗑️ Eliminar
-                            </button>
+                            </div>
+                            <div className="card-body p-2">
+                              <div className="d-grid gap-1">
+                                {index !== 0 && (
+                                  <button
+                                    type="button"
+                                    className="btn btn-sm btn-outline-primary"
+                                    onClick={() => moverFotoAInicio(index)}
+                                    disabled={loading}
+                                    title="Hacer principal"
+                                  >
+                                    ⭐ Hacer principal
+                                  </button>
+                                )}
+                                <button
+                                  type="button"
+                                  className="btn btn-sm btn-danger"
+                                  onClick={() => handleEliminarFoto(index)}
+                                  disabled={loading}
+                                >
+                                  🗑️ Eliminar
+                                </button>
+                              </div>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    ))}
-                  </div>
+                      ))}
+                    </div>
+                  </>
                 ) : (
                   <div className="alert alert-light text-center py-4">
                     <div className="mb-2" style={{ fontSize: "3rem" }}>📷</div>
@@ -311,16 +502,19 @@ const FormularioPublicacion: React.FC<FormularioPublicacionProps> = ({
                   Reglas o condiciones (opcional)
                 </label>
                 <textarea
-                  className="form-control"
-                  id="reglas"
-                  name="reglas"
-                  value={reglasTexto}
-                  onChange={handleChange}
-                  rows={4}
-                  maxLength={500}
-                  disabled={loading}
-                  placeholder="• No se permiten mascotas&#10;• No fumar en espacios comunes&#10;• Horario de silencio: 22:00 - 8:00"
-                />
+  className="form-control"
+  id="reglas"
+  name="reglas"
+  value={reglasTexto}
+  onChange={(e) => setReglasTexto(e.target.value)}
+  rows={4}
+  maxLength={500}
+  disabled={loading}
+  placeholder={`• No se permiten mascotas
+• No fumar en espacios comunes
+• Horario de silencio: 22:00 - 8:00`}
+/>
+
                 <div className="form-text">
                   Escribe una regla por línea. Máximo 500 caracteres.
                 </div>
@@ -330,66 +524,31 @@ const FormularioPublicacion: React.FC<FormularioPublicacionProps> = ({
 
           {/* COLUMNA LATERAL */}
           <div className="col-lg-4">
-            {/* PREFERENCIAS */}
-            <div className="card shadow-sm mb-4 sticky-top" style={{ top: "20px" }}>
-              <div className="card-header bg-secondary text-white">
-                <h5 className="mb-0">👤 Preferencias del Compañero</h5>
-              </div>
-              <div className="card-body">
-                <p className="text-muted small mb-3">
-                  Selecciona las características que buscas en tu compañero ideal
-                </p>
-                <div className="d-flex flex-column gap-2">
-                  {Object.entries(publicacion.preferencias || {}).map(([key, val]) => (
-                    <div key={key} className="form-check">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        id={`pref-${key}`}
-                        checked={!!val}
-                        onChange={(e) => onPreferenciasChange(key, e.target.checked)}
-                        disabled={loading}
-                      />
-                      <label className="form-check-label" htmlFor={`pref-${key}`}>
-                        {key}
-                      </label>
-                    </div>
-                  ))}
+            {cargandoPerfil && (
+                <div className="alert alert-info">
+                  <span className="spinner-border spinner-border-sm me-2" />
+                  Cargando tus datos del perfil...
                 </div>
-              </div>
-            </div>
+              )}
+              
+              {errorPerfil && (
+                <div className="alert alert-warning">
+                  No se pudieron cargar tus datos previos. Puedes seleccionarlos manualmente.
+                </div>
+              )}
 
-            {/* HÁBITOS */}
-            <div className="card shadow-sm mb-4">
-              <div className="card-header bg-dark text-white">
-                <h5 className="mb-0">🌟 Tus Hábitos</h5>
-              </div>
-              <div className="card-body">
-                <p className="text-muted small mb-3">
-                  Describe tu estilo de vida para encontrar mejor match
-                </p>
-                <div className="d-flex flex-column gap-2">
-                  {Object.entries(publicacion.habitos || {}).map(([key, val]) => (
-                    <div key={key} className="form-check">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        id={`hab-${key}`}
-                        checked={!!val}
-                        onChange={(e) => onHabitosChange(key, e.target.checked)}
-                        disabled={loading}
-                      />
-                      <label className="form-check-label" htmlFor={`hab-${key}`}>
-                        {key}
-                      </label>
-                    </div>
-                  ))}
-                </div>
-              </div>
+              <SelectorHabitosPreferencias
+                habitos={habitos}
+                preferencias={preferencias}
+                onHabitoChange={toggleHabito}
+                onPreferenciaChange={togglePreferencia}
+                disabled={loading}
+                compact={false}
+              />        
             </div>
 
             {/* BOTONES */}
-            <div className="card shadow-sm border-0 bg-light">
+          <div className="card shadow-sm border-0 bg-light">
               <div className="card-body">
                 <div className="d-grid gap-2">
                   <button
@@ -397,17 +556,13 @@ const FormularioPublicacion: React.FC<FormularioPublicacionProps> = ({
                     className="btn btn-primary btn-lg"
                     disabled={loading}
                   >
-                    {loading ? (
-                      <>
-                        <span className="spinner-border spinner-border-sm me-2" />
-                        Guardando...
-                      </>
-                    ) : modo === "crear" ? (
-                      "🚀 Publicar Ahora"
-                    ) : (
-                      "💾 Guardar Cambios"
-                    )}
+                    {loading
+                      ? "Publicando..."
+                      : modo === "crear"
+                      ? "Publicar"
+                      : "Guardar cambios"}
                   </button>
+
                   {onCancel && (
                     <button
                       type="button"
@@ -421,7 +576,6 @@ const FormularioPublicacion: React.FC<FormularioPublicacionProps> = ({
                 </div>
               </div>
             </div>
-          </div>
         </div>
       </form>
     </div>

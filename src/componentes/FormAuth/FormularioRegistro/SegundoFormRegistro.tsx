@@ -40,7 +40,7 @@ const SegundoFormRegistro: React.FC<SegundoFormRegistroProps> = ({
   onCancelar,
   loading = false,
 }) => {
-  
+  // Funciones de toggle simplificadas
   const toggleOpcionHabito = (opcion: HabitoKey) => {
     const nuevasOpciones = habitos.includes(opcion)
       ? habitos.filter(o => o !== opcion)
