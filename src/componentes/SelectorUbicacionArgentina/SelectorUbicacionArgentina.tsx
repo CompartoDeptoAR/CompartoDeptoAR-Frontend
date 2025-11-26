@@ -81,7 +81,7 @@ const SelectorUbicacionArgentina: React.FC<SelectorUbicacionProps> = ({
   const handleProvinciaChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const nuevaProvincia = e.target.value;
     onProvinciaChange(nuevaProvincia);
-    onLocalidadChange(""); // Resetear localidad
+    onLocalidadChange(""); 
   };
 
   const handleLocalidadChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
