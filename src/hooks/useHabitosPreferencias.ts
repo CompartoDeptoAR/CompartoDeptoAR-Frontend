@@ -23,8 +23,9 @@ export const useHabitosPreferencias = ({
   useEffect(() => {
     if (cargarDesdePerfil) {
       cargarDatosPerfil();
+
     }
-  }, [cargarDesdePerfil]);
+  }, []);
 
   const cargarDatosPerfil = async () => {
     try {
@@ -33,7 +34,7 @@ export const useHabitosPreferencias = ({
 
     
       const data = await apiHabitosPreferencias.perfil.obtener();
-
+      console.log("desde useHP: "+data)
       if (data.habitos) setHabitos(data.habitos);
       if (data.preferencias) setPreferencias(data.preferencias);
     } catch (err: any) {

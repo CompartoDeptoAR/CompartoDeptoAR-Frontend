@@ -6,12 +6,13 @@ import { Navegar } from "../../../navigation/navigationService";
 
 export const usePublicacionSubmit = (formData: Publicacion) => {
   const [loading, setLoading] = useState(false);
+
+
   const { showSuccess, showError, showWarning } = useToast();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Validaciones
     if (!formData.titulo?.trim()) return showWarning("El título es obligatorio");
     if (!formData.provincia) return showWarning("Selecciona una provincia");
     if (!formData.localidad) return showWarning("Selecciona una localidad");
@@ -25,12 +26,10 @@ export const usePublicacionSubmit = (formData: Publicacion) => {
     setLoading(true);
 
     try {
-      
       const ubicacion = formData.direccion?.trim()
         ? `${formData.direccion}, ${formData.localidad}, ${formData.provincia}`
         : `${formData.localidad}, ${formData.provincia}`;
 
-      
       const publicacionParaEnviar: Partial<Publicacion> = {
         titulo: formData.titulo.trim(),
         descripcion: formData.descripcion.trim(),
@@ -47,9 +46,11 @@ export const usePublicacionSubmit = (formData: Publicacion) => {
         estado: "activa",
       };
 
-      const response = await apiPublicacion.publicacion.crearPublicacion(publicacionParaEnviar);
+      const response =
+        await apiPublicacion.publicacion.crearPublicacion(publicacionParaEnviar);
 
       console.log("Publicación creada:", response);
+
       showSuccess("¡Publicación creada exitosamente!");
 
       setTimeout(() => Navegar.misPublicaciones(), 1500);
@@ -77,8 +78,6 @@ export const usePublicacionSubmit = (formData: Publicacion) => {
       } else mensaje = error.message;
 
       showError(mensaje);
-    } finally {
-      setLoading(false);
     }
   };
 

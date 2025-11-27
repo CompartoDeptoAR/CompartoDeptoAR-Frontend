@@ -12,6 +12,8 @@ const CrearPublicacion = () => {
     handleProvinciaChange,
     handleLocalidadChange,
     handleFotosChange,
+    handlePreferenciasChange,
+    handleHabitosChange,
   } = usePublicacionForm();
 
   const { handleSubmit, loading } = usePublicacionSubmit(formData);
@@ -28,11 +30,15 @@ const CrearPublicacion = () => {
         onProvinciaChange={handleProvinciaChange}
         onLocalidadChange={handleLocalidadChange}
         onFotosChange={handleFotosChange}
+        onPreferenciasChange={handlePreferenciasChange}
+        onHabitosChange={handleHabitosChange}
+
         handleSubmit={handleSubmit}
         modo="crear"
         loading={loading}
         onCancel={handleCancel}
       />
+
 
       <ToastNotification
         show={toast.show}

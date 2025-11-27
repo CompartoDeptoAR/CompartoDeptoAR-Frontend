@@ -142,15 +142,18 @@ const FormularioPublicacion: React.FC<FormularioPublicacionProps> = ({
                 manualmente.
               </div>
             )}
+            {
 
-            <SelectorHabitosPreferencias
-              habitos={habitos}
-              preferencias={preferencias}
-              onHabitoChange={toggleHabito}
-              onPreferenciaChange={togglePreferencia}
-              disabled={loading}
-              compact={false}
-            />
+              <SelectorHabitosPreferencias
+                habitos={habitos}
+                preferencias={preferencias}
+                onHabitoChange={toggleHabito}
+                onPreferenciaChange={togglePreferencia}
+                disabled={loading}
+                compact={false}
+              />
+            }
+           
 
             {/* BOTONES */}
             <div className="card shadow-sm border-0 bg-light mt-3">

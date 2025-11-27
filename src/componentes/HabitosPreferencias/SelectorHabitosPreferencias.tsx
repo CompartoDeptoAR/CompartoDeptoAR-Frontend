@@ -1,15 +1,31 @@
-import React from 'react';
-import { LABELS_HABITOS, LABELS_PREFERENCIAS, OPCIONES_HABITOS, OPCIONES_PREFERENCIAS, type HabitosUsuario, type PreferenciasUsuario } from '../../modelos/Usuario';
+import React from "react";
+import { 
+  LABELS_HABITOS, 
+  LABELS_PREFERENCIAS, 
+  OPCIONES_HABITOS, 
+  OPCIONES_PREFERENCIAS, 
+  type HabitosUsuario, 
+  type PreferenciasUsuario 
+} from '../../modelos/Usuario';
 
 interface SelectorHabitosPreferenciasProps {
-  habitos: HabitosUsuario;
-  preferencias: PreferenciasUsuario;
+  habitos?: HabitosUsuario;
+  preferencias?: PreferenciasUsuario;
   onHabitoChange: (key: keyof HabitosUsuario) => void;
   onPreferenciaChange: (key: keyof PreferenciasUsuario) => void;
   disabled?: boolean;
   mostrarTitulos?: boolean;
-  compact?: boolean; 
+  compact?: boolean;
 }
+
+const normalizar = <T extends Record<string, boolean | undefined>>(
+  obj: T | undefined,
+  keys: readonly string[]
+): Record<string, boolean> => 
+  keys.reduce((acc, key) => {
+    acc[key] = obj?.[key] ?? false;
+    return acc;
+  }, {} as Record<string, boolean>);
 
 export const SelectorHabitosPreferencias: React.FC<SelectorHabitosPreferenciasProps> = ({
   habitos,
@@ -20,6 +36,11 @@ export const SelectorHabitosPreferencias: React.FC<SelectorHabitosPreferenciasPr
   mostrarTitulos = true,
   compact = false,
 }) => {
+
+
+  const habitosNorm = normalizar(habitos, OPCIONES_HABITOS);
+  const prefsNorm = normalizar(preferencias, OPCIONES_PREFERENCIAS);
+
   return (
     <>
       {/* HÁBITOS */}
@@ -46,7 +67,7 @@ export const SelectorHabitosPreferencias: React.FC<SelectorHabitosPreferenciasPr
                   className="form-check-input"
                   type="checkbox"
                   id={`hab-${key}`}
-                  checked={!!habitos[key]}
+                  checked={habitosNorm[key]}
                   onChange={() => onHabitoChange(key)}
                   disabled={disabled}
                 />
@@ -83,7 +104,7 @@ export const SelectorHabitosPreferencias: React.FC<SelectorHabitosPreferenciasPr
                   className="form-check-input"
                   type="checkbox"
                   id={`pref-${key}`}
-                  checked={!!preferencias[key]}
+                  checked={prefsNorm[key]}
                   onChange={() => onPreferenciaChange(key)}
                   disabled={disabled}
                 />
