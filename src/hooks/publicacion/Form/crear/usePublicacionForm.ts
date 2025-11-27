@@ -12,25 +12,23 @@ export const usePublicacionForm = () => {
     direccion: "",
     ubicacion: "", 
     foto: [],
-    reglas: [],
-    preferencias: {} as PreferenciasUsuario, 
+    reglas: [],      
+    reglasTexto: "",   
+    preferencias: {} as PreferenciasUsuario,
     habitos: {} as HabitosUsuario,
     estado: "activa" as EstadoPublicacion,
   });
-
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
 
-    if (name === "reglas") {
-      const reglasArray = value
-        .split("\n")
-        .map((r) => r.trim())
-        .filter((r) => r.length > 0);
-
-      setFormData((prev) => ({ ...prev, reglas: reglasArray }));
+    if (name === "reglasTexto") {
+      setFormData((prev) => ({
+        ...prev,
+        reglasTexto: value,
+      }));
       return;
     }
 
@@ -40,7 +38,7 @@ export const usePublicacionForm = () => {
     }));
   };
 
-    const handlePreferenciasChange = (preferencias: PreferenciasUsuario) => {
+  const handlePreferenciasChange = (preferencias: PreferenciasUsuario) => {
     setFormData((prev) => ({ ...prev, preferencias }));
   };
 
@@ -60,15 +58,14 @@ export const usePublicacionForm = () => {
     setFormData((prev) => ({ ...prev, foto: fotos }));
   };
 
-
-return {
-  formData,
-  setFormData,
-  handleChange,
-  handleProvinciaChange,
-  handleLocalidadChange,
-  handleFotosChange,
-  handlePreferenciasChange,
-  handleHabitosChange,
-};
+  return {
+    formData,
+    setFormData,
+    handleChange,
+    handleProvinciaChange,
+    handleLocalidadChange,
+    handleFotosChange,
+    handlePreferenciasChange,
+    handleHabitosChange,
+  };
 };

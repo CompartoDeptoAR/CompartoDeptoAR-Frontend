@@ -1,3 +1,4 @@
+import { useRef, useEffect } from "react";
 import SelectorUbicacionArgentina from "../../SelectorUbicacionArgentina/SelectorUbicacionArgentina";
 
 interface UbicacionPrecioProps {
@@ -21,14 +22,31 @@ const UbicacionPrecio: React.FC<UbicacionPrecioProps> = ({
   onChange,
   disabled = false,
 }) => {
+  const precioInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const inputElement = precioInputRef.current;
+    
+    if (inputElement) {
+      // Prevenir cambio de valor con scroll
+      const handleWheel = (e: WheelEvent) => {
+        e.preventDefault();
+      };
+
+      inputElement.addEventListener("wheel", handleWheel, { passive: false });
+
+      return () => {
+        inputElement.removeEventListener("wheel", handleWheel);
+      };
+    }
+  }, []);
+
   return (
     <div className="card shadow-sm mb-4">
       <div className="card-header bg-success text-white">
         <h5 className="mb-0">📍 Ubicación y Precio</h5>
       </div>
-
       <div className="card-body">
-
         <div className="mb-3">
           <SelectorUbicacionArgentina
             provincia={provincia}
@@ -59,7 +77,6 @@ const UbicacionPrecio: React.FC<UbicacionPrecioProps> = ({
           </div>
         </div>
 
-
         <div className="mb-0">
           <label htmlFor="precio" className="form-label fw-semibold">
             Precio mensual <span className="text-danger">*</span>
@@ -69,6 +86,7 @@ const UbicacionPrecio: React.FC<UbicacionPrecioProps> = ({
               <strong>$</strong>
             </span>
             <input
+              ref={precioInputRef}
               type="number"
               className="form-control"
               id="precio"

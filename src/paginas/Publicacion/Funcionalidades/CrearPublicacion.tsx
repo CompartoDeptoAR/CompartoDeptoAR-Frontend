@@ -14,6 +14,7 @@ const CrearPublicacion = () => {
     handleFotosChange,
     handlePreferenciasChange,
     handleHabitosChange,
+
   } = usePublicacionForm();
 
   const { handleSubmit, loading } = usePublicacionSubmit(formData);
