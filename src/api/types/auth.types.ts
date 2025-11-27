@@ -2,6 +2,7 @@ import type { Rol } from "../../modelos/Roles";
 import type { Genero, HabitosUsuario, PreferenciasUsuario } from "../../modelos/Usuario";
 
 export interface LoginRequest {
+  idToken: any;
   correo: string;
   contrasena: string;
 }

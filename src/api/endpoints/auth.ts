@@ -40,39 +40,42 @@ const apiAuth = {
       }
     },
 
-    login: async (data: LoginRequest): Promise<LoginResponse> => {
-      try {
-        const result = await axiosApi.post<LoginResponse>(
-        `${import.meta.env.VITE_URL_AUTH}/login`,
-          data
-        );
-
-        if (result.status === 200) {
-          TokenService.saveAuthData({
-          token: result.data.token,
-          ID: result.data.ID,
-          rol: result.data.rol,
-          mail: result.data.mail,
-        });
-          return result.data;
-        }
-        throw new Error("Error al iniciar sesión");
-      } catch (error: any) {
-        if (error.response) {
-          throw new Error(
-            error.response.data.message || "Credenciales inválidas"
+      login: async (data: LoginRequest): Promise<LoginResponse> => {
+        try {
+          const result = await axiosApi.post<LoginResponse>(
+            `${import.meta.env.VITE_URL_AUTH}/login`,
+            data  
           );
+
+          if (result.status === 200) {
+            TokenService.saveAuthData({
+              ID: result.data.ID,
+              rol: result.data.rol,
+              mail: result.data.mail,
+              idToken: data.idToken,
+            });
+
+            return result.data;
+          }
+
+          throw new Error("Error al iniciar sesión");
+        } catch (error: any) {
+          if (error.response) {
+            throw new Error(
+              error.response.data.message || "Credenciales inválidas"
+            );
+          }
+          throw new Error("Error de conexión");
         }
-        throw new Error("Error de conexión");
-      }
+      },
+
+      logout: (mostrarMensaje = false) => {
+        TokenService.clearAuthData();
+        if (mostrarMensaje) {
+          window.alert('Tu sesión ha expirado. Por favor, inicia sesión nuevamente.');
+        }
+      },
     },
-    logout: (mostrarMensaje=false) => {
-      TokenService.clearAuthData();
-      if(mostrarMensaje){
-        window.alert('Tu sesión ha expirado. Por favor, inicia sesión nuevamente.')
-      }
-    },
-  },
 };
 
 export default apiAuth;
