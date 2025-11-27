@@ -16,7 +16,8 @@ interface FormularioPublicacionProps {
   onLocalidadChange: (localidad: string) => void;
   onFotosChange: (fotos: string[]) => void;
   onPreferenciasChange?: (preferencias: PreferenciasUsuario) => void;
-  onHabitosChange?: (habitos: HabitosUsuario) => void;   
+  onHabitosChange?: (habitos: HabitosUsuario) => void;  
+
   handleSubmit: (e: React.FormEvent) => void;
   modo: "crear" | "editar";
   loading?: boolean;
@@ -29,6 +30,8 @@ const FormularioPublicacion: React.FC<FormularioPublicacionProps> = ({
   onProvinciaChange,
   onLocalidadChange,
   onFotosChange,
+  onHabitosChange,
+  onPreferenciasChange,
   handleSubmit,
   modo,
   loading = false,
@@ -44,22 +47,23 @@ const FormularioPublicacion: React.FC<FormularioPublicacionProps> = ({
     cargando: cargandoPerfil,
     error: errorPerfil,
   } = useHabitosPreferencias({
-    habitosIniciales:
-      (publicacion.habitos as HabitosUsuario) ?? ({} as HabitosUsuario),
-    preferenciasIniciales:
-      (publicacion.preferencias as PreferenciasUsuario) ??
-      ({} as PreferenciasUsuario),
+    habitosIniciales:(publicacion.habitos as HabitosUsuario) ?? ({} as HabitosUsuario),
+    preferenciasIniciales: (publicacion.preferencias as PreferenciasUsuario) ??({} as PreferenciasUsuario),
+    cargarDesdePerfil: true, 
   });
 
+
   useEffect(() => {
-    setHabitos(
-      (publicacion.habitos as HabitosUsuario) ?? ({} as HabitosUsuario)
-    );
-    setPreferencias(
-      (publicacion.preferencias as PreferenciasUsuario) ??
-        ({} as PreferenciasUsuario)
-    );
-  }, [publicacion.habitos, publicacion.preferencias]);
+    if (!cargandoPerfil) {
+
+      if (onHabitosChange) {
+        onHabitosChange(habitos);
+      }
+      if (onPreferenciasChange) {
+        onPreferenciasChange(preferencias);
+      }
+    }
+  }, [habitos, preferencias, cargandoPerfil]);
 
   return (
     <div className="container py-4">
@@ -107,19 +111,20 @@ const FormularioPublicacion: React.FC<FormularioPublicacionProps> = ({
                 <h5 className="mb-0">📜 Reglas y Condiciones</h5>
               </div>
               <div className="card-body">
-                <label htmlFor="reglas" className="form-label fw-semibold">
+                <label htmlFor="reglasTexto" className="form-label fw-semibold">
                   Reglas o condiciones (opcional)
                 </label>
                 <textarea
                   className="form-control"
-                  id="reglas"
-                  name="reglas"
-                  value={publicacion.reglas?.join("\n") ?? ""}
-                  onChange={handleChange}
+                  id="reglasTexto"
+                  name="reglasTexto"
+                  value={publicacion.reglasTexto ?? ""}
+                  onChange={ handleChange }
                   rows={4}
                   maxLength={500}
                   placeholder="• No se permiten mascotas&#10;• No fumar&#10;• Horario de silencio 22:00 - 08:00"
                 />
+
                 <div className="form-text">
                   Escribe una regla por línea. Máximo 500 caracteres.
                 </div>
@@ -129,30 +134,42 @@ const FormularioPublicacion: React.FC<FormularioPublicacionProps> = ({
 
           {/* DERECHA */}
           <div className="col-lg-4">
-            {cargandoPerfil && (
-              <div className="alert alert-info">
-                <span className="spinner-border spinner-border-sm me-2" />
-                Cargando tus datos del perfil...
+        <div>
+          {errorPerfil && (
+            <div className="alert alert-warning">
+              No se pudieron cargar tus datos previos. Puedes seleccionarlos
+              manualmente.
+            </div>
+          )}
+          
+            {!cargandoPerfil && !errorPerfil && Object.keys(habitos).length > 0 && (
+              <div className="alert alert-success mb-3">
+                ✔ Cargamos tus hábitos y preferencias guardados previamente.
+              </div>
+            )}
+
+            {!cargandoPerfil && !errorPerfil && Object.keys(habitos).length === 0 && (
+              <div className="alert alert-warning mb-3">
+                ⚠ No tenías hábitos ni preferencias guardados. Puedes seleccionarlos ahora.
               </div>
             )}
 
             {errorPerfil && (
-              <div className="alert alert-warning">
-                No se pudieron cargar tus datos previos. Puedes seleccionarlos
-                manualmente.
+              <div className="alert alert-danger mb-3">
+                ❌ No se pudieron cargar tus hábitos desde el perfil.
               </div>
             )}
-            {
 
-              <SelectorHabitosPreferencias
-                habitos={habitos}
-                preferencias={preferencias}
-                onHabitoChange={toggleHabito}
-                onPreferenciaChange={togglePreferencia}
-                disabled={loading}
-                compact={false}
-              />
-            }
+            <SelectorHabitosPreferencias
+              habitos={habitos}
+              preferencias={preferencias}
+              onHabitoChange={toggleHabito}
+              onPreferenciaChange={togglePreferencia}
+              disabled={loading}
+              compact={false}
+            />
+
+          </div>
            
 
             {/* BOTONES */}

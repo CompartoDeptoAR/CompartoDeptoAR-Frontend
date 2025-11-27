@@ -3,10 +3,10 @@ import type { Publicacion } from "../../../modelos/Publicacion";
 import { useToast } from "../../useToast";
 import apiPublicacion from "../../../api/endpoints/publicaciones";
 import { Navegar } from "../../../navigation/navigationService";
+import noimage from "../../../assets/noimage.png"
 
 export const usePublicacionSubmit = (formData: Publicacion) => {
   const [loading, setLoading] = useState(false);
-
 
   const { showSuccess, showError, showWarning } = useToast();
 
@@ -26,26 +26,32 @@ export const usePublicacionSubmit = (formData: Publicacion) => {
     setLoading(true);
 
     try {
+
       const ubicacion = formData.direccion?.trim()
         ? `${formData.direccion}, ${formData.localidad}, ${formData.provincia}`
         : `${formData.localidad}, ${formData.provincia}`;
+
+      const reglasArray = formData.reglasTexto
+        ?.split("\n")
+        .map((r) => r.trim())
+        .filter((r) => r.length > 0) || [];
+
+      const fotosFinales = Array.isArray(formData.foto) && formData.foto.length > 0
+        ? formData.foto.filter((url) => url.trim().length > 0)
+        : [noimage];
 
       const publicacionParaEnviar: Partial<Publicacion> = {
         titulo: formData.titulo.trim(),
         descripcion: formData.descripcion.trim(),
         precio: Number(formData.precio),
         ubicacion,
-        foto: Array.isArray(formData.foto)
-          ? formData.foto.filter((url) => url.trim().length > 0)
-          : [],
-        reglas: Array.isArray(formData.reglas)
-          ? formData.reglas.filter((r) => r.trim().length > 0)
-          : [],
+        foto: fotosFinales,
+        reglas: reglasArray, 
         preferencias: formData.preferencias ?? {},
         habitos: formData.habitos ?? {},
         estado: "activa",
       };
-
+      console.log(publicacionParaEnviar);
       const response =
         await apiPublicacion.publicacion.crearPublicacion(publicacionParaEnviar);
 

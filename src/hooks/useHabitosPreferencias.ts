@@ -60,7 +60,6 @@ export const useHabitosPreferencias = ({
     }));
   };
 
-  // Setters completos
   const setHabitosCompletos = (nuevosHabitos: HabitosUsuario) => {
     setHabitos(nuevosHabitos);
   };

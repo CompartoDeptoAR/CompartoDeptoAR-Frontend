@@ -30,6 +30,7 @@ export interface Publicacion {
   ubicacion: string;
   foto: string[]; 
   reglas?: string[];
+  reglasTexto: string;
   preferencias?: PreferenciasUsuario;
   habitos?: HabitosUsuario;
   estado: EstadoPublicacion;
