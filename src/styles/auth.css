@@ -4,7 +4,6 @@
   margin: 0;
   font-family: var(--fuente-principal);
 
-  /* ⬇ Fondo con tu imagen */
   background: url("/ciudad.jpg") no-repeat center center fixed;
   background-size: cover;
 
@@ -143,7 +142,6 @@
   background: var(--violeta-hover);
 }
 
-/* ===== FIX REAL ACÁ ===== */
 .password-wrapper {
   display: flex;
   align-items: center;

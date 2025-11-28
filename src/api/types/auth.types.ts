@@ -3,8 +3,6 @@ import type { Genero, HabitosUsuario, PreferenciasUsuario } from "../../modelos/
 
 export interface LoginRequest {
   idToken: any;
-  correo: string;
-  contrasena: string;
 }
 
 export interface LoginResponse {

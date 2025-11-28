@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { TokenService, AuthData } from "../../services/auth/tokenService";
 import { useToast } from "../useToast";
-import { Navegar } from "../../navigation/navigationService";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../../firebase/config";
 import apiAuth from "../../api/endpoints/auth";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { AuthData, TokenService } from "../../services/auth/tokenService";
+import { Navegar } from "../../navigation/navigationService";
 
 export function useLogin() {
   const [email, setEmail] = useState("");
@@ -19,15 +20,10 @@ export function useLogin() {
     setLoading(true);
 
     try {
-      const auth = getAuth();
       const cred = await signInWithEmailAndPassword(auth, email, password);
       const idToken = await cred.user.getIdToken();
 
-      const backendData = await apiAuth.auth.login({
-        idToken,
-        correo: "",
-        contrasena: ""
-      });
+      const backendData = await apiAuth.auth.login({ idToken });
 
       const authData: AuthData = {
         ID: backendData.ID,
@@ -41,25 +37,23 @@ export function useLogin() {
       Navegar.home();
 
     } catch (err: any) {
-      console.error(err);
-
+      console.error("Error completo:", err);
+      
       let errorMessage = "Error al iniciar sesión";
       if (err.code) {
         const map: Record<string, string> = {
-          "auth/user-not-found": "No existe un usuario con ese email",
-          "auth/wrong-password": "Contraseña incorrecta",
           "auth/invalid-email": "Email inválido",
-          "auth/user-disabled": "El usuario está deshabilitado",
+          "auth/user-disabled": "Esta cuenta ha sido deshabilitada",
+          "auth/user-not-found": "No existe una cuenta con este correo",
+          "auth/wrong-password": "Contraseña incorrecta",
+          "auth/too-many-requests": "Demasiados intentos. Intenta más tarde",
         };
-        errorMessage = map[err.code] || "Error al iniciar sesión";
-      }
-      if (err.response) {
-        const backendError = err.response.data?.error || err.response.data?.message;
-        errorMessage = backendError || errorMessage;
+        errorMessage = map[err.code] || `Error de Firebase: ${err.code}`;
+      } else if (err.response?.data?.error) {
+        errorMessage = err.response.data.error;
       }
 
       showError(errorMessage);
-
     } finally {
       setLoading(false);
     }
