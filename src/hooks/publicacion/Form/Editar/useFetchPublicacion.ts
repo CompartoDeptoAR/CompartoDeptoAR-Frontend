@@ -41,7 +41,8 @@ export const useFetchPublicacion = (
           preferencias: data.preferencias || {},
           habitos: data.habitos || {},
           estado: data.estado,
-          ubicacion: ""
+          ubicacion: "",
+          reglasTexto: ""
         });
       } catch (e) {
         console.error("Error al cargar publicación:", e);
