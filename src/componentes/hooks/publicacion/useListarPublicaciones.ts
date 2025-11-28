@@ -1,6 +1,6 @@
 import type { PublicacionResumida } from "../../../modelos/Publicacion";
 import { Navegar } from "../../../navigation/navigationService";
-
+import noimage from "../../../assets/noimage.png"
 
 interface UseListarPublicacionesProps {
   onEdit?: (id: string) => void;
@@ -15,36 +15,33 @@ export const useListarPublicaciones = ({
   onToggleFavorite,
   favoriteIds = [],
 }: UseListarPublicacionesProps = {}) => {
-  
+
   const handleVerDetalle = (id: string) => {
     Navegar.verPublicacion(id);
   };
 
-  const handleEdit = (e: React.MouseEvent, id: string) => {
-    e.stopPropagation();
-    if (onEdit) onEdit(id);
+  const handleEdit = ( id: string) => {
+    onEdit?.(id);
   };
 
-  const handleDelete = (e: React.MouseEvent, id: string) => {
-    e.stopPropagation();
-    if (onDelete) onDelete(id);
+  const handleDelete = ( id: string) => {
+    onDelete?.(id);
   };
 
-  const handleToggleFavorite = (e: React.MouseEvent, id: string) => {
-    e.stopPropagation();
-    if (onToggleFavorite) onToggleFavorite(id);
+  const handleToggleFavorite = ( id: string) => {
+    onToggleFavorite?.(id);
   };
 
   const isFavorite = (id: string) => favoriteIds.includes(id);
 
   const obtenerPrimeraFoto = (pub: PublicacionResumida): string => {
-    return Array.isArray(pub.foto) && pub.foto.length > 0
-      ? pub.foto[0]
-      : "https://via.placeholder.com/400x300?text=Sin+Imagen";
+    return pub.foto && pub.foto.trim() !== ""
+      ? pub.foto
+      : noimage;
   };
 
   const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
-    e.currentTarget.src = "https://via.placeholder.com/400x300?text=Sin+Imagen";
+    e.currentTarget.src = noimage;
   };
 
   return {

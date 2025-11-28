@@ -11,6 +11,8 @@ const VerPublicacion = () => {
   const { publicacion, promedio, fetchPromedio } = usePublicacionDetalle();
   const { handleContactar } = useAccionesPublicacion(publicacion, fetchPromedio);
 
+
+
   if (!publicacion) {
     return (
       <div className="container mt-5">

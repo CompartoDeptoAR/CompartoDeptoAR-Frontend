@@ -9,6 +9,7 @@ import TodasLasPublicaciones from "../paginas/Publicacion/Listar/TodasLasPublica
 import {  PUBLIC_ROUTES, GENERAL } from "./Routes";
 
 import { TokenService } from "../services/auth/tokenService";
+import VerPublicacion from "../paginas/Publicacion/Funcionalidades/VerPublicacion";
 
 const Router: React.FC = () => {
   const authData = TokenService.getAuthData();
@@ -27,7 +28,7 @@ const Router: React.FC = () => {
         <Route path={PUBLIC_ROUTES.CONTACTANOS} element={<ContactanosPage />} />
         <Route path={PUBLIC_ROUTES.NOSOTROS} element={<NosotrosPage />} />
         <Route path={PUBLIC_ROUTES.TODAS_PUBLICACIONES} element={<TodasLasPublicaciones />} />
-
+        <Route path={PUBLIC_ROUTES.VIEW_PUBLICACION()} element={<VerPublicacion />} />
      
         <Route path="/*" element={<ProtectedRouter />} />
       </Route>

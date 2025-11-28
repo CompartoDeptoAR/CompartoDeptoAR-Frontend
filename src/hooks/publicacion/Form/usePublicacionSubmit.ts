@@ -3,7 +3,7 @@ import type { Publicacion } from "../../../modelos/Publicacion";
 import { useToast } from "../../useToast";
 import apiPublicacion from "../../../api/endpoints/publicaciones";
 import { Navegar } from "../../../navigation/navigationService";
-import noimage from "../../../assets/noimage.png"
+
 
 export const usePublicacionSubmit = (formData: Publicacion) => {
   const [loading, setLoading] = useState(false);
@@ -38,7 +38,7 @@ export const usePublicacionSubmit = (formData: Publicacion) => {
 
       const fotosFinales = Array.isArray(formData.foto) && formData.foto.length > 0
         ? formData.foto.filter((url) => url.trim().length > 0)
-        : [noimage];
+        : [];
 
       const publicacionParaEnviar: Partial<Publicacion> = {
         titulo: formData.titulo.trim(),

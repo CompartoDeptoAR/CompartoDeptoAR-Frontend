@@ -42,8 +42,6 @@ const FormularioPublicacion: React.FC<FormularioPublicacionProps> = ({
     preferencias,
     toggleHabito,
     togglePreferencia,
-    setHabitos,
-    setPreferencias,
     cargando: cargandoPerfil,
     error: errorPerfil,
   } = useHabitosPreferencias({

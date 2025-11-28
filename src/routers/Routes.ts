@@ -4,10 +4,10 @@ export const PUBLIC_ROUTES = {
   CONTACTANOS: "/contactanos",
   NOSOTROS: "/nosotros",
   TODAS_PUBLICACIONES: "/todaslasPublicaciones",
+  VIEW_PUBLICACION: (id: string | number = ":id") => `/publicacion/${id}`,
 };
 
 export const USER_ROUTES = {
-  VIEW_PUBLICACION: (id: string | number = ":id") => `/publicacion/${id}`,
   CREAR_PUBLICACION: "/crear-publicacion",
   EDITAR_PUBLICACION: (id: string | number = ":id") => `/editar-publicacion/${id}`,
 

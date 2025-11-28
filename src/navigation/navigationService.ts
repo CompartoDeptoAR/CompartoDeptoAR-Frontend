@@ -24,11 +24,10 @@ export const Navegar = {
     auth: () => go(PUBLIC_ROUTES.AUTH),
     contactanos: () => go(PUBLIC_ROUTES.CONTACTANOS),
     nosotros: () => go(PUBLIC_ROUTES.NOSOTROS),
-
+    verPublicacion: (id: string) => go(PUBLIC_ROUTES.VIEW_PUBLICACION(id)),
 
     crearPublicacion: () => go(USER_ROUTES.CREAR_PUBLICACION),
     editarPublicacion: (id: string) => go(USER_ROUTES.EDITAR_PUBLICACION(id)),
-    verPublicacion: (id: string) => go(USER_ROUTES.VIEW_PUBLICACION(id)),
     miPerfil: () => go(USER_ROUTES.MI_PERFIL),
     editarPerfil: () => go(USER_ROUTES.EDITAR_PERFIL),
     misPublicaciones: () => go(USER_ROUTES.MIS_PUBLICACIONES),

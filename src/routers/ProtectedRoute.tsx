@@ -9,7 +9,6 @@ import EditarPublicacion from "../paginas/Publicacion/Funcionalidades/EditarPubl
 import MisPublicaciones from "../paginas/Publicacion/Listar/MisPublicaciones";
 import MisFavoritos from "../paginas/Publicacion/Listar/MisFavoritos";
 import Configuracion from "../paginas/Configuracion/Configuracion";
-import VerPublicacion from "../paginas/Publicacion/Funcionalidades/VerPublicacion";
 import { ADMIN_ROUTES, GENERAL, USER_ROUTES, PUBLIC_ROUTES } from "./Routes";
 
 const ProtectedRouter = () => {
@@ -29,7 +28,6 @@ const ProtectedRouter = () => {
       
       {hasRole(Rol.USUARIO) && (
         <>
-          <Route path={USER_ROUTES.VIEW_PUBLICACION()} element={<VerPublicacion />} />
           <Route path={USER_ROUTES.CREAR_PUBLICACION} element={<CrearPublicacion />} />
           <Route path={USER_ROUTES.MI_PERFIL} element={<PerfilView />} />
           <Route path={USER_ROUTES.EDITAR_PERFIL} element={<PerfilEdit />} />
