@@ -1,9 +1,8 @@
-
 import { useEffect, useState } from 'react';
-import { estaTokenExpirado, getTiempoRestante } from '../utils/jwtUtils';
-import apiAuth from '../api/endpoints/auth';
+import { estaTokenExpirado, getTiempoRestante } from '../utils/firebaseTokenUtils'; // Cambiar aquí
+//import apiAuth from '../api/endpoints/auth';
 import { Navegar } from '../navigation/navigationService';
-
+import { TokenService } from '../services/auth/tokenService';
 
 export const useAuthCheck = () => {
   const [advertenciaExpiracion, setAdvertenciaExpiracion] = useState(false);
@@ -12,24 +11,22 @@ export const useAuthCheck = () => {
     let timeoutId: ReturnType<typeof setTimeout> | null = null;
 
     const verificarToken = () => {
-      const token = localStorage.getItem('token');
+      const token = TokenService.getToken();
       
       if (!token) {
-        Navegar.auth;
+        Navegar.auth();
         return;
       }
 
       if (estaTokenExpirado(token)) {
         console.log('Token expirado, cerrando sesión...');
-        apiAuth.auth.logout(true); 
+        TokenService.clearAuthData();
         sessionStorage.setItem('mensajeSesion', 'Tu sesión ha expirado.');
-        Navegar.auth;
+        Navegar.auth();
         return;
       }
 
       const tiempoRestante = getTiempoRestante(token);
-      
-
       if (tiempoRestante < 5 * 60 * 1000 && tiempoRestante > 0) {
         setAdvertenciaExpiracion(true);
       } else {
