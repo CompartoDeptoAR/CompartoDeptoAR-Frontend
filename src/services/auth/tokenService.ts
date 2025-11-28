@@ -1,4 +1,4 @@
-import { LoginResponse } from "../../api/types/auth.types";
+//import { LoginResponse } from "../../api/types/auth.types";
 import type { Rol } from "../../modelos/Roles";
 import { LocalStorageService, STORAGE_KEYS } from "../storage/localStorage.service";
 
