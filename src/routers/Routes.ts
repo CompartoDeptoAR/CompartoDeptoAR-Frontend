@@ -25,5 +25,9 @@ export const ADMIN_ROUTES = {
 export const GENERAL = {
   CONFIGURACION:"/configuracion",
   NOT_FOUND: "*",
+  RESTRICTED: "/restricted",
 };
 
+export const ROUTE ={
+  OTRO_PERFIL: (id: string | number = ":id") => `/perfil/${id}`,
+}

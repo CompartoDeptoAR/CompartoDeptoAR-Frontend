@@ -9,15 +9,18 @@ import EditarPublicacion from "../paginas/Publicacion/Funcionalidades/EditarPubl
 import MisPublicaciones from "../paginas/Publicacion/Listar/MisPublicaciones";
 import MisFavoritos from "../paginas/Publicacion/Listar/MisFavoritos";
 import Configuracion from "../paginas/Configuracion/Configuracion";
-import { ADMIN_ROUTES, GENERAL, USER_ROUTES, PUBLIC_ROUTES } from "./Routes";
+import { ADMIN_ROUTES, GENERAL, USER_ROUTES, ROUTE } from "./Routes";
+import NotFoundPage from "../paginas/Configuracion/NotFound";
+import PerfilOtroUsuarioView from "../paginas/Perfil/PerfilOtroUsuarioView";
+
 
 const ProtectedRouter = () => {
   const loggedIn = TokenService.getAuthData();
   const userRol = TokenService.getUserRol();
   
-  // Si no está logueado, redirigir al login
+  
   if (!loggedIn) {
-    return <Navigate to={PUBLIC_ROUTES.AUTH} replace />;
+    return <Navigate to={GENERAL.RESTRICTED} replace />;
   }
   
   const hasRole = (role: Rol) => 
@@ -40,9 +43,10 @@ const ProtectedRouter = () => {
       {hasRole(Rol.ADMIN) && (
         <Route path={ADMIN_ROUTES.PANEL} element={<AdminPage />} />
       )}
+      <Route path={ROUTE.OTRO_PERFIL()} element={<PerfilOtroUsuarioView />} />
 
       <Route path={GENERAL.CONFIGURACION} element={<Configuracion/>}/>
-      <Route path={GENERAL.NOT_FOUND} element={<Navigate to={PUBLIC_ROUTES.HOME} replace />} />
+      <Route path={GENERAL.NOT_FOUND} element={<NotFoundPage/>} />
     </Routes>
   );
 };

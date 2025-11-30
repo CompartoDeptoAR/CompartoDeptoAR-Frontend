@@ -2,7 +2,7 @@ import React from "react";
 import "../../../styles/CartaPublicacion.css";
 import type { EstadoPublicacion, PublicacionResumida } from "../../../modelos/Publicacion";
 import error from "../../../assets/error.png"
-import { Navegar } from "../../../navigation/navigationService";
+
 
 interface CartaPublicacionProps {
   publicacion: PublicacionResumida;

@@ -10,6 +10,7 @@ import {  PUBLIC_ROUTES, GENERAL } from "./Routes";
 
 import { TokenService } from "../services/auth/tokenService";
 import VerPublicacion from "../paginas/Publicacion/Funcionalidades/VerPublicacion";
+import RestrictedAccess from "../paginas/Auth/RestrictedAccess";
 
 const Router: React.FC = () => {
   const authData = TokenService.getAuthData();
@@ -32,7 +33,7 @@ const Router: React.FC = () => {
      
         <Route path="/*" element={<ProtectedRouter />} />
       </Route>
-
+      <Route path={GENERAL.RESTRICTED} element={<RestrictedAccess />} />
       <Route path={GENERAL.NOT_FOUND} element={<Navigate to={PUBLIC_ROUTES.HOME} replace />} />
     </Routes>
   );

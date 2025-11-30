@@ -1,8 +1,8 @@
-import FormularioPublicacion from "../../../componentes/Publicacion/FormularioPublicacion/FormularioPublicacion";
+import FormularioPublicacion from "../../../componentes/Publicacion/componentePrincipal.tsx/FormularioPublicacion";
 import ToastNotification from "../../../componentes/ToastNotification/ToastNotification";
 import { useToast } from "../../../hooks/useToast";
-import { usePublicacionForm } from "../../../hooks/publicacion/Form/crear/usePublicacionForm";
-import { usePublicacionSubmit } from "../../../hooks/publicacion/Form/usePublicacionSubmit";
+import { usePublicacionForm } from "../../../hooks/pagina/publicacion/Form/crear/usePublicacionForm";
+import { usePublicacionSubmit } from "../../../hooks/pagina/publicacion/Form/usePublicacionSubmit";
 import { useNavigationActions } from "../../../hooks/sistema/useNavigationActions";
 
 const CrearPublicacion = () => {

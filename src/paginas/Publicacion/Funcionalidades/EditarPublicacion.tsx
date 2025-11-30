@@ -1,11 +1,11 @@
 import { useParams } from "react-router-dom";
-import FormularioPublicacion from "../../../componentes/Publicacion/FormularioPublicacion/FormularioPublicacion";
+import FormularioPublicacion from "../../../componentes/Publicacion/componentePrincipal.tsx/FormularioPublicacion";
 import ToastNotification from "../../../componentes/ToastNotification/ToastNotification";
 
 import { useToast } from "../../../hooks/useToast";
-import { usePublicacionForm } from "../../../hooks/publicacion/Form/crear/usePublicacionForm";
-import { useFetchPublicacion } from "../../../hooks/publicacion/Form/Editar/useFetchPublicacion";
-import { useEditarPublicacionSubmit } from "../../../hooks/publicacion/Form/Editar/useEditarPublicacionSubmit";
+import { usePublicacionForm } from "../../../hooks/pagina/publicacion/Form/crear/usePublicacionForm";
+import { useFetchPublicacion } from "../../../hooks/pagina/publicacion/Form/Editar/useFetchPublicacion";
+import { useEditarPublicacionSubmit } from "../../../hooks/pagina/publicacion/Form/Editar/useEditarPublicacionSubmit";
 import { useNavigationActions } from "../../../hooks/sistema/useNavigationActions";
 
 

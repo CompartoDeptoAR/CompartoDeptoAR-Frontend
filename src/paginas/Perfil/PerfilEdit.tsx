@@ -1,7 +1,7 @@
 import React from "react";
 import FormularioPerfil from "../../componentes/FormularioPerfil/FormularioPerfil";
 import ToastNotification from "../../componentes/ToastNotification/ToastNotification";
-import { usePerfilEdit } from "../../hooks/usuario/usePerfilEdit";
+import { usePerfilEdit } from "../../hooks/pagina/usuario/usePerfilEdit";
 
 
 

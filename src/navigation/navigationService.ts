@@ -1,5 +1,5 @@
 import type { NavigateFunction } from "react-router-dom";
-import { PUBLIC_ROUTES, USER_ROUTES, ADMIN_ROUTES, GENERAL } from "../routers/Routes";
+import { PUBLIC_ROUTES, USER_ROUTES, ADMIN_ROUTES, GENERAL, ROUTE } from "../routers/Routes";
 
 
 let navigator: NavigateFunction;
@@ -36,9 +36,10 @@ export const Navegar = {
     chat: (id: string) => go("aun no existe") ,
     notificaciones: () => go("aun no existe"),
     contactos: () => go("aun no existe"),
-    usuarioPerfil: (is:string) => go("aun no existe"),
+    usuarioPerfil: (id: string) => go(ROUTE.OTRO_PERFIL(id)),
     adminPanel: () => go(ADMIN_ROUTES.PANEL),
 
+    
 
     volverAtras: () => go(-1 as any),
     configuracion: () => go(GENERAL.CONFIGURACION),
