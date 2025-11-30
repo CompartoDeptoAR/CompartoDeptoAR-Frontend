@@ -3,8 +3,8 @@ import ListarPublicaciones from "../../../componentes/Publicacion/ListarPublicac
 import ToastNotification from "../../../componentes/ToastNotification/ToastNotification";
 
 import { useToast } from "../../../hooks/useToast";
-import { usePublicacionesPaginadas } from "../../../hooks/publicacion/listar/usePublicacionesPaginadas";
-import { useFavoritos } from "../../../hooks/favorito/useFavoritos";
+import { usePublicacionesPaginadas } from "../../../hooks/pagina/publicacion/listar/usePublicacionesPaginadas";
+import { useFavoritos } from "../../../hooks/pagina/favorito/useFavoritos";
 
 const TodasLasPublicaciones: React.FC = () => {
   const { toast, hideToast } = useToast();
@@ -27,7 +27,7 @@ const TodasLasPublicaciones: React.FC = () => {
   useEffect(() => {
     cargarPublicaciones();
   }, []);
-
+  
   const total = publicaciones.length;
 
   return (

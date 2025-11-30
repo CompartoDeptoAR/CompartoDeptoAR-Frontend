@@ -1,7 +1,7 @@
 import React from "react";
-import "./ListarPublicacion.css";
+import "../../../styles/ListarPublicacion.css";
 import type { PublicacionResumida } from "../../../modelos/Publicacion";
-import { useListarPublicaciones } from "../../hooks/publicacion/useListarPublicaciones";
+import { useListarPublicaciones } from "../../../hooks/componente/publicacion/useListarPublicaciones";
 import CartaPublicacion from "../componenteSecundario/CartaPublicacion";
 
 interface ListarPublicacionesProps {

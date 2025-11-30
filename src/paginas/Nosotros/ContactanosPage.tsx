@@ -1,5 +1,5 @@
 import React from "react";
-import { useContactanos } from "../../hooks/nosotros/useContactanos";
+import { useContactanos } from "../../hooks/pagina/nosotros/useContactanos";
 import  FormContactanos  from "../../componentes/Nosotros/FormContactanos";
 
 const ContactanosPage: React.FC = () => {

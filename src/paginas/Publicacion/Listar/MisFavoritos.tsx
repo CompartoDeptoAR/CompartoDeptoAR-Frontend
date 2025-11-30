@@ -1,5 +1,5 @@
 import React from "react";
-import { useFavoritos } from "../../../hooks/favorito/useFavoritos";
+import { useFavoritos } from "../../../hooks/pagina/favorito/useFavoritos";
 import { useToast } from "../../../hooks/useToast";
 import ListarPublicaciones from "../../../componentes/Publicacion/ListarPublicacion/ListarPublicacion";
 import ToastNotification from "../../../componentes/ToastNotification/ToastNotification";

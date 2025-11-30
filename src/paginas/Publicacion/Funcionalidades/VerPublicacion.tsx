@@ -1,17 +1,15 @@
 import ToastNotification from "../../../componentes/ToastNotification/ToastNotification";
-import FormularioPublicacionView from "../../../componentes/Publicacion/FormularioPublicacion/FormularioPublicacionView";
-import { useToast } from "../../../hooks/useToast";
-import { usePublicacionDetalle } from "../../../hooks/publicacion/Ver/usePublicacionDetalle";
-import { useAccionesPublicacion } from "../../../hooks/publicacion/Ver/useAccionesPublicacion";
-import { Navegar } from "../../../navigation/navigationService";
+import PublicacionDetalleView from "../../../componentes/Publicacion/componentePrincipal.tsx/PublicacionDetalleView";
 
+import { useToast } from "../../../hooks/useToast";
+import { usePublicacionDetalle } from "../../../hooks/pagina/publicacion/Ver/usePublicacionDetalle";
+import { useAccionesPublicacion } from "../../../hooks/pagina/publicacion/Ver/useAccionesPublicacion";
+import { Navegar } from "../../../navigation/navigationService";
 
 const VerPublicacion = () => {
   const { toast, hideToast } = useToast();
-  const { publicacion, promedio, fetchPromedio } = usePublicacionDetalle();
-  const { handleContactar } = useAccionesPublicacion(publicacion, fetchPromedio);
-
-
+  const { publicacion } = usePublicacionDetalle();
+  const { handleContactar } = useAccionesPublicacion(publicacion);
 
   if (!publicacion) {
     return (
@@ -29,11 +27,10 @@ const VerPublicacion = () => {
 
   return (
     <>
-      <FormularioPublicacionView
+      <PublicacionDetalleView
         publicacion={publicacion}
         nombreUsuario={publicacion.nombreUsuario || "Usuario"}
         usuarioId={publicacion.usuarioId!}
-        calificacionPromedio={promedio}
         onContactar={handleContactar}
       />
 
