@@ -20,7 +20,6 @@ const PublicacionDetalleView:React.FC<PublicacionDetalleViewProps> = ({
   return (
     <div className="container mt-4">
       <div className="row">
-        
         <div className="col-lg-8">
           <div className="card mb-3">
             <div className="card-body">

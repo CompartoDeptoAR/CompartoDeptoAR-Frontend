@@ -9,7 +9,7 @@ const apiUsuario = {
       
         perfil: async():Promise<UsuarioPerfil>=>{
             const result= await axiosApi.get<UsuarioPerfil>(
-                `${import.meta.env.VITE_URL_USER}/perfil`
+                import.meta.env.VITE_URL_USER
             )
             console.log(data)
             
@@ -23,7 +23,7 @@ const apiUsuario = {
         editarPerfil: async ( data: Partial<UsuarioPerfil>): Promise<UsuarioPerfil> => {
             try {
                 const result = await axiosApi.put<UsuarioPerfil>(
-                `${import.meta.env.VITE_URL_USER}/perfil`,
+                import.meta.env.VITE_URL_USER,
                 data
                 );
                 return result.data;
@@ -32,6 +32,22 @@ const apiUsuario = {
                 throw new Error(
                     error.response.data.message || "Error al editar perfil"
                 );
+                }
+                throw new Error("Error de conexión");
+            }
+        },
+        obtenerPerfilPorId: async (id: number): Promise<UsuarioPerfil> => {
+            try {
+                const result = await axiosApi.get<UsuarioPerfil>(
+                    `${import.meta.env.VITE_URL_USER}/${id}`
+                );
+                return result.data;
+            } catch (error: any) {
+                if (error.response) {
+                    throw new Error(
+                        error.response.data.message ||
+                        "Error al obtener el perfil del usuario"
+                    );
                 }
                 throw new Error("Error de conexión");
             }
