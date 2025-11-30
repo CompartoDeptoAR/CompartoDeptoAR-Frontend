@@ -54,8 +54,6 @@ export function useLogin() {
       }
 
       showError(errorMessage);
-    } finally {
-      setLoading(false);
     }
   };
 

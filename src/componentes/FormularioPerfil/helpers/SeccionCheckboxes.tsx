@@ -1,5 +1,4 @@
 
-
 interface ConfigCheckbox<T> {
   key: keyof T;
   label: string;

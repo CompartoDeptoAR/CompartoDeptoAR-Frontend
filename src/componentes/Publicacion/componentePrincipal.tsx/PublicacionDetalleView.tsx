@@ -1,9 +1,12 @@
 import type { PublicacionResponce } from "../../../modelos/Publicacion";
 import "../../../styles/publicacionView.css";
+import { CalificacionUsuario } from "../../Calificacion/CalificacionUsuario";
+import { habitosConfig, preferenciasConfig } from "../../FormularioPerfil/helpers/config";
 import { AnuncianteCard } from "../componenteSecundario/View/AnuncianteCard";
 import GaleriaPublicacion from "../componenteSecundario/View/GaleriaPublicacion";
 import { InfoBasicaPublicacion } from "../componenteSecundario/View/InfoBasicaPublicacion";
 import { PrecioYContacto } from "../componenteSecundario/View/PrecioYContacto";
+import { SeccionLecturaCheckboxes } from "../componenteSecundario/View/SeccionLecturaCheckboxes";
 
 interface PublicacionDetalleViewProps {
   publicacion: PublicacionResponce;
@@ -27,6 +30,19 @@ const PublicacionDetalleView:React.FC<PublicacionDetalleViewProps> = ({
               <GaleriaPublicacion fotos={publicacion.foto} />
 
               <InfoBasicaPublicacion publicacion={publicacion} />
+
+              <SeccionLecturaCheckboxes
+              titulo="Hábitos del anunciante"
+              config={habitosConfig}
+              datos={publicacion.habitos}
+            />
+
+            <SeccionLecturaCheckboxes
+              titulo="Preferencias del anunciante"
+              config={preferenciasConfig}
+              datos={publicacion.preferencias}
+            />
+
             </div>
           </div>
         </div>
@@ -36,6 +52,8 @@ const PublicacionDetalleView:React.FC<PublicacionDetalleViewProps> = ({
           <PrecioYContacto precio={publicacion.precio} onContactar={onContactar} />
 
           <AnuncianteCard nombre={nombreUsuario} usuarioId={usuarioId} />
+
+          <CalificacionUsuario usuarioId={usuarioId} nombre={nombreUsuario} />
 
         </div>
       </div>

@@ -17,13 +17,13 @@ const Router: React.FC = () => {
 
   return (
     <Routes>
-
-      <Route 
-        path={PUBLIC_ROUTES.AUTH}
-        element={!authData ? <AuthPage /> : <Navigate to={PUBLIC_ROUTES.HOME} replace />}
-      />
-      
       <Route element={<Layout />}>
+        <Route 
+          path={PUBLIC_ROUTES.AUTH}
+          element={!authData ? <AuthPage /> : <Navigate to={PUBLIC_ROUTES.HOME} replace />}
+        />
+      
+      
         
         <Route path={PUBLIC_ROUTES.HOME} element={<HomePage />} />
         <Route path={PUBLIC_ROUTES.CONTACTANOS} element={<ContactanosPage />} />

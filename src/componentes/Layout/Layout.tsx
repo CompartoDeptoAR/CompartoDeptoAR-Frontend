@@ -1,15 +1,17 @@
-import Header from './Navbar';
-import Footer from './Footer';
-import { Outlet } from 'react-router-dom';
+import Header from "./Navbar";
+import Footer from "./Footer";
+import { Outlet } from "react-router-dom";
 
 export default function Layout() {
   return (
-    <>
-      <Header/>
-       <main className="container my-4">
+    <div className="layout-wrapper">
+      <Header />
+
+      <main className="layout-content">
         <Outlet />
       </main>
-      <Footer/>
-    </>
+
+      <Footer />
+    </div>
   );
 }

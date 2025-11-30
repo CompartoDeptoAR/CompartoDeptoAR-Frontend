@@ -3,8 +3,7 @@ import { useGlobalLoader } from "../../hooks/sistema/useGlobalLoader";
 
 
 const GlobalLoader: React.FC = () => {
-   const { loading } = useGlobalLoader();   // 👈 necesitamos el estado, no las funciones
-
+   const { loading } = useGlobalLoader();
   if (!loading) return null;
 
   return (
