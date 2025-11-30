@@ -10,6 +10,7 @@ interface CartaPublicacionProps {
   isFavorite?: boolean;
   onEdit?: (id: string) => void;
   onDelete?: (id: string) => void;
+  onEstado?:(id: string) => void;
   onToggleFavorite?: (id: string) => void;
   onVerDetalles:(id: string) => void;
 }
@@ -20,6 +21,7 @@ const CartaPublicacion: React.FC<CartaPublicacionProps> = ({
   isFavorite = false,
   onEdit,
   onDelete,
+  onEstado,
   onToggleFavorite,
   onVerDetalles,
 }) => {
@@ -37,7 +39,10 @@ const CartaPublicacion: React.FC<CartaPublicacionProps> = ({
     e.stopPropagation();
     onDelete?.(publicacion.id);
   };
-
+  const handleEstado = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onEstado?.(publicacion.id);
+  };
   const handleToggleFavorite = (e: React.MouseEvent) => {
     e.stopPropagation();
     onToggleFavorite?.(publicacion.id);
@@ -95,6 +100,9 @@ const CartaPublicacion: React.FC<CartaPublicacionProps> = ({
           <div className="mt-auto pt-2 d-flex gap-2">
             <button className="btn btn-sm btn-outline-primary flex-fill" onClick={handleEdit}>
               ✏️ Editar
+            </button>
+            <button className="btn btn-sm btn-outline-warning flex-fill" onClick={handleEstado}>
+              {publicacion.estado === "activa" ? "⏸ Pausar" : "▶️ Activar"}
             </button>
             <button className="btn btn-sm btn-outline-danger flex-fill" onClick={handleDelete}>
               🗑️ Eliminar

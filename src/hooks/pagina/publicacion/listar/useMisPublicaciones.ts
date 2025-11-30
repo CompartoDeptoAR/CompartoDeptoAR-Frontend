@@ -44,8 +44,7 @@ export const useMisPublicaciones = () => {
     try {
       await apiPublicacion.publicacion.eliminarPublicacion(id);
       showSuccess("✅ Publicación eliminada exitosamente");
-      
-      // Eliminar de la lista local sin recargar
+  
       setPublicaciones((prev) => prev.filter((pub) => pub.id !== id));
     } catch (err: any) {
       console.error("Error al eliminar publicación:", err);
@@ -57,6 +56,29 @@ export const useMisPublicaciones = () => {
     Navegar.crearPublicacion();
   };
 
+  const handleEstado = async (id: string) => {
+    const publicacion = publicaciones.find((p) => p.id === id);
+    if (!publicacion) return;
+
+    const nuevoEstado: "activa" | "pausada" =
+      publicacion.estado === "activa" ? "pausada" : "activa";
+
+    try {
+      await apiPublicacion.publicacion.cambiarEstado(id, nuevoEstado);
+
+      setPublicaciones((prev) =>
+        prev.map((p) =>
+          p.id === id ? { ...p, estado: nuevoEstado } : p
+        )
+      );
+
+      showSuccess(`✅ Publicación ${nuevoEstado}`);
+    } catch (err: any) {
+      console.error("Error al cambiar estado:", err);
+      showError(err.message || "❌ Error al cambiar el estado de la publicación");
+    }
+  };
+
   return {
     publicaciones,
     loading,
@@ -65,7 +87,8 @@ export const useMisPublicaciones = () => {
     hideToast,
     handleEdit,
     handleDelete,
+    handleEstado,
     handleCrearNueva,
-    cargarPublicaciones, // Por si necesitas recargar manualmente
+    cargarPublicaciones, 
   };
 };

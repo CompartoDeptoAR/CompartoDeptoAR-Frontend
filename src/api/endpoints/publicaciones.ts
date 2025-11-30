@@ -72,6 +72,13 @@ const apiPublicacion = {
           } catch (error:any) {
             throw new Error(error.response?.data?.error || "Error al obtener la publicacion");
           }
+        },
+        cambiarEstado: async (id: string, nuevoEstado: "activa" | "pausada") => {
+          try {
+            await axiosApi.patch(`${urlApi}/${id}/estado`, { estado: nuevoEstado });
+          } catch (error: any) {
+            throw new Error(error.response?.data?.error || "Error al cambiar el estado de la publicación");
+          }
         }
     }
 }

@@ -5,6 +5,7 @@ import noimage from "../../../assets/noimage.png"
 interface UseListarPublicacionesProps {
   onEdit?: (id: string) => void;
   onDelete?: (id: string) => void;
+  onEstado?: (id: string) => void;
   onToggleFavorite?: (id: string) => void;
   favoriteIds?: string[];
 }
@@ -12,6 +13,7 @@ interface UseListarPublicacionesProps {
 export const useListarPublicaciones = ({
   onEdit,
   onDelete,
+  onEstado,
   onToggleFavorite,
   favoriteIds = [],
 }: UseListarPublicacionesProps = {}) => {
@@ -28,6 +30,9 @@ export const useListarPublicaciones = ({
     onDelete?.(id);
   };
 
+  const handleEstado = ( id: string) =>{
+    onEstado?.(id);
+  }
   const handleToggleFavorite = ( id: string) => {
     onToggleFavorite?.(id);
   };
@@ -48,6 +53,7 @@ export const useListarPublicaciones = ({
     handleVerDetalle,
     handleEdit,
     handleDelete,
+    handleEstado,
     handleToggleFavorite,
     isFavorite,
     obtenerPrimeraFoto,

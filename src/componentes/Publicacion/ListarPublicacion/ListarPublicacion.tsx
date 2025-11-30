@@ -12,6 +12,7 @@ interface ListarPublicacionesProps {
   showActions?: boolean;
   onEdit?: (id: string) => void;
   onDelete?: (id: string) => void;
+  onEstado?: (id:string) => void;
   onToggleFavorite?: (id: string) => void;
   favoriteIds?: string[];
 }
@@ -24,6 +25,7 @@ const ListarPublicaciones: React.FC<ListarPublicacionesProps> = ({
   showActions = false,
   onEdit,
   onDelete,
+  onEstado,
   onToggleFavorite,
   favoriteIds = [],
 }) => {
@@ -31,11 +33,13 @@ const ListarPublicaciones: React.FC<ListarPublicacionesProps> = ({
     handleVerDetalle,
     handleEdit,
     handleDelete,
+    handleEstado,
     handleToggleFavorite,
     isFavorite,
   } = useListarPublicaciones({
     onEdit,
     onDelete,
+    onEstado,
     onToggleFavorite,
     favoriteIds,
   });
@@ -89,6 +93,7 @@ const ListarPublicaciones: React.FC<ListarPublicacionesProps> = ({
               isFavorite={isFavorite(pub.id)}
               onEdit={() => handleEdit(pub.id)}
               onDelete={() => handleDelete(pub.id)}
+              onEstado={() => handleEstado(pub.id)}
               onToggleFavorite={() => handleToggleFavorite(pub.id)}
               onVerDetalles={()=>handleVerDetalle(pub.id)}
             />

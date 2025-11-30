@@ -1,5 +1,4 @@
 import React from "react";
-
 import ListarPublicaciones from "../../../componentes/Publicacion/ListarPublicacion/ListarPublicacion";
 import ToastNotification from "../../../componentes/ToastNotification/ToastNotification";
 import { useMisPublicaciones } from "../../../hooks/pagina/publicacion/listar/useMisPublicaciones";
@@ -13,6 +12,7 @@ const MisPublicaciones: React.FC = () => {
     hideToast,
     handleEdit,
     handleDelete,
+    handleEstado,
     handleCrearNueva,
   } = useMisPublicaciones();
 
@@ -41,6 +41,7 @@ const MisPublicaciones: React.FC = () => {
           showActions={true}
           onEdit={handleEdit}
           onDelete={handleDelete}
+          onEstado={handleEstado}
         />
       </div>
 
