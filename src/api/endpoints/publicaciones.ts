@@ -27,10 +27,18 @@ const apiPublicacion = {
             throw new Error(error.response?.data?.error || "Error al crear publicación");
         }
         },
-        misPublicaciones: async (): Promise<PublicacionResumida[]> => {
-            const res = await axiosApi.get<PublicacionResumida[]>(`${urlApi}/misPublicaciones`);
-            return res.data;
-        },
+      misPublicaciones: async (usuarioId?: string): Promise<PublicacionResumida[]> => {
+        const headers: Record<string, string> = {};
+        
+        if (usuarioId) {
+          headers['x-user-id'] = usuarioId;
+        }
+        
+        const res = await axiosApi.get<PublicacionResumida[]>(`${urlApi}/misPublicaciones`, {
+          headers
+        });
+        return res.data;
+      },
         
         traerPaginadas: async (limit = 10, startAfterId?: string): Promise<ResultadoPaginado> => {
           try {

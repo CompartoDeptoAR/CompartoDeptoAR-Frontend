@@ -1,3 +1,4 @@
+// ListarPublicaciones.tsx - VERSIÓN SIMPLIFICADA
 import React from "react";
 import "../../../styles/ListarPublicacion.css";
 import type { PublicacionResumida } from "../../../modelos/Publicacion";
@@ -12,13 +13,13 @@ interface ListarPublicacionesProps {
   showActions?: boolean;
   onEdit?: (id: string) => void;
   onDelete?: (id: string) => void;
-  onEstado?: (id:string) => void;
+  onEstado?: (id: string, nuevoEstado: "activa" | "pausada") => void;
   onToggleFavorite?: (id: string) => void;
   favoriteIds?: string[];
 }
 
 const ListarPublicaciones: React.FC<ListarPublicacionesProps> = ({
-  publicaciones,
+  publicaciones = [],
   loading = false,
   error,
   emptyMessage = "No hay publicaciones disponibles",
@@ -29,36 +30,34 @@ const ListarPublicaciones: React.FC<ListarPublicacionesProps> = ({
   onToggleFavorite,
   favoriteIds = [],
 }) => {
+  // Hook personalizado - NO pasamos onEstado al hook
   const {
     handleVerDetalle,
     handleEdit,
     handleDelete,
-    handleEstado,
     handleToggleFavorite,
     isFavorite,
   } = useListarPublicaciones({
     onEdit,
     onDelete,
-    onEstado,
+    // No pasamos onEstado aquí
     onToggleFavorite,
     favoriteIds,
   });
 
+  // Función local para manejar el cambio de estado
+  const handleEstadoClick = (id: string) => {
+    if (!onEstado) return;
+    
+    const publicacion = publicaciones.find(p => p.id === id);
+    if (!publicacion) return;
+    
+    const nuevoEstado = publicacion.estado === "activa" ? "pausada" : "activa";
+    onEstado(id, nuevoEstado);
+  };
+
   if (loading) {
-    return null
-    /*
-    (
-      <div className="container mt-5 text-center">
-        <div
-          className="spinner-border text-primary"
-          role="status"
-          style={{ width: "3rem", height: "3rem" }}
-        >
-          <span className="visually-hidden">Cargando...</span>
-        </div>
-        <p className="mt-3 text-muted">Cargando publicaciones...</p>
-      </div>
-    );*/
+    return null;
   }
 
   if (error) {
@@ -93,9 +92,9 @@ const ListarPublicaciones: React.FC<ListarPublicacionesProps> = ({
               isFavorite={isFavorite(pub.id)}
               onEdit={() => handleEdit(pub.id)}
               onDelete={() => handleDelete(pub.id)}
-              onEstado={() => handleEstado(pub.id)}
+              onEstado={() => handleEstadoClick(pub.id)} // Usamos la función local
               onToggleFavorite={() => handleToggleFavorite(pub.id)}
-              onVerDetalles={()=>handleVerDetalle(pub.id)}
+              onVerDetalles={() => handleVerDetalle(pub.id)}
             />
           </div>
         ))}

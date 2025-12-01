@@ -9,7 +9,7 @@ const apiUsuario = {
       
         perfil: async():Promise<UsuarioPerfil>=>{
             const result= await axiosApi.get<UsuarioPerfil>(
-                import.meta.env.VITE_URL_USER
+                import.meta.env.VITE_URL_USER_PERFI
             )
             console.log(data)
             
@@ -23,7 +23,7 @@ const apiUsuario = {
         editarPerfil: async ( data: Partial<UsuarioPerfil>): Promise<UsuarioPerfil> => {
             try {
                 const result = await axiosApi.put<UsuarioPerfil>(
-                import.meta.env.VITE_URL_USER,
+                import.meta.env.VITE_URL_USER_PERFI,
                 data
                 );
                 return result.data;
@@ -39,7 +39,7 @@ const apiUsuario = {
         obtenerPerfilPorId: async (id: number): Promise<UsuarioPerfil> => {
             try {
                 const result = await axiosApi.get<UsuarioPerfil>(
-                    `${import.meta.env.VITE_URL_USER}/${id}`
+                    `${import.meta.env.VITE_URL_USER_PERFI}/${id}`
                 );
                 return result.data;
             } catch (error: any) {

@@ -1,54 +1,78 @@
-import { useEffect, useState } from "react";
-import type { PublicacionResumida } from "../../../../modelos/Publicacion";
-import { useToast } from "../../../useToast";
+// En hooks/pagina/publicacion/listar/useMisPublicaciones.ts
+import { useState, useEffect, useCallback } from "react";
 import apiPublicacion from "../../../../api/endpoints/publicaciones";
+import { useToast } from "../../../../hooks/useToast";
+import { TokenService } from "../../../../services/auth/tokenService";
 import { Navegar } from "../../../../navigation/navigationService";
-
+import type { Publicacion, PublicacionResumida } from "../../../../modelos/Publicacion";
 
 export const useMisPublicaciones = () => {
+  const { showSuccess, showError } = useToast();
   const [publicaciones, setPublicaciones] = useState<PublicacionResumida[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [toast, setToast] = useState({ show: false, message: "", type: "info" as const });
 
-  const { toast, showSuccess, showError, hideToast } = useToast();
-
-  useEffect(() => {
-    cargarPublicaciones();
-  }, []);
-
-  const cargarPublicaciones = async () => {
-    setLoading(true);
-    setError("");
+  const fetchMisPublicaciones = useCallback(async () => {
     try {
-      const data = await apiPublicacion.publicacion.misPublicaciones();
+      setLoading(true);
+      setError(null);
+      
+      const usuarioId = TokenService.getUserId();
+      
+      if (!usuarioId) {
+        setError("Usuario no autenticado");
+        showError("Debes iniciar sesión para ver tus publicaciones");
+        setTimeout(() => Navegar.auth(), 2000);
+        return;
+      }
+
+      // Asegúrate de usar la estructura correcta según tu API
+      const data = await apiPublicacion.publicacion.misPublicaciones(usuarioId);
       setPublicaciones(data);
+      
     } catch (err: any) {
-      console.error("Error al cargar publicaciones:", err);
-      setError(err.message || "Error al cargar tus publicaciones");
+      console.error("Error al obtener publicaciones:", err);
+      setError(err.message || "Error al cargar publicaciones");
+      showError(err.message || "No se pudieron cargar tus publicaciones");
     } finally {
       setLoading(false);
     }
-  };
+  }, [showError]);
+
+  useEffect(() => {
+    fetchMisPublicaciones();
+  }, [fetchMisPublicaciones]);
 
   const handleEdit = (id: string) => {
     Navegar.editarPublicacion(id);
   };
 
   const handleDelete = async (id: string) => {
-    const confirmar = window.confirm(
-      "¿Estás seguro de que deseas eliminar esta publicación? Esta acción no se puede deshacer."
-    );
+    if (window.confirm("¿Estás seguro de eliminar esta publicación?")) {
+      try {
+        const token = TokenService.getToken();
+        if (!token) {
+          showError("No estás autenticado");
+          return;
+        }
+        
+        await apiPublicacion.publicacion.eliminarPublicacion(id);
+        showSuccess("Publicación eliminada correctamente");
+        fetchMisPublicaciones();
+      } catch (err: any) {
+        showError(err.message || "Error al eliminar publicación");
+      }
+    }
+  };
 
-    if (!confirmar) return;
-
+  const handleEstado = async (id: string, nuevoEstado: "activa" | "pausada") => {
     try {
-      await apiPublicacion.publicacion.eliminarPublicacion(id);
-      showSuccess("✅ Publicación eliminada exitosamente");
-  
-      setPublicaciones((prev) => prev.filter((pub) => pub.id !== id));
+      await apiPublicacion.publicacion.cambiarEstado(id, nuevoEstado);
+      showSuccess(`Estado cambiado a ${nuevoEstado}`);
+      fetchMisPublicaciones();
     } catch (err: any) {
-      console.error("Error al eliminar publicación:", err);
-      showError(err.message || "❌ Error al eliminar la publicación");
+      showError(err.message || "Error al cambiar estado");
     }
   };
 
@@ -56,29 +80,11 @@ export const useMisPublicaciones = () => {
     Navegar.crearPublicacion();
   };
 
-  const handleEstado = async (id: string) => {
-    const publicacion = publicaciones.find((p) => p.id === id);
-    if (!publicacion) return;
-
-    const nuevoEstado: "activa" | "pausada" =
-      publicacion.estado === "activa" ? "pausada" : "activa";
-
-    try {
-      await apiPublicacion.publicacion.cambiarEstado(id, nuevoEstado);
-
-      setPublicaciones((prev) =>
-        prev.map((p) =>
-          p.id === id ? { ...p, estado: nuevoEstado } : p
-        )
-      );
-
-      showSuccess(`✅ Publicación ${nuevoEstado}`);
-    } catch (err: any) {
-      console.error("Error al cambiar estado:", err);
-      showError(err.message || "❌ Error al cambiar el estado de la publicación");
-    }
+  const hideToast = () => {
+    setToast({ ...toast, show: false });
   };
 
+  // Asegúrate de retornar TODAS las propiedades que el componente necesita
   return {
     publicaciones,
     loading,
@@ -89,6 +95,7 @@ export const useMisPublicaciones = () => {
     handleDelete,
     handleEstado,
     handleCrearNueva,
-    cargarPublicaciones, 
+    // Si necesitas refrescar desde fuera del hook
+    refresh: fetchMisPublicaciones
   };
 };
