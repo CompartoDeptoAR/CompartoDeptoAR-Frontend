@@ -4,7 +4,7 @@ import { LocalStorageService, STORAGE_KEYS } from "../storage/localStorage.servi
 
 export interface AuthData {
   ID: string;
-  rol: Rol[];
+  rol: Rol[] | String[];
   mail?: string;
   idToken: string;
 }

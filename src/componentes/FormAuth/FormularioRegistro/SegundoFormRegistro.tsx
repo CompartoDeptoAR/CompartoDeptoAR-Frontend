@@ -63,7 +63,7 @@ const SegundoFormRegistro: React.FC<SegundoFormRegistroProps> = ({
   const restantes = MAX_DESCRIPCION - descripcion.length;
 
   return (
-    <div className="form-container-segundo page-transition">
+    <div className="form-container page-transition"> {/* ← CAMBIO AQUÍ */}
       <h2 className="form-title">Completá tu perfil</h2>
       <p className="form-subtitle">
         Esta información ayuda a encontrar mejores compañeros
