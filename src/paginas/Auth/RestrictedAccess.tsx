@@ -9,6 +9,7 @@ const RestrictedAccess: React.FC = () =>
         src={restricted} 
         alt="Restricted Access"
         className="img-fluid mb-4"
+        style={{ maxWidth: "800px" }}
       />
 
       <h2 className="fw-bold">Necesitas una cuenta</h2>

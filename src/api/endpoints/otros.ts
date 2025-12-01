@@ -14,7 +14,8 @@ const apiHabitosPreferencias = {
         const result = await axiosApi.get<PerfilHabitosPreferenciasResponse>(
             import.meta.env.VITE_URL_PERFIL_HABITOS_PREFERECIAS
         );
-        
+        console.log(result.data)
+        console.log(result.status)
         if (result.status === 200) return result.data;
 
         return handleApiError(

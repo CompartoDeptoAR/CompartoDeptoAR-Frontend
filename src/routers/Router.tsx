@@ -32,9 +32,10 @@ const Router: React.FC = () => {
         <Route path={PUBLIC_ROUTES.VIEW_PUBLICACION()} element={<VerPublicacion />} />
      
         <Route path="/*" element={<ProtectedRouter />} />
+      
+        <Route path={GENERAL.RESTRICTED} element={<RestrictedAccess />} />
+        <Route path={GENERAL.NOT_FOUND} element={<Navigate to={PUBLIC_ROUTES.HOME} replace />} />
       </Route>
-      <Route path={GENERAL.RESTRICTED} element={<RestrictedAccess />} />
-      <Route path={GENERAL.NOT_FOUND} element={<Navigate to={PUBLIC_ROUTES.HOME} replace />} />
     </Routes>
   );
 };
