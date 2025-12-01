@@ -44,7 +44,7 @@ export const usePublicacionDetalle = () => {
     try {
       if (!id) return;
       const prom = await apiCalificacion.calificacion.obtenerPromedio(id);
-      setPromedio(prom);
+      setPromedio(prom.promedio);
     } catch (err) {
       console.error("Error cargando promedio:", err);
       setPromedio(0);

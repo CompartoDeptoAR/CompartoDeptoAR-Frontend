@@ -19,6 +19,11 @@ export interface CalificacionResponse {
   calificaciones: Calificacion[];
 }
 
+export interface PromedioResponse {
+  promedio: number;
+  cantidad: number;
+}
+
 const apiCalificacion = {
   calificacion: {
     crear: async ( data: CalificacionCrear ): Promise<CrearCalificacionResponse> => {
@@ -63,6 +68,31 @@ const apiCalificacion = {
         if (error.response) {
           throw new Error(
             error.response.data.error || "Error al obtener calificaciones"
+          );
+        }
+        throw new Error("Error de conexión");
+      }
+    },
+
+    obtenerPromedio: async (idUsuario: string): Promise<PromedioResponse> => {
+      try {
+        const res = await axiosApi.get<PromedioResponse>(
+          `${import.meta.env.VITE_URL_CALIFICACION}/${idUsuario}/promedio`
+        );
+        
+        if (res.status === 200) {
+          return res.data;
+        }
+        
+        return handleApiError(
+          res.status,
+          "No se pudo obtener el promedio",
+        ) as never;
+
+      } catch (error: any) {
+        if (error.response) {
+          throw new Error(
+            error.response.data.error || "Error al obtener promedio"
           );
         }
         throw new Error("Error de conexión");
