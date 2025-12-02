@@ -28,6 +28,7 @@ export const GENERAL = {
   RESTRICTED: "/restricted",
 };
 
-export const ROUTE ={
-  OTRO_PERFIL: (id: string | number = ":id") => `/perfil/${id}`,
-}
+export const ROUTE = {
+  OTRO_PERFIL: (id: string) => `/perfil/${id}`,
+};
+

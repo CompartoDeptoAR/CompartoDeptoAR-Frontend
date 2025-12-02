@@ -31,7 +31,6 @@ const VerPublicacion = () => {
         publicacion={publicacion}
         nombreUsuario={publicacion.nombreUsuario || "Usuario"}
         usuarioId={publicacion.usuarioId!}
-        onContactar={handleContactar}
       />
 
       <ToastNotification

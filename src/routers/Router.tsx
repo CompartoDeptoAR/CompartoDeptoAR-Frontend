@@ -6,11 +6,12 @@ import HomePage from "../paginas/Home/HomePage";
 import ContactanosPage from "../paginas/Nosotros/ContactanosPage";
 import NosotrosPage from "../paginas/Nosotros/NosotosPage";
 import TodasLasPublicaciones from "../paginas/Publicacion/Listar/TodasLasPublicaciones";
-import {  PUBLIC_ROUTES, GENERAL } from "./Routes";
+import {  PUBLIC_ROUTES, GENERAL, ROUTE } from "./Routes";
 
 import { TokenService } from "../services/auth/tokenService";
 import VerPublicacion from "../paginas/Publicacion/Funcionalidades/VerPublicacion";
 import RestrictedAccess from "../paginas/Auth/RestrictedAccess";
+import PerfilOtroUsuarioView from "../paginas/Perfil/PerfilOtroUsuarioView";
 
 const Router: React.FC = () => {
   const authData = TokenService.getAuthData();
@@ -30,7 +31,9 @@ const Router: React.FC = () => {
         <Route path={PUBLIC_ROUTES.NOSOTROS} element={<NosotrosPage />} />
         <Route path={PUBLIC_ROUTES.TODAS_PUBLICACIONES} element={<TodasLasPublicaciones />} />
         <Route path={PUBLIC_ROUTES.VIEW_PUBLICACION()} element={<VerPublicacion />} />
-     
+
+        <Route path={'/perfil/:id'} element={<PerfilOtroUsuarioView />} />
+
         <Route path="/*" element={<ProtectedRouter />} />
       
         <Route path={GENERAL.RESTRICTED} element={<RestrictedAccess />} />

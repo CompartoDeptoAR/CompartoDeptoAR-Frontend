@@ -14,13 +14,11 @@ interface PublicacionDetalleViewProps {
   publicacion: PublicacionResponce;
   nombreUsuario: string;
   usuarioId: string;
-  onContactar: () => void;
 }
 const PublicacionDetalleView:React.FC<PublicacionDetalleViewProps> = ({
   publicacion,
   nombreUsuario,
   usuarioId,
-  onContactar,
 }) => {
   const [mostrarChat, setMostrarChat] = useState(false);
 

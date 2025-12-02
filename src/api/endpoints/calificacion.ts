@@ -77,7 +77,7 @@ const apiCalificacion = {
     obtenerPromedio: async (idUsuario: string): Promise<PromedioResponse> => {
       try {
         const res = await axiosApi.get<PromedioResponse>(
-          `${import.meta.env.VITE_URL_CALIFICACION}/${idUsuario}/promedio`
+          `${import.meta.env.VITE_URL_CALIFICACION}/${idUsuario}`
         );
         
         if (res.status === 200) {

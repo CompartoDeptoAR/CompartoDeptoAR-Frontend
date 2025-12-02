@@ -13,7 +13,7 @@ export const usePerfilDeOtroUsuario = () => {
 
     const obtenerPerfil = async () => {
       try {
-        const result = await apiUsuario.usuario.obtenerPerfilPorId(Number(id));
+        const result = await apiUsuario.usuario.obtenerPerfilPorId(id);
         setPerfil(result);
       } catch (error) {
         console.error("Error obteniendo perfil:", error);
@@ -21,7 +21,7 @@ export const usePerfilDeOtroUsuario = () => {
     };
 
     obtenerPerfil();
-  }, [id]);
+  }, []);
 
   return { perfil };
 };
