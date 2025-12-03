@@ -3,63 +3,64 @@ import { LocalStorageService, STORAGE_KEYS } from "../../services/storage/localS
 import axiosApi from "./axios.config";
 import isPublicRoute from "./constants";
 
-
 let globalToastError: ((message: string) => void) | null = null;
 
 export const setGlobalToastError = (fn: (message: string) => void) => {
   globalToastError = fn;
 };
 
-
+/* ------------------------------
+   INTERCEPTOR DE REQUEST
+-------------------------------- */
 axiosApi.interceptors.request.use(
   (config) => {
-    const token = LocalStorageService.get(STORAGE_KEYS.TOKEN);
+    const idToken = LocalStorageService.get(STORAGE_KEYS.IDTOKEN);
 
-    if (token && config.url && !isPublicRoute(config.url)) {
+    if (idToken && config.url && !isPublicRoute(config.url)) {
       config.headers = {
         ...config.headers,
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${idToken}`, 
       };
     }
+
     return config;
   },
-  function (error) {
-    return Promise.reject(error);
-  }
+  (error) => Promise.reject(error)
 );
 
-
+/* ------------------------------
+   INTERCEPTOR DE RESPONSE
+-------------------------------- */
 axiosApi.interceptors.response.use(
-  (response) => {
-    return response;
-  },
-  (error) => {
+  (response) => response,
 
-    if (error.response && (error.response.status === 401 || error.response.status === 403)) {
-      const errorMessage = error.response.data?.error || error.response.data?.message || "";
-      
- 
-      if (
-        errorMessage.toLowerCase().includes("token") ||
-        errorMessage.toLowerCase().includes("expirado") ||
-        errorMessage.toLowerCase().includes("inválido") ||
-        errorMessage.toLowerCase().includes("autorizado") ||
-        errorMessage.toLowerCase().includes("sesion")
-      ) {
-        console.warn("🔒 Token expirado o inválido. Cerrando sesión...");
-        
+  (error) => {
+    const status = error.response?.status;
+    const msg = error.response?.data?.error || error.response?.data?.message || "";
+
+    if (status === 401 || status === 403) {
+      const mensaje = msg.toLowerCase();
+
+      const tokenProblema =
+        mensaje.includes("token") ||
+        mensaje.includes("expirado") ||
+        mensaje.includes("inválido") ||
+        mensaje.includes("autorizado") ||
+        mensaje.includes("sesion");
+
+      if (tokenProblema) {
+        console.warn("🔒 ID Token expirado o inválido. Cerrando sesión...");
 
         if (globalToastError) {
           globalToastError("Tu sesión ha expirado. Por favor, inicia sesión nuevamente.");
         }
-        
 
         TokenService.clearAuthData();
-        
+
         setTimeout(() => {
           window.location.href = "/auth/login";
-        }, 2000);
-        
+        }, 1500);
+
         return Promise.reject(new Error("Sesión expirada"));
       }
     }

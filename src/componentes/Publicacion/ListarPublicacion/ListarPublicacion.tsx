@@ -1,4 +1,3 @@
-// ListarPublicaciones.tsx - VERSIÓN SIMPLIFICADA
 import React from "react";
 import "../../../styles/ListarPublicacion.css";
 import type { PublicacionResumida } from "../../../modelos/Publicacion";
@@ -30,7 +29,7 @@ const ListarPublicaciones: React.FC<ListarPublicacionesProps> = ({
   onToggleFavorite,
   favoriteIds = [],
 }) => {
-  // Hook personalizado - NO pasamos onEstado al hook
+
   const {
     handleVerDetalle,
     handleEdit,
@@ -40,12 +39,11 @@ const ListarPublicaciones: React.FC<ListarPublicacionesProps> = ({
   } = useListarPublicaciones({
     onEdit,
     onDelete,
-    // No pasamos onEstado aquí
     onToggleFavorite,
     favoriteIds,
   });
 
-  // Función local para manejar el cambio de estado
+ 
   const handleEstadoClick = (id: string) => {
     if (!onEstado) return;
     
@@ -92,7 +90,7 @@ const ListarPublicaciones: React.FC<ListarPublicacionesProps> = ({
               isFavorite={isFavorite(pub.id)}
               onEdit={() => handleEdit(pub.id)}
               onDelete={() => handleDelete(pub.id)}
-              onEstado={() => handleEstadoClick(pub.id)} // Usamos la función local
+              onEstado={() => handleEstadoClick(pub.id)} 
               onToggleFavorite={() => handleToggleFavorite(pub.id)}
               onVerDetalles={() => handleVerDetalle(pub.id)}
             />

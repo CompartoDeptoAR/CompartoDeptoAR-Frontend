@@ -29,9 +29,9 @@ export function useLogin() {
         ID: backendData.ID,
         rol: backendData.rol,
         mail: backendData.mail,
-        idToken,
+        uid: backendData.uid,
       };
-      TokenService.saveAuthData(authData);
+      TokenService.saveAuthData(authData, idToken);
 
       showSuccess("¡Inicio de sesión exitoso!");
       Navegar.home();

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import type { EstadoPublicacion, Publicacion } from "../../../../../modelos/Publicacion";
 import { PreferenciasUsuario, HabitosUsuario } from "../../../../../modelos/Usuario";
 
@@ -10,7 +10,6 @@ export const usePublicacionForm = () => {
     provincia: "",
     localidad: "",
     direccion: "",
-    ubicacion: "", 
     foto: [],
     reglas: [],      
     reglasTexto: "",   
@@ -38,13 +37,14 @@ export const usePublicacionForm = () => {
     }));
   };
 
-  const handlePreferenciasChange = (preferencias: PreferenciasUsuario) => {
-    setFormData((prev) => ({ ...prev, preferencias }));
-  };
+  const handlePreferenciasChange = useCallback((preferencias: PreferenciasUsuario) => {
+    setFormData(prev => ({ ...prev, preferencias }));
+  }, []);
 
-  const handleHabitosChange = (habitos: HabitosUsuario) => {
-    setFormData((prev) => ({ ...prev, habitos }));
-  };
+  const handleHabitosChange = useCallback((habitos: HabitosUsuario) => {
+    setFormData(prev => ({ ...prev, habitos }));
+  }, []);
+
 
   const handleProvinciaChange = (provincia: string) => {
     setFormData((prev) => ({ ...prev, provincia, localidad: "" }));

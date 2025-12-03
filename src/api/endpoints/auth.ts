@@ -46,14 +46,14 @@ const apiAuth = {
             `${import.meta.env.VITE_URL_AUTH}/login`,
             data  
           );
-
+            console.log(result.data)
           if (result.status === 200) {
             TokenService.saveAuthData({
               ID: result.data.ID,
               rol: result.data.rol,
               mail: result.data.mail,
-              idToken: data.idToken,
-            });
+              uid: result.data.uid,
+            }, data.idToken,);
 
             return result.data;
           }

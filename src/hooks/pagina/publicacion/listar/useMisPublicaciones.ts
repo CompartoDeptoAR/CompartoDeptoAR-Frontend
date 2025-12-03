@@ -1,4 +1,4 @@
-// En hooks/pagina/publicacion/listar/useMisPublicaciones.ts
+
 import { useState, useEffect, useCallback } from "react";
 import apiPublicacion from "../../../../api/endpoints/publicaciones";
 import { useToast } from "../../../../hooks/useToast";
@@ -27,7 +27,6 @@ export const useMisPublicaciones = () => {
         return;
       }
 
-      // Asegúrate de usar la estructura correcta según tu API
       const data = await apiPublicacion.publicacion.misPublicaciones(usuarioId);
       setPublicaciones(data);
       
@@ -51,8 +50,8 @@ export const useMisPublicaciones = () => {
   const handleDelete = async (id: string) => {
     if (window.confirm("¿Estás seguro de eliminar esta publicación?")) {
       try {
-        const token = TokenService.getToken();
-        if (!token) {
+        const isAuthenticated = TokenService.isAuthenticated();
+        if (isAuthenticated) {
           showError("No estás autenticado");
           return;
         }
@@ -65,7 +64,7 @@ export const useMisPublicaciones = () => {
       }
     }
   };
-
+ /*
   const handleEstado = async (id: string, nuevoEstado: "activa" | "pausada") => {
     try {
       await apiPublicacion.publicacion.cambiarEstado(id, nuevoEstado);
@@ -75,6 +74,31 @@ export const useMisPublicaciones = () => {
       showError(err.message || "Error al cambiar estado");
     }
   };
+*/ 
+  const handleEstado = async (id: string, nuevoEstado: "activa" | "pausada") => {
+      //depus lo uso en favoritos
+      setPublicaciones(prev =>
+        prev.map(p =>
+          p.id === id ? { ...p, estado: nuevoEstado } : p
+        )
+      );
+
+      try {
+    
+        await apiPublicacion.publicacion.cambiarEstado(id, nuevoEstado);
+        showSuccess(`Estado cambiado a ${nuevoEstado}`);
+      } catch (err: any) {
+        showError(err.message || "Error al cambiar estado");
+
+        setPublicaciones(prev =>
+          prev.map(p =>
+            p.id === id
+              ? { ...p, estado: nuevoEstado === "activa" ? "pausada" : "activa" }
+              : p
+          )
+        );
+      }
+    };
 
   const handleCrearNueva = () => {
     Navegar.crearPublicacion();
@@ -84,7 +108,6 @@ export const useMisPublicaciones = () => {
     setToast({ ...toast, show: false });
   };
 
-  // Asegúrate de retornar TODAS las propiedades que el componente necesita
   return {
     publicaciones,
     loading,
@@ -95,7 +118,6 @@ export const useMisPublicaciones = () => {
     handleDelete,
     handleEstado,
     handleCrearNueva,
-    // Si necesitas refrescar desde fuera del hook
     refresh: fetchMisPublicaciones
   };
 };

@@ -3,11 +3,10 @@ import type { HabitosUsuario, PreferenciasUsuario, Usuario } from "./Usuario";
 export type EstadoPublicacion = "activa" | "pausada" | "inactiva";
 
 export interface PublicacionResponce {
-  id: string;
+  id?: string;
   titulo: string;
   descripcion: string;
   precio: number;
-  ubicacion:string; 
   foto: string[]; 
   reglas?: string[]; 
   preferencias?: PreferenciasUsuario;
@@ -26,7 +25,6 @@ export interface Publicacion {
   provincia: string;
   localidad: string;
   direccion: string;
-  ubicacion: string;
   foto: string[]; 
   reglas?: string[];
   reglasTexto: string;

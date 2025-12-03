@@ -1,10 +1,10 @@
 export const STORAGE_KEYS = {
-  TOKEN: 'token',
   REFRESH_TOKEN: 'refreshToken',
   USER_ID: 'userId',
   USER_ROL: 'userRol',
   USER_MAIL: 'userEmail',
-  PREFERENCES: 'userPreferences',
+  UID: 'uid',
+  IDTOKEN: 'idToken'
 } as const;
 
 

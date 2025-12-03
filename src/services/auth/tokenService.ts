@@ -1,4 +1,3 @@
-//import { LoginResponse } from "../../api/types/auth.types";
 import type { Rol } from "../../modelos/Roles";
 import { LocalStorageService, STORAGE_KEYS } from "../storage/localStorage.service";
 
@@ -6,20 +5,21 @@ export interface AuthData {
   ID: string;
   rol: Rol[] | String[];
   mail?: string;
-  idToken: string;
+  uid: string;
 }
 
 export class TokenService {
 
-  static saveAuthData(data: AuthData): void {
+  static saveAuthData(data: AuthData, idToken: string): void {
     LocalStorageService.set(STORAGE_KEYS.USER_ID, data.ID);
     LocalStorageService.setObject(STORAGE_KEYS.USER_ROL, data.rol);
     LocalStorageService.set(STORAGE_KEYS.USER_MAIL, data.mail || "");
-    LocalStorageService.set(STORAGE_KEYS.TOKEN, data.idToken);
+    LocalStorageService.set(STORAGE_KEYS.UID, data.uid);
+    LocalStorageService.set(STORAGE_KEYS.IDTOKEN, idToken);
   }
 
-  static getToken(): string | null {
-    return LocalStorageService.get(STORAGE_KEYS.TOKEN);
+  static getUid(): string | null {
+    return LocalStorageService.get(STORAGE_KEYS.UID);
   }
 
   static getUserId(): string | null {
@@ -35,26 +35,26 @@ export class TokenService {
   }
 
   static getAuthData(): AuthData | null {
-    const idToken = this.getToken();
+    const uid = this.getUid();
     const ID = this.getUserId();
     const rol = this.getUserRol();
 
-    if (!idToken || !ID || rol.length === 0) return null;
+    if (!uid || !ID || rol.length === 0) return null;
 
     return {
-      idToken,
       ID,
       rol,
       mail: this.getUserEmail() || undefined,
+      uid,
     };
   }
 
   static isAuthenticated(): boolean {
-    return this.getToken() !== null;
+    return this.getUid() !== null;
   }
 
   static clearAuthData(): void {
-    LocalStorageService.remove(STORAGE_KEYS.TOKEN);
+    LocalStorageService.remove(STORAGE_KEYS.UID);
     LocalStorageService.remove(STORAGE_KEYS.USER_ID);
     LocalStorageService.remove(STORAGE_KEYS.USER_ROL);
     LocalStorageService.remove(STORAGE_KEYS.USER_MAIL);

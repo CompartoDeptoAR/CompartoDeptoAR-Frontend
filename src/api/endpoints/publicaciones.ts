@@ -19,26 +19,27 @@ const apiPublicacion = {
   
     publicacion:{
 
-        crearPublicacion: async (data: Partial<Publicacion>):Promise<Publicacion> => {
-        try {
-            const result = await axiosApi.post<Publicacion>(`${urlApi}/`, data);
-            return result.data;
-        } catch (error: any) {
-            throw new Error(error.response?.data?.error || "Error al crear publicación");
-        }
+        crearPublicacion: async (data: Partial<PublicacionResponce>):Promise<{ mensaje: string }> => {
+          try {
+              const result = await axiosApi.post<{ mensaje: string }>(`${urlApi}/`, data);
+              return result.data;
+          } catch (error: any) {
+              throw new Error(error.response?.data?.error || "Error al crear publicación");
+          }
         },
-      misPublicaciones: async (usuarioId?: string): Promise<PublicacionResumida[]> => {
-        const headers: Record<string, string> = {};
-        
-        if (usuarioId) {
-          headers['x-user-id'] = usuarioId;
-        }
-        
-        const res = await axiosApi.get<PublicacionResumida[]>(`${urlApi}/misPublicaciones`, {
-          headers
-        });
-        return res.data;
-      },
+
+        misPublicaciones: async (usuarioId?: string): Promise<PublicacionResumida[]> => {
+          const headers: Record<string, string> = {};
+          
+          if (usuarioId) {
+            headers['x-user-id'] = usuarioId;
+          }
+          
+          const res = await axiosApi.get<PublicacionResumida[]>(`${urlApi}/misPublicaciones`, {
+            headers
+          });
+          return res.data;
+        },
         
         traerPaginadas: async (limit = 10, startAfterId?: string): Promise<ResultadoPaginado> => {
           try {
@@ -83,7 +84,7 @@ const apiPublicacion = {
         },
         cambiarEstado: async (id: string, nuevoEstado: "activa" | "pausada") => {
           try {
-            await axiosApi.patch(`${urlApi}/${id}/estado`, { estado: nuevoEstado });
+            await axiosApi.patch(`${urlApi}/${id}`, { estado: nuevoEstado });
           } catch (error: any) {
             throw new Error(error.response?.data?.error || "Error al cambiar el estado de la publicación");
           }

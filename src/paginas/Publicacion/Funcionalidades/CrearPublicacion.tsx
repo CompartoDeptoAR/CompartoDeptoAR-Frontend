@@ -4,6 +4,8 @@ import { useToast } from "../../../hooks/useToast";
 import { usePublicacionForm } from "../../../hooks/pagina/publicacion/Form/crear/usePublicacionForm";
 import { usePublicacionSubmit } from "../../../hooks/pagina/publicacion/Form/usePublicacionSubmit";
 import { useNavigationActions } from "../../../hooks/sistema/useNavigationActions";
+import { useEffect } from "react";
+
 
 const CrearPublicacion = () => {
   const {
@@ -22,6 +24,7 @@ const CrearPublicacion = () => {
   const { handleCancel } = useNavigationActions();
 
   const { toast, hideToast } = useToast();
+
 
   return (
     <>

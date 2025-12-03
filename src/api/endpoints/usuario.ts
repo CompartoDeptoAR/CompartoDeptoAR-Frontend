@@ -14,7 +14,6 @@ const apiUsuario = {
             console.log(data)
             
             if (result.status === 200) { 
-                LocalStorageService.setObject(STORAGE_KEYS.PREFERENCES, result.data);
                 return result.data;
             }
             return undefined as unknown as UsuarioPerfil;
@@ -39,7 +38,7 @@ const apiUsuario = {
         obtenerPerfilPorId: async (id: string): Promise<UsuarioPerfil> => {
             try {
                 const result = await axiosApi.get<UsuarioPerfil>(
-                    `${import.meta.env.VITE_URL_USER_PERFIL}/${id}`
+                    `${import.meta.env.VITE_URL_USER}/${id}`
                 );
                 return result.data;
             } catch (error: any) {

@@ -52,16 +52,15 @@ const FormularioPublicacion: React.FC<FormularioPublicacionProps> = ({
 
 
   useEffect(() => {
-    if (!cargandoPerfil) {
-
-      if (onHabitosChange) {
-        onHabitosChange(habitos);
-      }
-      if (onPreferenciasChange) {
-        onPreferenciasChange(preferencias);
-      }
+  if (!cargandoPerfil) {
+    if (onHabitosChange) {
+      onHabitosChange(habitos);
     }
-  }, [habitos, preferencias, cargandoPerfil]);
+    if (onPreferenciasChange) {
+      onPreferenciasChange(preferencias);
+    }
+  }
+}, []);
 
   return (
     <div className="container py-4">

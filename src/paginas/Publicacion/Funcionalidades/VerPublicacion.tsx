@@ -9,8 +9,8 @@ import { Navegar } from "../../../navigation/navigationService";
 const VerPublicacion = () => {
   const { toast, hideToast } = useToast();
   const { publicacion } = usePublicacionDetalle();
-  const { handleContactar } = useAccionesPublicacion(publicacion);
-  console.log("1"+publicacion?.nombreUsuario)
+ 
+
   if (!publicacion) {
     return (
       <div className="container mt-5">
@@ -24,7 +24,7 @@ const VerPublicacion = () => {
       </div>
     );
   }
-  console.log("2"+publicacion.nombreUsuario)
+ 
   return (
     <>
       <PublicacionDetalleView

@@ -7,9 +7,7 @@ import { Navegar } from "../../../navigation/navigationService";
 
 
 export const usePerfilEdit = () => {
-  const [perfil, setPerfil] = useState<UsuarioPerfil | null>(
-    LocalStorageService.getObject<UsuarioPerfil>(STORAGE_KEYS.PREFERENCES)
-  );
+  const [perfil, setPerfil] = useState<UsuarioPerfil>();
 
   const [loading, setLoading] = useState(!perfil);
   const { toast, showSuccess, showError, hideToast } = useToast();
@@ -17,7 +15,7 @@ export const usePerfilEdit = () => {
 
   useEffect(() => {
     if (!perfil) {
-      const token = LocalStorageService.get(STORAGE_KEYS.TOKEN);
+      const token = LocalStorageService.get(STORAGE_KEYS.IDTOKEN);
       const userId = LocalStorageService.get(STORAGE_KEYS.USER_ID);
 
       if (!userId || !token) {
@@ -30,7 +28,7 @@ export const usePerfilEdit = () => {
         try {
           const data = await apiUsuario.usuario.perfil();
           setPerfil(data);
-          LocalStorageService.setObject(STORAGE_KEYS.PREFERENCES, data);
+
         } catch (error: any) {
           console.error("Error al traer perfil:", error);
           showError(error.message || "Error al cargar el perfil");
@@ -48,12 +46,11 @@ export const usePerfilEdit = () => {
 
   const handleSave = async (nuevoPerfil: UsuarioPerfil): Promise<void> => {
     try {
-      const token = LocalStorageService.get(STORAGE_KEYS.TOKEN);
+      const token = LocalStorageService.get(STORAGE_KEYS.IDTOKEN);
       if (!token) throw new Error("Token no encontrado");
 
       const res = await apiUsuario.usuario.editarPerfil(nuevoPerfil);
 
-      LocalStorageService.setObject(STORAGE_KEYS.PREFERENCES, res);
       setPerfil(res);
 
       showSuccess("¡Perfil actualizado correctamente!");
