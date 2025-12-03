@@ -4,7 +4,7 @@ export const STORAGE_KEYS = {
   USER_ROL: 'userRol',
   USER_MAIL: 'userEmail',
   UID: 'uid',
-  IDTOKEN: 'idToken'
+  FTOKEN: 'FToken'
 } as const;
 
 

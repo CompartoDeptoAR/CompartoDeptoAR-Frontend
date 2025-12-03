@@ -10,18 +10,20 @@ export interface AuthData {
 
 export class TokenService {
 
-  static saveAuthData(data: AuthData, idToken: string): void {
+  static saveAuthData(data: AuthData, FToken: string): void {
     LocalStorageService.set(STORAGE_KEYS.USER_ID, data.ID);
     LocalStorageService.setObject(STORAGE_KEYS.USER_ROL, data.rol);
     LocalStorageService.set(STORAGE_KEYS.USER_MAIL, data.mail || "");
     LocalStorageService.set(STORAGE_KEYS.UID, data.uid);
-    LocalStorageService.set(STORAGE_KEYS.IDTOKEN, idToken);
+    LocalStorageService.set(STORAGE_KEYS.FTOKEN, FToken);
   }
 
   static getUid(): string | null {
     return LocalStorageService.get(STORAGE_KEYS.UID);
   }
-
+  static getFToken(): string | null {
+    return LocalStorageService.get(STORAGE_KEYS.FTOKEN);
+  }
   static getUserId(): string | null {
     return LocalStorageService.get(STORAGE_KEYS.USER_ID);
   }
@@ -33,7 +35,9 @@ export class TokenService {
   static getUserEmail(): string | null {
     return LocalStorageService.get(STORAGE_KEYS.USER_MAIL);
   }
-
+  static getTock(): string | null {
+    return LocalStorageService.get(STORAGE_KEYS.UID);
+  }
   static getAuthData(): AuthData | null {
     const uid = this.getUid();
     const ID = this.getUserId();
@@ -58,5 +62,6 @@ export class TokenService {
     LocalStorageService.remove(STORAGE_KEYS.USER_ID);
     LocalStorageService.remove(STORAGE_KEYS.USER_ROL);
     LocalStorageService.remove(STORAGE_KEYS.USER_MAIL);
+    LocalStorageService.remove(STORAGE_KEYS.FTOKEN);
   }
 }

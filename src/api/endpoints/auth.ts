@@ -53,7 +53,7 @@ const apiAuth = {
               rol: result.data.rol,
               mail: result.data.mail,
               uid: result.data.uid,
-            }, data.idToken,);
+            }, data.idToken);
 
             return result.data;
           }

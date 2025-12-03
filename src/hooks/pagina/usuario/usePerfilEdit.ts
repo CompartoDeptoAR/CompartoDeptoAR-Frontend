@@ -15,7 +15,7 @@ export const usePerfilEdit = () => {
 
   useEffect(() => {
     if (!perfil) {
-      const token = LocalStorageService.get(STORAGE_KEYS.IDTOKEN);
+      const token = LocalStorageService.get(STORAGE_KEYS.FTOKEN);
       const userId = LocalStorageService.get(STORAGE_KEYS.USER_ID);
 
       if (!userId || !token) {
@@ -46,7 +46,7 @@ export const usePerfilEdit = () => {
 
   const handleSave = async (nuevoPerfil: UsuarioPerfil): Promise<void> => {
     try {
-      const token = LocalStorageService.get(STORAGE_KEYS.IDTOKEN);
+      const token = LocalStorageService.get(STORAGE_KEYS.FTOKEN);
       if (!token) throw new Error("Token no encontrado");
 
       const res = await apiUsuario.usuario.editarPerfil(nuevoPerfil);

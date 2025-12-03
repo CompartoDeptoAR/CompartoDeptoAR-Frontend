@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
-import { estaTokenExpirado, getTiempoRestante } from '../utils/firebaseTokenUtils'; // Cambiar aquí
-//import apiAuth from '../api/endpoints/auth';
+import { estaTokenExpirado, getTiempoRestante } from '../utils/firebaseTokenUtils'; 
 import { Navegar } from '../navigation/navigationService';
 import { TokenService } from '../services/auth/tokenService';
 
@@ -11,7 +10,7 @@ export const useAuthCheck = () => {
     let timeoutId: ReturnType<typeof setTimeout> | null = null;
 
     const verificarToken = () => {
-      const token = TokenService.getToken();
+      const token = TokenService.getFToken();
       
       if (!token) {
         Navegar.auth();

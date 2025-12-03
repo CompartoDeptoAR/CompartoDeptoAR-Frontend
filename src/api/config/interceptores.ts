@@ -14,12 +14,12 @@ export const setGlobalToastError = (fn: (message: string) => void) => {
 -------------------------------- */
 axiosApi.interceptors.request.use(
   (config) => {
-    const idToken = LocalStorageService.get(STORAGE_KEYS.IDTOKEN);
+    const FToken = LocalStorageService.get(STORAGE_KEYS.FTOKEN);
 
-    if (idToken && config.url && !isPublicRoute(config.url)) {
+    if (FToken && config.url && !isPublicRoute(config.url)) {
       config.headers = {
         ...config.headers,
-        Authorization: `Bearer ${idToken}`, 
+        Authorization: `Bearer ${FToken}`, 
       };
     }
 
