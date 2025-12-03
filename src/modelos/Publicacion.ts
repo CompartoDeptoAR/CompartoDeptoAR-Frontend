@@ -6,6 +6,7 @@ export interface PublicacionResponce {
   id?: string;
   titulo: string;
   descripcion: string;
+  ubicacion:string;
   precio: number;
   foto: string[]; 
   reglas?: string[]; 

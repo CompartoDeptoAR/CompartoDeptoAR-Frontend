@@ -21,7 +21,7 @@ const apiAuth = {
         if (data.preferencias && Object.keys(data.preferencias).length > 0) payload.preferencias = data.preferencias;
 
         const result = await axiosApi.post<RegisterResponse>(
-          import.meta.env.VITE_URL_USER,
+          import.meta.env.VITE_URL_AUTH+"/registrar",
           payload
         );
 
