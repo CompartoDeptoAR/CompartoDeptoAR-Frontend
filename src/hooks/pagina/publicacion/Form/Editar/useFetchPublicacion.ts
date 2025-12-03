@@ -41,7 +41,6 @@ export const useFetchPublicacion = (
           preferencias: data.preferencias || {},
           habitos: data.habitos || {},
           estado: data.estado,
-          ubicacion: "",
           reglasTexto: ""
         });
       } catch (e) {
