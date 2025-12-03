@@ -1,40 +1,22 @@
 import { useState, useEffect } from "react";
-import apiChat from "../../api/endpoints/chat";
+import chatService from "../../services/chat/chatService";
 
-export const useNotificaciones = () => {
+export const useNotificaciones = (idUsuario: string | null) => {
   const [count, setCount] = useState(0);
-  const [cargando, setCargando] = useState(false);
 
   useEffect(() => {
-    // Cargar count inicial
-    fetchCount();
-
-    // Polling cada 10 segundos
-    const interval = setInterval(fetchCount, 10000);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  const fetchCount = async () => {
-    try {
-      setCargando(true);
-      const data = await apiChat.contarNoLeidos();
-      setCount(data.count);
-    } catch (err: any) {
-      console.error("Error al obtener notificaciones:", err);
-    } finally {
-      setCargando(false);
+    if (!idUsuario) {
+      setCount(0);
+      return;
     }
-  };
 
-  const resetCount = () => {
-    setCount(0);
-  };
+    // Escuchar cambios en tiempo real
+    const unsubscribe = chatService.escucharNoLeidos(idUsuario, (nuevoCount) => {
+      setCount(nuevoCount);
+    });
 
-  return {
-    count,
-    cargando,
-    refetch: fetchCount,
-    resetCount,
-  };
+    return () => unsubscribe();
+  }, [idUsuario]);
+
+  return { count };
 };

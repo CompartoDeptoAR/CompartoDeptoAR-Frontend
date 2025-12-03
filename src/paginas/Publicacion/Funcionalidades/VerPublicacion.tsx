@@ -3,7 +3,6 @@ import PublicacionDetalleView from "../../../componentes/Publicacion/componenteP
 
 import { useToast } from "../../../hooks/useToast";
 import { usePublicacionDetalle } from "../../../hooks/pagina/publicacion/Ver/usePublicacionDetalle";
-import { useAccionesPublicacion } from "../../../hooks/pagina/publicacion/Ver/useAccionesPublicacion";
 import { Navegar } from "../../../navigation/navigationService";
 
 const VerPublicacion = () => {

@@ -29,6 +29,7 @@ export const GENERAL = {
 };
 
 export const ROUTE = {
+  MENSAJE: "/mensajes",
   OTRO_PERFIL: (id: string) => `/perfil/${id}`,
 };
 

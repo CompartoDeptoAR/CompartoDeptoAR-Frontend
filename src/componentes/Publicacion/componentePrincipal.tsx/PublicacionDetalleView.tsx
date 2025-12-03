@@ -8,7 +8,8 @@ import GaleriaPublicacion from "../componenteSecundario/View/GaleriaPublicacion"
 import { InfoBasicaPublicacion } from "../componenteSecundario/View/InfoBasicaPublicacion";
 import { PrecioYContacto } from "../componenteSecundario/View/PrecioYContacto";
 import { SeccionLecturaCheckboxes } from "../componenteSecundario/View/SeccionLecturaCheckboxes";
-import { MiniChat } from "../../Chat/MiniChat";
+import { MiniChat } from "../../Chat/MiniChat/MiniChat";
+
 
 interface PublicacionDetalleViewProps {
   publicacion: PublicacionResponce;
@@ -61,7 +62,15 @@ const PublicacionDetalleView:React.FC<PublicacionDetalleViewProps> = ({
           </div>
         </div>
       </div>
-      <MiniChat visible={mostrarChat} onClose={() => setMostrarChat(false)} />
+
+      <MiniChat
+        visible={mostrarChat}
+        onClose={() => setMostrarChat(false)}
+        idPublicacion={publicacion.id!}
+        idDestinatario={publicacion.usuarioId!}
+        idUsuarioActual={usuarioId}
+        nombreDestinatario={nombreUsuario}
+      />
     </>
   );
 };

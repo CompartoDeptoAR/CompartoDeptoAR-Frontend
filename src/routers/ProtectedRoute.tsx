@@ -11,6 +11,8 @@ import MisFavoritos from "../paginas/Publicacion/Listar/MisFavoritos";
 import Configuracion from "../paginas/Configuracion/Configuracion";
 import { ADMIN_ROUTES, GENERAL, USER_ROUTES, ROUTE } from "./Routes";
 import NotFoundPage from "../paginas/Configuracion/NotFound";
+import { ChatCompleto } from "../componentes/Chat/ChatCompleto/ChatCompleto";
+import { Navegar } from "../navigation/navigationService";
 
 
 const ProtectedRouter = () => {
@@ -42,7 +44,7 @@ const ProtectedRouter = () => {
       {hasRole(Rol.ADMIN) && (
         <Route path={ADMIN_ROUTES.PANEL} element={<AdminPage />} />
       )}
-
+      <Route path={ROUTE.MENSAJE} element={<ChatCompleto idUsuario={TokenService.getUserId()!} onBack={Navegar.volverAtras} />}/>
       <Route path={GENERAL.CONFIGURACION} element={<Configuracion/>}/>
       <Route path={GENERAL.NOT_FOUND} element={<NotFoundPage/>} />
     </Routes>

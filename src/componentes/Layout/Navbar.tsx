@@ -5,6 +5,8 @@ import { Bell, MessageCircle, Settings } from "lucide-react";
 import { TokenService } from "../../services/auth/tokenService";
 import apiAuth from "../../api/endpoints/auth";
 import { Navegar } from "../../navigation/navigationService";
+import { NotificacionesBadge } from "../Chat/NotificacionesBadge";
+import { LocalStorageService } from "../../services/storage/localStorage.service";
 
 const NavbarApp: React.FC = () => {
 
@@ -36,23 +38,36 @@ const NavbarApp: React.FC = () => {
         </Form>
        
         <Nav className="ms-auto align-items-center">
-          {isLoggedIn && ( 
-            <>
-              <Nav.Link onClick={() => Navegar.notificaciones()} className="position-relative">
-                <Bell size={20} />
-                <Badge bg="danger" pill className="position-absolute top-0 start-100 translate-middle">
-                  3
-                </Badge>
-              </Nav.Link>
+          {isLoggedIn && (
+              <>
+                {/* Notificaciones */}
+                <Nav.Link 
+                  className="position-relative" 
+                  onClick={() => Navegar.notificaciones()}
+                >
+                  <Bell size={20} />
 
-              <Nav.Link onClick={() => Navegar.chat("")} className="position-relative">
-                <MessageCircle size={20} />
-                <Badge bg="primary" pill className="position-absolute top-0 start-100 translate-middle">
-                  5
-                </Badge>
-              </Nav.Link>
-            </>
-          )}
+                  <NotificacionesBadge
+                    idUsuario={TokenService.getUserId()}
+                  
+                  />
+                </Nav.Link>
+
+                {/* Mensajes */}
+                <Nav.Link 
+                  className="position-relative" 
+                  onClick={() => Navegar.chatCompleto()}
+                >
+                  <MessageCircle size={20} />
+
+                  <NotificacionesBadge
+                    idUsuario={TokenService.getUserId()}
+           
+                  />
+                </Nav.Link>
+              </>
+            )}
+
 
           {/* 👤 Menú desplegable del usuario */}
           <NavDropdown title="Mi Cuenta" align="end" id="dropdown-usuario">

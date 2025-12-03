@@ -1,14 +1,14 @@
 import { useNotificaciones } from "../../hooks/chat/useNotificaciones";
 
 interface NotificacionesBadgeProps {
+  idUsuario: string | null;
   onClick?: () => void;
 }
 
-export const NotificacionesBadge = ({ onClick }: NotificacionesBadgeProps) => {
-  const { count } = useNotificaciones();
-  const token = localStorage.getItem('token');
+export const NotificacionesBadge = ({ idUsuario, onClick }: NotificacionesBadgeProps) => {
+  const { count } = useNotificaciones(idUsuario);
 
-  if (!token) return null;
+  if (!idUsuario) return null;
 
   return (
     <button
@@ -18,11 +18,18 @@ export const NotificacionesBadge = ({ onClick }: NotificacionesBadgeProps) => {
     >
       <i className="bi bi-chat-dots fs-5 text-dark"></i>
       {count > 0 && (
-        <span 
+        <span
           className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-          style={{ fontSize: "10px" }}
+          style={{
+            fontSize: "10px",
+            minWidth: "18px",
+            height: "18px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
         >
-          {count > 99 ? '99+' : count}
+          {count > 99 ? "99+" : count}
         </span>
       )}
     </button>
