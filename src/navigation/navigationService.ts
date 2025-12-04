@@ -32,7 +32,8 @@ export const Navegar = {
     editarPerfil: () => go(USER_ROUTES.EDITAR_PERFIL),
     misPublicaciones: () => go(USER_ROUTES.MIS_PUBLICACIONES),
     misFavoritos: () => go(USER_ROUTES.MIS_FAVORITOS),
-
+   
+    chat: (id: string) => go(ROUTE.CHAT(id)),
     chatCompleto: () => go(ROUTE.MENSAJE) ,
     notificaciones: () => go("aun no existe"),
     contactos: () => go("aun no existe"),

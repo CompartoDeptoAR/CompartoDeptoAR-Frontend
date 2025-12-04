@@ -12,8 +12,10 @@ export function useLogin() {
   const [mostrarPassword, setMostrarPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  const [usuario, setUsuario] = useState<AuthData | null>(null); // 🔥 agregado
+
   const { toast, showSuccess, showError, hideToast } = useToast();
-  const togglePassword = () => setMostrarPassword(p => !p);
+  const togglePassword = () => setMostrarPassword((p) => !p);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,6 +33,8 @@ export function useLogin() {
         mail: backendData.mail,
         uid: backendData.uid,
       };
+
+      setUsuario(authData);
       TokenService.saveAuthData(authData, idToken);
 
       showSuccess("¡Inicio de sesión exitoso!");
@@ -38,7 +42,7 @@ export function useLogin() {
 
     } catch (err: any) {
       console.error("Error completo:", err);
-      
+
       let errorMessage = "Error al iniciar sesión";
       if (err.code) {
         const map: Record<string, string> = {
@@ -54,6 +58,8 @@ export function useLogin() {
       }
 
       showError(errorMessage);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -63,6 +69,8 @@ export function useLogin() {
     mostrarPassword,
     loading,
     toast,
+    usuario,       
+    setUsuario,       
     setEmail,
     setPassword,
     togglePassword,
