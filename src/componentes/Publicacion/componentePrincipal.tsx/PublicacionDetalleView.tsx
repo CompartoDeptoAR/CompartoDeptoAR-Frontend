@@ -13,12 +13,12 @@ import { MiniChat } from "../../Chat/MiniChat/MiniChat";
 
 interface PublicacionDetalleViewProps {
   publicacion: PublicacionResponce;
-  nombreUsuario: string;
+  usuarioNombre: string;
   usuarioId: string;
 }
 const PublicacionDetalleView:React.FC<PublicacionDetalleViewProps> = ({
   publicacion,
-  nombreUsuario,
+  usuarioNombre,
   usuarioId,
 }) => {
   const [mostrarChat, setMostrarChat] = useState(false);
@@ -55,9 +55,9 @@ const PublicacionDetalleView:React.FC<PublicacionDetalleViewProps> = ({
 
             <PrecioYContacto precio={publicacion.precio} onContactar={() => setMostrarChat(true)} />
 
-            <AnuncianteCard nombre={nombreUsuario} usuarioId={usuarioId} />
+            <AnuncianteCard nombre={usuarioNombre} usuarioId={usuarioId} />
 
-            <CalificacionUsuario usuarioId={usuarioId} nombre={nombreUsuario} />
+            <CalificacionUsuario usuarioId={usuarioId} nombre={usuarioNombre} />
 
           </div>
         </div>
@@ -69,7 +69,7 @@ const PublicacionDetalleView:React.FC<PublicacionDetalleViewProps> = ({
         idPublicacion={publicacion.id!}
         idDestinatario={publicacion.usuarioId!}
         idUsuarioActual={usuarioId}
-        nombreDestinatario={nombreUsuario}
+        nombreDestinatario={usuarioNombre}
       />
     </>
   );

@@ -28,7 +28,7 @@ const VerPublicacion = () => {
     <>
       <PublicacionDetalleView
         publicacion={publicacion}
-        nombreUsuario={publicacion.nombreUsuario || "Usuario"}
+        usuarioNombre={publicacion.usuarioNombre || "Usuario"}
         usuarioId={publicacion.usuarioId!}
       />
 

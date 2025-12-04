@@ -6,7 +6,7 @@ import apiUsuario from "../../../api/endpoints/usuario";
 
 export const usePerfilDeOtroUsuario = () => {
   const { id } = useParams(); 
-  const [perfil, setPerfil] = useState<UsuarioPerfil | null>(null);
+  const [perfil, setPerfil] = useState<UsuarioPerfil>();
 
   useEffect(() => {
     if (!id) return;
@@ -21,7 +21,7 @@ export const usePerfilDeOtroUsuario = () => {
     };
 
     obtenerPerfil();
-  }, []);
+  }, [id]);
 
   return { perfil };
 };
