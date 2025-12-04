@@ -9,18 +9,30 @@ export const useChatCompleto = (idUsuarioActual: string) => {
   const [mensajes, setMensajes] = useState<MensajeUI[]>([]);
   const [cargando, setCargando] = useState(false);
 
+  // 🔍 LOG
+  console.log("🎯 useChatCompleto - idUsuarioActual:", idUsuarioActual);
+
   // Escuchar lista de conversaciones en tiempo real
   useEffect(() => {
-    if (!idUsuarioActual) return;
+    if (!idUsuarioActual) {
+      console.log("❌ No hay idUsuarioActual");
+      return;
+    }
+
+    console.log("🔄 Iniciando listener de conversaciones...");
 
     const unsubscribe = chatService.escucharConversaciones(
       idUsuarioActual,
       (nuevasConversaciones) => {
+        console.log("📬 Conversaciones recibidas:", nuevasConversaciones);
         setConversaciones(nuevasConversaciones);
       }
     );
 
-    return () => unsubscribe();
+    return () => {
+      console.log("🛑 Desuscribiendo listener de conversaciones");
+      unsubscribe();
+    };
   }, [idUsuarioActual]);
 
   // Escuchar mensajes de la conversación activa
@@ -30,12 +42,14 @@ export const useChatCompleto = (idUsuarioActual: string) => {
       return;
     }
 
+    console.log("💬 Cargando mensajes de:", conversacionActiva);
     setCargando(true);
 
     const unsubscribe = chatService.escucharMensajes(
       conversacionActiva,
       idUsuarioActual,
       (nuevosMensajes) => {
+        console.log("📨 Mensajes recibidos:", nuevosMensajes);
         setMensajes(nuevosMensajes);
         setCargando(false);
 
@@ -54,10 +68,12 @@ export const useChatCompleto = (idUsuarioActual: string) => {
   }, [conversacionActiva, idUsuarioActual]);
 
   const seleccionarConversacion = useCallback((idPublicacion: string) => {
+    console.log("✅ Conversación seleccionada:", idPublicacion);
     setConversacionActiva(idPublicacion);
   }, []);
 
   const cerrarConversacion = useCallback(() => {
+    console.log("❌ Cerrando conversación");
     setConversacionActiva(null);
     setMensajes([]);
   }, []);
@@ -69,8 +85,12 @@ export const useChatCompleto = (idUsuarioActual: string) => {
       const conversacion = conversaciones.find(
         (c) => c.idPublicacion === conversacionActiva
       );
-      if (!conversacion) return;
+      if (!conversacion) {
+        console.error("❌ No se encontró la conversación");
+        return;
+      }
 
+      console.log("📤 Enviando mensaje...");
       try {
         await chatService.enviarMensaje(
           contenido,
@@ -78,8 +98,9 @@ export const useChatCompleto = (idUsuarioActual: string) => {
           conversacion.idOtraPersona,
           conversacionActiva
         );
+        console.log("✅ Mensaje enviado");
       } catch (err) {
-        console.error("Error al enviar:", err);
+        console.error("❌ Error al enviar:", err);
         throw err;
       }
     },
@@ -89,6 +110,14 @@ export const useChatCompleto = (idUsuarioActual: string) => {
   const conversacionSeleccionada = conversaciones.find(
     (c) => c.idPublicacion === conversacionActiva
   );
+
+  // 🔍 LOG del estado actual
+  console.log("📊 Estado actual:", {
+    totalConversaciones: conversaciones.length,
+    conversacionActiva,
+    totalMensajes: mensajes.length,
+    cargando,
+  });
 
   return {
     conversaciones,

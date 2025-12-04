@@ -28,7 +28,8 @@ const VerPublicacion = () => {
     <>
       <PublicacionDetalleView
         publicacion={publicacion}
-        usuarioIdActual={usuarioIdActual}
+        usuarioNombre={publicacion.usuarioNombre || "Usuario"}
+        usuarioId={publicacion.usuarioId!}
       />
 
       <ToastNotification

@@ -13,7 +13,7 @@ export interface PublicacionResponce {
   preferencias?: PreferenciasUsuario;
   habitos?: HabitosUsuario;
   usuarioId: Usuario["id"];
-  usuarioNombre?: string;
+  usuarioNombre?: string; 
   estado: EstadoPublicacion;
   createdAt: string;
   updatedAt: string;
@@ -44,7 +44,7 @@ export interface PublicacionResumida {
 }
 
 export interface PublicacionResponce extends Publicacion {
-  nombreUsuario?: string;
+  usuarioNombre?: string;
   calificacionPromedio?: number;
 }
 

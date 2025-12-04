@@ -12,12 +12,14 @@ import { MiniChat } from "../../Chat/MiniChat/MiniChat";
 
 interface PublicacionDetalleViewProps {
   publicacion: PublicacionResponce;
-  usuarioIdActual: string; // tu usuario logueado
+  usuarioNombre: string;
+  usuarioId: string;
 }
 
 const PublicacionDetalleView: React.FC<PublicacionDetalleViewProps> = ({
   publicacion,
-  usuarioIdActual,
+  usuarioNombre,
+  usuarioId,
 }) => {
   const [mostrarChat, setMostrarChat] = useState(false);
 
@@ -47,12 +49,13 @@ const PublicacionDetalleView: React.FC<PublicacionDetalleViewProps> = ({
           </div>
 
           <div className="col-lg-4">
-            <PrecioYContacto
-              precio={publicacion.precio}
-              onContactar={() => setMostrarChat(true)}
-            />
-            <AnuncianteCard nombre={nombreUsuario} usuarioId={publicacion.usuarioId!} />
-            <CalificacionUsuario usuarioId={publicacion.usuarioId!} nombre={nombreUsuario} />
+
+            <PrecioYContacto precio={publicacion.precio} onContactar={() => setMostrarChat(true)} />
+
+            <AnuncianteCard nombre={usuarioNombre} usuarioId={usuarioId} />
+
+            <CalificacionUsuario usuarioId={usuarioId} nombre={usuarioNombre} />
+
           </div>
         </div>
       </div>
@@ -62,8 +65,8 @@ const PublicacionDetalleView: React.FC<PublicacionDetalleViewProps> = ({
         onClose={() => setMostrarChat(false)}
         idPublicacion={publicacion.id!}
         idDestinatario={publicacion.usuarioId!}
-        idUsuarioActual={usuarioIdActual}
-        nombreDestinatario={nombreUsuario}
+        idUsuarioActual={usuarioId}
+        nombreDestinatario={usuarioNombre}
       />
     </>
   );
