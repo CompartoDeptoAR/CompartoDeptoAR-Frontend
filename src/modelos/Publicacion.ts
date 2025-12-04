@@ -13,7 +13,7 @@ export interface PublicacionResponce {
   preferencias?: PreferenciasUsuario;
   habitos?: HabitosUsuario;
   usuarioId: Usuario["id"];
-  nombreUsuario?: string; 
+  usuarioNombre?: string;
   estado: EstadoPublicacion;
   createdAt: string;
   updatedAt: string;

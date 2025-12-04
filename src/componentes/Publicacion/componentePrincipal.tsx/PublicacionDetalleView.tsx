@@ -10,18 +10,18 @@ import { PrecioYContacto } from "../componenteSecundario/View/PrecioYContacto";
 import { SeccionLecturaCheckboxes } from "../componenteSecundario/View/SeccionLecturaCheckboxes";
 import { MiniChat } from "../../Chat/MiniChat/MiniChat";
 
-
 interface PublicacionDetalleViewProps {
   publicacion: PublicacionResponce;
-  nombreUsuario: string;
-  usuarioId: string;
+  usuarioIdActual: string; // tu usuario logueado
 }
-const PublicacionDetalleView:React.FC<PublicacionDetalleViewProps> = ({
+
+const PublicacionDetalleView: React.FC<PublicacionDetalleViewProps> = ({
   publicacion,
-  nombreUsuario,
-  usuarioId,
+  usuarioIdActual,
 }) => {
   const [mostrarChat, setMostrarChat] = useState(false);
+
+  const nombreUsuario = publicacion.usuarioNombre || "Usuario";
 
   return (
     <>
@@ -30,35 +30,29 @@ const PublicacionDetalleView:React.FC<PublicacionDetalleViewProps> = ({
           <div className="col-lg-8">
             <div className="card mb-3">
               <div className="card-body">
-
                 <GaleriaPublicacion fotos={publicacion.foto} />
-
                 <InfoBasicaPublicacion publicacion={publicacion} />
-
                 <SeccionLecturaCheckboxes
-                titulo="Hábitos del anunciante"
-                config={habitosConfig}
-                datos={publicacion.habitos}
+                  titulo="Hábitos del anunciante"
+                  config={habitosConfig}
+                  datos={publicacion.habitos}
                 />
-
                 <SeccionLecturaCheckboxes
                   titulo="Preferencias del anunciante"
                   config={preferenciasConfig}
                   datos={publicacion.preferencias}
                 />
-
               </div>
             </div>
           </div>
 
           <div className="col-lg-4">
-
-            <PrecioYContacto precio={publicacion.precio} onContactar={() => setMostrarChat(true)} />
-
-            <AnuncianteCard nombre={nombreUsuario} usuarioId={usuarioId} />
-
-            <CalificacionUsuario usuarioId={usuarioId} nombre={nombreUsuario} />
-
+            <PrecioYContacto
+              precio={publicacion.precio}
+              onContactar={() => setMostrarChat(true)}
+            />
+            <AnuncianteCard nombre={nombreUsuario} usuarioId={publicacion.usuarioId!} />
+            <CalificacionUsuario usuarioId={publicacion.usuarioId!} nombre={nombreUsuario} />
           </div>
         </div>
       </div>
@@ -68,7 +62,7 @@ const PublicacionDetalleView:React.FC<PublicacionDetalleViewProps> = ({
         onClose={() => setMostrarChat(false)}
         idPublicacion={publicacion.id!}
         idDestinatario={publicacion.usuarioId!}
-        idUsuarioActual={usuarioId}
+        idUsuarioActual={usuarioIdActual}
         nombreDestinatario={nombreUsuario}
       />
     </>

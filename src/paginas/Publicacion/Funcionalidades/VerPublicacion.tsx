@@ -4,11 +4,13 @@ import PublicacionDetalleView from "../../../componentes/Publicacion/componenteP
 import { useToast } from "../../../hooks/useToast";
 import { usePublicacionDetalle } from "../../../hooks/pagina/publicacion/Ver/usePublicacionDetalle";
 import { Navegar } from "../../../navigation/navigationService";
+import { TokenService } from "../../../services/auth/tokenService";
 
 const VerPublicacion = () => {
   const { toast, hideToast } = useToast();
   const { publicacion } = usePublicacionDetalle();
- 
+
+  const usuarioIdActual = TokenService.getAuthData()?.ID || "";
 
   if (!publicacion) {
     return (
@@ -23,13 +25,12 @@ const VerPublicacion = () => {
       </div>
     );
   }
- 
+
   return (
     <>
       <PublicacionDetalleView
         publicacion={publicacion}
-        nombreUsuario={publicacion.nombreUsuario || "Usuario"}
-        usuarioId={publicacion.usuarioId!}
+        usuarioIdActual={usuarioIdActual}
       />
 
       <ToastNotification

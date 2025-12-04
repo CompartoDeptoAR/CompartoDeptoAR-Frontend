@@ -6,6 +6,7 @@ import { Navegar } from "../../../../navigation/navigationService";
 import { useToast } from "../../../useToast";
 import { useParams } from "react-router-dom";
 import { useGlobalLoader } from "../../../sistema/useGlobalLoader";
+import apiUsuario from "../../../../api/endpoints/usuario";
 
 export const usePublicacionDetalle = () => {
   const { id } = useParams<{ id: string }>();
@@ -29,7 +30,20 @@ export const usePublicacionDetalle = () => {
   const fetchPublicacion = async () => {
     try {
       showLoader();
-      const data = await apiPublicacion.publicacion.obtener(id!);
+
+      // Traemos la publicación
+      let data = await apiPublicacion.publicacion.obtener(id!);
+
+      // Si no tiene usuarioNombre (publicaciones viejas), lo buscamos
+      if (!data.usuarioNombre) {
+        try {
+          const usuario = await apiUsuario.usuario.obtenerPerfilPorId(data.usuarioId!);
+          data.usuarioNombre = usuario?.nombreCompleto || "Usuario";
+        } catch {
+          data.usuarioNombre = "Usuario";
+        }
+      }
+
       setPublicacion(data);
     } catch (err) {
       console.error("Error cargando publicación:", err);
