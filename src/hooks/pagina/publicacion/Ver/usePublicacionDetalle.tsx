@@ -5,16 +5,17 @@ import type { PublicacionResponce } from "../../../../modelos/Publicacion";
 import { Navegar } from "../../../../navigation/navigationService";
 import { useToast } from "../../../useToast";
 import { useParams } from "react-router-dom";
-import { useGlobalLoader } from "../../../sistema/useGlobalLoader";
 import apiUsuario from "../../../../api/endpoints/usuario";
+import { useLoading } from "../../../../contexts/LoadingContext";
 
 export const usePublicacionDetalle = () => {
   const { id } = useParams<{ id: string }>();
   const { showError } = useToast();
-  const { showLoader, hideLoader } = useGlobalLoader();
+  const { showLoader, hideLoader } = useLoading();
 
   const [publicacion, setPublicacion] = useState<PublicacionResponce | null>(null);
   const [promedio, setPromedio] = useState<number>(0);
+  const [firstLoad, setFirstLoad] = useState(true); 
 
   useEffect(() => {
     if (!id) {
@@ -23,18 +24,16 @@ export const usePublicacionDetalle = () => {
       return;
     }
 
-    fetchPublicacion();
-    fetchPromedio();
+    cargarTodo();
   }, [id]);
 
-  const fetchPublicacion = async () => {
+  const cargarTodo = async () => {
     try {
+      setFirstLoad(true);
       showLoader();
 
-      // Traemos la publicación
       let data = await apiPublicacion.publicacion.obtener(id!);
 
-      // Si no tiene usuarioNombre (publicaciones viejas), lo buscamos
       if (!data.usuarioNombre) {
         try {
           const usuario = await apiUsuario.usuario.obtenerPerfilPorId(data.usuarioId!);
@@ -45,30 +44,26 @@ export const usePublicacionDetalle = () => {
       }
 
       setPublicacion(data);
+
+      try {
+        const prom = await apiCalificacion.calificacion.obtenerPromedio(id!);
+        setPromedio(prom.promedio);
+      } catch {
+        setPromedio(0);
+      }
+
     } catch (err) {
       console.error("Error cargando publicación:", err);
-      showError("No se pudo cargar la publicación");
-      setTimeout(() => Navegar.home(), 2000);
+      setPublicacion(null);
     } finally {
       hideLoader();
-    }
-  };
-
-  const fetchPromedio = async () => {
-    try {
-      if (!id) return;
-      const prom = await apiCalificacion.calificacion.obtenerPromedio(id);
-      setPromedio(prom.promedio);
-    } catch (err) {
-      console.error("Error cargando promedio:", err);
-      setPromedio(0);
+      setFirstLoad(false);
     }
   };
 
   return {
     id,
-    publicacion,
+    publicacion: firstLoad ? {} as any : publicacion,
     promedio,
-    fetchPromedio,
   };
 };
