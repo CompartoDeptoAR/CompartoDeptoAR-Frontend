@@ -8,6 +8,9 @@ interface FormLoginProps {
   onTogglePassword: () => void;
   onSubmit: (e: React.FormEvent) => void;
   onSwitch: () => void;
+
+  // 👇 AGREGADO
+  onGoogleLogin?: () => void;
 }
 
 const FormularioLogin: React.FC<FormLoginProps> = ({
@@ -20,6 +23,7 @@ const FormularioLogin: React.FC<FormLoginProps> = ({
   onTogglePassword,
   onSubmit,
   onSwitch,
+  onGoogleLogin,
 }) => (
   <form onSubmit={onSubmit} className="form-container page-transition">
     <h2 className="form-title">Iniciar sesión</h2>
@@ -39,7 +43,6 @@ const FormularioLogin: React.FC<FormLoginProps> = ({
     <div>
       <label>Contraseña</label>
 
-      {/* WRAPPER AGREGADO PARA PODER SEPARAR EL BOTÓN "VER/OCULTAR" */}
       <div className="password-wrapper">
         <input
           type={mostrarPassword ? "text" : "password"}
@@ -68,6 +71,15 @@ const FormularioLogin: React.FC<FormLoginProps> = ({
       {loading ? "Ingresando..." : "Ingresar"}
     </button>
 
+    <button
+      type="button"
+      onClick={onGoogleLogin}
+      disabled={loading}
+      className="google-button"
+      style={{ marginTop: "10px" }}
+    >
+      Iniciar sesión con Google
+    </button>
     <p>
       ¿No tenés cuenta?{" "}
       <button type="button" onClick={onSwitch} disabled={loading}>

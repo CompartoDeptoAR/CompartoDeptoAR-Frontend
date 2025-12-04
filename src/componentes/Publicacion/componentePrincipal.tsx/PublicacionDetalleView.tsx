@@ -10,18 +10,20 @@ import { PrecioYContacto } from "../componenteSecundario/View/PrecioYContacto";
 import { SeccionLecturaCheckboxes } from "../componenteSecundario/View/SeccionLecturaCheckboxes";
 import { MiniChat } from "../../Chat/MiniChat/MiniChat";
 
-
 interface PublicacionDetalleViewProps {
   publicacion: PublicacionResponce;
   usuarioNombre: string;
   usuarioId: string;
 }
-const PublicacionDetalleView:React.FC<PublicacionDetalleViewProps> = ({
+
+const PublicacionDetalleView: React.FC<PublicacionDetalleViewProps> = ({
   publicacion,
   usuarioNombre,
   usuarioId,
 }) => {
   const [mostrarChat, setMostrarChat] = useState(false);
+
+  const nombreUsuario = publicacion.usuarioNombre || "Usuario";
 
   return (
     <>
@@ -30,23 +32,18 @@ const PublicacionDetalleView:React.FC<PublicacionDetalleViewProps> = ({
           <div className="col-lg-8">
             <div className="card mb-3">
               <div className="card-body">
-
                 <GaleriaPublicacion fotos={publicacion.foto} />
-
                 <InfoBasicaPublicacion publicacion={publicacion} />
-
                 <SeccionLecturaCheckboxes
-                titulo="Hábitos del anunciante"
-                config={habitosConfig}
-                datos={publicacion.habitos}
+                  titulo="Hábitos del anunciante"
+                  config={habitosConfig}
+                  datos={publicacion.habitos}
                 />
-
                 <SeccionLecturaCheckboxes
                   titulo="Preferencias del anunciante"
                   config={preferenciasConfig}
                   datos={publicacion.preferencias}
                 />
-
               </div>
             </div>
           </div>
