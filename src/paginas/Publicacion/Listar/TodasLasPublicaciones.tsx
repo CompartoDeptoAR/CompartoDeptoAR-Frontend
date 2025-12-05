@@ -35,9 +35,6 @@ const TodasLasPublicaciones: React.FC = () => {
       <div className="container mt-4 mb-5">
         <header className="mb-4">
           <h2 className="mb-1">🏠 Todas las Publicaciones</h2>
-          <p className="text-muted mb-0">
-            {loading ? "" : `${total} publicaciones`}
-          </p>
         </header>
 
         <ListarPublicaciones
