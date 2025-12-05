@@ -44,7 +44,7 @@ const ProtectedRouter = () => {
       {hasRole(Rol.ADMIN) && (
         <Route path={ADMIN_ROUTES.PANEL} element={<AdminPage />} />
       )}
-      <Route path={ROUTE.MENSAJE} element={<ChatCompleto idUsuario={TokenService.getUserId()!} onBack={Navegar.volverAtras} />}/>
+      <Route path={ROUTE.MENSAJE} element={<ChatCompleto idUsuario={TokenService.getUserId()!} onBack={()=>Navegar.volverAtras()} />}/>
       <Route path={GENERAL.CONFIGURACION} element={<Configuracion/>}/>
       <Route path={GENERAL.NOT_FOUND} element={<NotFoundPage/>} />
     </Routes>
