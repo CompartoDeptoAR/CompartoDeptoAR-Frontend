@@ -4,8 +4,6 @@ import { useToast } from "../../../hooks/useToast";
 import { usePublicacionForm } from "../../../hooks/pagina/publicacion/Form/crear/usePublicacionForm";
 import { usePublicacionSubmit } from "../../../hooks/pagina/publicacion/Form/usePublicacionSubmit";
 import { useNavigationActions } from "../../../hooks/sistema/useNavigationActions";
-import { useEffect } from "react";
-
 
 const CrearPublicacion = () => {
   const {
@@ -16,15 +14,11 @@ const CrearPublicacion = () => {
     handleFotosChange,
     handlePreferenciasChange,
     handleHabitosChange,
-
   } = usePublicacionForm();
 
   const { handleSubmit, loading } = usePublicacionSubmit(formData);
-
   const { handleCancel } = useNavigationActions();
-
   const { toast, hideToast } = useToast();
-
 
   return (
     <>
@@ -36,13 +30,11 @@ const CrearPublicacion = () => {
         onFotosChange={handleFotosChange}
         onPreferenciasChange={handlePreferenciasChange}
         onHabitosChange={handleHabitosChange}
-
         handleSubmit={handleSubmit}
         modo="crear"
         loading={loading}
         onCancel={handleCancel}
       />
-
 
       <ToastNotification
         show={toast.show}

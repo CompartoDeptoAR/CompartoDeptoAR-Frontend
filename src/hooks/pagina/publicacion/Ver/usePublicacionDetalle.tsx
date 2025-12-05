@@ -34,14 +34,17 @@ export const usePublicacionDetalle = () => {
 
       let data = await apiPublicacion.publicacion.obtener(id!);
 
-      if (!data.usuarioNombre) {
-        try {
-          const usuario = await apiUsuario.usuario.obtenerPerfilPorId(data.usuarioId!);
-          data.usuarioNombre = usuario?.nombreCompleto || "Usuario";
-        } catch {
-          data.usuarioNombre = "Usuario";
-        }
-      }
+if (!data.usuarioNombre) {
+  try {
+    const usuario = await apiUsuario.usuario.obtenerPerfilPorId(data.usuarioId!);
+    data.usuarioNombre = usuario?.nombreCompleto || "Usuario";
+  } catch {
+    data.usuarioNombre = "Usuario";
+  }
+}
+
+  data.habitos = data.habitos ?? {};
+  data.preferencias = data.preferencias ?? {};
 
       setPublicacion(data);
 

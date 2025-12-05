@@ -16,7 +16,7 @@ interface FormularioPublicacionProps {
   onLocalidadChange: (localidad: string) => void;
   onFotosChange: (fotos: string[]) => void;
   onPreferenciasChange?: (preferencias: PreferenciasUsuario) => void;
-  onHabitosChange?: (habitos: HabitosUsuario) => void;  
+  onHabitosChange?: (habitos: HabitosUsuario) => void;
 
   handleSubmit: (e: React.FormEvent) => void;
   modo: "crear" | "editar";
@@ -45,22 +45,24 @@ const FormularioPublicacion: React.FC<FormularioPublicacionProps> = ({
     cargando: cargandoPerfil,
     error: errorPerfil,
   } = useHabitosPreferencias({
-    habitosIniciales:(publicacion.habitos as HabitosUsuario) ?? ({} as HabitosUsuario),
-    preferenciasIniciales: (publicacion.preferencias as PreferenciasUsuario) ??({} as PreferenciasUsuario),
-    cargarDesdePerfil: true, 
+    habitosIniciales:
+      (publicacion.habitos as HabitosUsuario) ?? ({} as HabitosUsuario),
+    preferenciasIniciales:
+      (publicacion.preferencias as PreferenciasUsuario) ??
+      ({} as PreferenciasUsuario),
+    cargarDesdePerfil: true,
   });
 
-
+  // ---------------------------
+  //  FIX: sincroniza sin romper
+  // ---------------------------
   useEffect(() => {
-  if (!cargandoPerfil) {
-    if (onHabitosChange) {
-      onHabitosChange(habitos);
-    }
-    if (onPreferenciasChange) {
-      onPreferenciasChange(preferencias);
-    }
-  }
-}, []);
+    if (cargandoPerfil) return;
+    if (!habitos || !preferencias) return;
+
+    onHabitosChange?.(habitos);
+    onPreferenciasChange?.(preferencias);
+  }, [habitos, preferencias, cargandoPerfil]);
 
   return (
     <div className="container py-4">
@@ -116,7 +118,7 @@ const FormularioPublicacion: React.FC<FormularioPublicacionProps> = ({
                   id="reglasTexto"
                   name="reglasTexto"
                   value={publicacion.reglasTexto ?? ""}
-                  onChange={ handleChange }
+                  onChange={handleChange}
                   rows={4}
                   maxLength={500}
                   placeholder="• No se permiten mascotas&#10;• No fumar&#10;• Horario de silencio 22:00 - 08:00"
@@ -131,25 +133,30 @@ const FormularioPublicacion: React.FC<FormularioPublicacionProps> = ({
 
           {/* DERECHA */}
           <div className="col-lg-4">
-        <div>
-          {errorPerfil && (
-            <div className="alert alert-warning">
-              No se pudieron cargar tus datos previos. Puedes seleccionarlos
-              manualmente.
-            </div>
-          )}
-          
-            {!cargandoPerfil && !errorPerfil && Object.keys(habitos).length > 0 && (
-              <div className="alert alert-success mb-3">
-                ✔ Cargamos tus hábitos y preferencias guardados previamente.
+            {/* mensajes */}
+            {errorPerfil && (
+              <div className="alert alert-warning">
+                No se pudieron cargar tus datos previos. Puedes seleccionarlos
+                manualmente.
               </div>
             )}
 
-            {!cargandoPerfil && !errorPerfil && Object.keys(habitos).length === 0 && (
-              <div className="alert alert-warning mb-3">
-                ⚠ No tenías hábitos ni preferencias guardados. Puedes seleccionarlos ahora.
-              </div>
-            )}
+            {!cargandoPerfil &&
+              !errorPerfil &&
+              Object.keys(habitos ?? {}).length > 0 && (
+                <div className="alert alert-success mb-3">
+                  ✔ Cargamos tus hábitos y preferencias guardados previamente.
+                </div>
+              )}
+
+            {!cargandoPerfil &&
+              !errorPerfil &&
+              Object.keys(habitos ?? {}).length === 0 && (
+                <div className="alert alert-warning mb-3">
+                  ⚠ No tenías hábitos ni preferencias guardados. Puedes
+                  seleccionarlos ahora.
+                </div>
+              )}
 
             {errorPerfil && (
               <div className="alert alert-danger mb-3">
@@ -157,17 +164,17 @@ const FormularioPublicacion: React.FC<FormularioPublicacionProps> = ({
               </div>
             )}
 
-            <SelectorHabitosPreferencias
-              habitos={habitos}
-              preferencias={preferencias}
-              onHabitoChange={toggleHabito}
-              onPreferenciaChange={togglePreferencia}
-              disabled={loading}
-              compact={false}
-            />
-
-          </div>
-           
+            {/* FIX: evitar pantalla en blanco */}
+            {!cargandoPerfil && (
+              <SelectorHabitosPreferencias
+                habitos={habitos ?? {}}
+                preferencias={preferencias ?? {}}
+                onHabitoChange={toggleHabito}
+                onPreferenciaChange={togglePreferencia}
+                disabled={loading}
+                compact={false}
+              />
+            )}
 
             {/* BOTONES */}
             <div className="card shadow-sm border-0 bg-light mt-3">

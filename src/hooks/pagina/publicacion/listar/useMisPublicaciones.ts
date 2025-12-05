@@ -7,11 +7,11 @@ import type { PublicacionResumida } from "../../../../modelos/Publicacion";
 
 export const useMisPublicaciones = () => {
   const { showSuccess, showError } = useToast();
+
   const [publicaciones, setPublicaciones] = useState<PublicacionResumida[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [toast, setToast] = useState({ show: false, message: "", type: "info" as const });
-
 
   const fetchMisPublicaciones = useCallback(async () => {
     try {
@@ -29,7 +29,6 @@ export const useMisPublicaciones = () => {
 
       const data = await apiPublicacion.publicacion.misPublicaciones(usuarioId);
       setPublicaciones(data);
-
     } catch (err: any) {
       console.error("Error al obtener publicaciones:", err);
       setError(err.message || "Error al cargar publicaciones");
@@ -43,11 +42,9 @@ export const useMisPublicaciones = () => {
     fetchMisPublicaciones();
   }, [fetchMisPublicaciones]);
 
-
   const handleEdit = (id: string) => {
     Navegar.editarPublicacion(id);
   };
-
 
   const handleDelete = useCallback(
     (id: string) => {
@@ -58,31 +55,28 @@ export const useMisPublicaciones = () => {
         return;
       }
 
-      const prev = publicaciones;
+      const prev = [...publicaciones];
+
       setPublicaciones(prev => prev.filter(p => p.id !== id));
 
-      apiPublicacion.publicacion.eliminarPublicacion(id)
+      apiPublicacion.publicacion
+        .eliminarPublicacion(id)
         .then(() => {
           showSuccess("Publicación eliminada correctamente");
         })
         .catch(err => {
           showError(err.message || "Error al eliminar la publicación");
-
-          setPublicaciones(prev);
+          setPublicaciones(prev); 
         });
-
     },
     [publicaciones, showError, showSuccess]
   );
 
   const handleEstado = async (id: string, nuevoEstado: "activa" | "pausada") => {
-    const prev = publicaciones;
+    const prev = [...publicaciones];
 
-    // Update instantáneo
     setPublicaciones(prev =>
-      prev.map(p =>
-        p.id === id ? { ...p, estado: nuevoEstado } : p
-      )
+      prev.map(p => (p.id === id ? { ...p, estado: nuevoEstado } : p))
     );
 
     try {
@@ -90,8 +84,7 @@ export const useMisPublicaciones = () => {
       showSuccess(`Estado cambiado a ${nuevoEstado}`);
     } catch (err: any) {
       showError(err.message || "Error al cambiar estado");
-
-      setPublicaciones(prev);
+      setPublicaciones(prev); // rollback
     }
   };
 
@@ -103,7 +96,6 @@ export const useMisPublicaciones = () => {
     setToast({ ...toast, show: false });
   };
 
-
   return {
     publicaciones,
     loading,
@@ -114,6 +106,6 @@ export const useMisPublicaciones = () => {
     handleDelete,
     handleEstado,
     handleCrearNueva,
-    refresh: fetchMisPublicaciones
+    refresh: fetchMisPublicaciones,
   };
 };
