@@ -1,9 +1,12 @@
 import axios from "axios";
 
-const BASE_URL = import.meta.env.VITE_API_URL;
+const BASE_URL =
+  import.meta.env.MODE === "development"
+    ? import.meta.env.VITE_API_URL
+    : import.meta.env.VITE_API_URL_RENDER;
 
 if (!BASE_URL) {
-  console.error("❌ ERROR: VITE_API_URL no está definida en las variables de entorno.");
+  console.error("❌ ERROR: BASE_URL no está definida en las variables de entorno.");
 }
 
 const axiosApi = axios.create({

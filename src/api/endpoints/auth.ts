@@ -1,4 +1,5 @@
 import { handleApiError } from "../../helpers/handleApiError";
+import { limpiarSesionFirebase } from "../../services/auth/firebaseUtils";
 import { TokenService } from "../../services/auth/tokenService";
 import axiosApi from "../config/axios.config";
 import type { LoginRequest, LoginResponse, RegisterRequest, RegisterResponse } from "../types/auth.types";
@@ -42,12 +43,11 @@ const apiAuth = {
 
     login: async (data: LoginRequest): Promise<LoginResponse> => {
       try {
+        await limpiarSesionFirebase();
         const result = await axiosApi.post<LoginResponse>(
           `${import.meta.env.VITE_URL_AUTH}/login`,
           data
         );
-
-        console.log(result.data);
 
         if (result.status === 200) {
           TokenService.saveAuthData(
@@ -59,28 +59,28 @@ const apiAuth = {
             },
             data.idToken
           );
-
           return result.data;
         }
 
         throw new Error("Error al iniciar sesión");
       } catch (error: any) {
-        if (error.response) {
-          throw new Error(
-            error.response.data.message || "Credenciales inválidas"
-          );
+        if (error.code === "auth/invalid-credential") {
+          await limpiarSesionFirebase();
         }
-        throw new Error("Error de conexión");
+        throw error;
       }
     },
 
     loginConGoogle: async (): Promise<LoginResponse> => {
       try {
+        await limpiarSesionFirebase();
+
         const auth = getAuth();
         const provider = new GoogleAuthProvider();
         const resultado = await signInWithPopup(auth, provider);
         const usuario = resultado.user;
         const idToken = await usuario.getIdToken();
+
         const result = await axiosApi.post<LoginResponse>(
           `${import.meta.env.VITE_URL_AUTH}/login-google`,
           { idToken }
@@ -96,19 +96,22 @@ const apiAuth = {
             },
             idToken
           );
-
           return result.data;
         }
 
         throw new Error("Error al iniciar sesión con Google");
       } catch (error: any) {
         console.error("Error Google Login:", error);
-        throw new Error("Error al iniciar sesión con Google");
+        if (error.code === "auth/invalid-credential") {
+          await limpiarSesionFirebase();
+        }
+        throw error;
       }
     },
 
     logout: (mostrarMensaje = false) => {
       TokenService.clearAuthData();
+      limpiarSesionFirebase();
       if (mostrarMensaje) {
         window.alert(
           "Tu sesión ha expirado. Por favor, inicia sesión nuevamente."
@@ -116,6 +119,7 @@ const apiAuth = {
       }
     },
   },
+
 };
 
 export default apiAuth;
