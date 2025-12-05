@@ -9,6 +9,8 @@ import { InfoBasicaPublicacion } from "../componenteSecundario/View/InfoBasicaPu
 import { PrecioYContacto } from "../componenteSecundario/View/PrecioYContacto";
 import { SeccionLecturaCheckboxes } from "../componenteSecundario/View/SeccionLecturaCheckboxes";
 import { MiniChat } from "../../Chat/MiniChat/MiniChat";
+import { Button } from "react-bootstrap";
+import { Navegar } from "../../../navigation/navigationService";
 
 interface PublicacionDetalleViewProps {
   publicacion: PublicacionResponce;
@@ -49,16 +51,16 @@ const PublicacionDetalleView: React.FC<PublicacionDetalleViewProps> = ({
           </div>
 
           <div className="col-lg-4">
-
             <PrecioYContacto precio={publicacion.precio} onContactar={() => setMostrarChat(true)} />
-
             <AnuncianteCard nombre={usuarioNombre} usuarioId={usuarioId} />
-
             <CalificacionUsuario usuarioId={usuarioId} nombre={usuarioNombre} />
-
           </div>
         </div>
       </div>
+
+        <div className="btn-skip-container">
+          <button className="btn-skip" onClick={() => Navegar.home()}>Volver</button>
+        </div>
 
       <MiniChat
         visible={mostrarChat}

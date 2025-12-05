@@ -20,7 +20,7 @@ const NavbarApp: React.FC = () => {
   
   return (
     <Navbar bg="dark" variant="dark" expand="lg" className="px-4 shadow-sm">
-      <Navbar.Brand onClick={() => Navegar.home()} className="fw-bold text-uppercase">
+      <Navbar.Brand onClick={() => Navegar.home()} className="fw-bold text-uppercase" style={{ cursor: "pointer" }}>
         Comparto DeptoAR
       </Navbar.Brand>
 
