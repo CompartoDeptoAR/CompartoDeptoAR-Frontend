@@ -9,9 +9,7 @@ const apiModeracion = {
       const usuarioId = TokenService.getUserId();
       if (!usuarioId) throw new Error("Usuario no autenticado");
 
-      const res = await axiosApi.get(`${urlApi}`, {
-        headers: { "x-user-id": usuarioId }
-      });
+      const res = await axiosApi.get(`${urlApi}`);
 
       return res.data;
     } catch (error: any) {
@@ -34,11 +32,6 @@ const apiModeracion = {
       const res = await axiosApi.post(
         `${urlApi}/${idReporte}/revisar`,
         body,
-        {
-          headers: {
-            "x-user-id": usuarioId
-          }
-        }
       );
 
       return res.data;
@@ -56,10 +49,7 @@ const apiModeracion = {
       const usuarioId = TokenService.getUserId();
       if (!usuarioId) throw new Error("Usuario no autenticado");
 
-      const res = await axiosApi.delete(`${urlApi}/${idPublicacion}`, {
-        headers: { "x-user-id": usuarioId },
-        data: { motivo }
-      });
+      const res = await axiosApi.delete(`${urlApi}/${idPublicacion}`);
 
       return res.data;
     } catch (error: any) {
@@ -76,10 +66,7 @@ const apiModeracion = {
       const usuarioId = TokenService.getUserId();
       if (!usuarioId) throw new Error("Usuario no autenticado");
 
-      const res = await axiosApi.delete(`${urlApi}/mensajes/${idMensaje}`, {
-        headers: { "x-user-id": usuarioId },
-        data: { motivo }
-      });
+      const res = await axiosApi.delete(`${urlApi}/mensajes/${idMensaje}`);
 
       return res.data;
     } catch (error: any) {

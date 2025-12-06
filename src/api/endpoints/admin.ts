@@ -10,10 +10,7 @@ const apiAdmin = {
       if (!adminId) throw new Error("Usuario no autenticado");
 
       const res = await axiosApi.post(
-        `${urlApi}/asignar-rol`,
-        { usuarioId, rol },
-        { headers: { "x-user-id": adminId } }
-      );
+        `${urlApi}/asignar-rol`);
 
       return res.data;
     } catch (error: any) {
@@ -28,10 +25,7 @@ const apiAdmin = {
       if (!adminId) throw new Error("Usuario no autenticado");
 
       const res = await axiosApi.post(
-        `${urlApi}/sacar-rol`,
-        { usuarioId, rol },
-        { headers: { "x-user-id": adminId } }
-      );
+        `${urlApi}/sacar-rol`);
 
       return res.data;
     } catch (error: any) {
