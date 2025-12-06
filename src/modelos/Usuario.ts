@@ -17,7 +17,7 @@ export interface UsuarioPerfil {
   descripcion?: string;
   habitos?: HabitosUsuario;
   preferencias?: PreferenciasUsuario;
-  fotoPerfil?: string
+  fotoPerfil?: string;
 }
 
 export const OPCIONES_HABITOS = [

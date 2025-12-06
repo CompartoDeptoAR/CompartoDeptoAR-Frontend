@@ -7,6 +7,7 @@ import CampoSelect from "./helpers/CampoSelect";
 import CampoTextArea from "./helpers/CampoTextArea";
 import BotonesFormulario from "./helpers/BotonesFormulario";
 import SeccionCheckboxes from "./helpers/SeccionCheckboxes";
+import GestorFotos from "../Publicacion/componenteSecundario/Formulario/GestorFotos";
 import axiosApi from "../../api/config/axios.config";
 
 interface FormularioPerfilProps {
@@ -15,7 +16,6 @@ interface FormularioPerfilProps {
   onSubmit?: (usuario: UsuarioPerfil) => void;
 }
 
-// Tipado de la respuesta del backend al subir foto
 interface SubirFotoResponse {
   mensaje: string;
   url: string;
@@ -28,40 +28,6 @@ const FormularioPerfil: React.FC<FormularioPerfilProps> = ({ perfil, modo, onSub
   useEffect(() => {
     if (perfil) setFormData(perfil);
   }, [perfil]);
-
-  // 👇 FUNCION PARA SUBIR FOTO AL BACKEND
-  const handleFotoChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files?.[0]) return;
-    const archivo = e.target.files[0];
-    setSubiendo(true);
-
-    try {
-      const formDataArchivo = new FormData();
-      formDataArchivo.append("foto", archivo);
-
-      const token = localStorage.getItem("token"); // si tu backend usa JWT
-      const res = await axiosApi.post<SubirFotoResponse>(
-        "/usuarios/subir-foto",
-        formDataArchivo,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      // Actualizamos la URL de la foto en el estado
-      setFormData(prev => ({
-        ...prev,
-        fotoPerfil: res.data.url,
-      }));
-    } catch (error) {
-      console.error("Error subiendo foto al backend:", error);
-    } finally {
-      setSubiendo(false);
-    }
-  };
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -76,20 +42,14 @@ const FormularioPerfil: React.FC<FormularioPerfilProps> = ({ perfil, modo, onSub
   const toggleHabito = (key: keyof HabitosUsuario) => {
     setFormData(prev => ({
       ...prev,
-      habitos: {
-        ...(prev.habitos ?? {}),
-        [key]: !prev.habitos?.[key],
-      },
+      habitos: { ...(prev.habitos ?? {}), [key]: !prev.habitos?.[key] },
     }));
   };
 
   const togglePreferencia = (key: keyof PreferenciasUsuario) => {
     setFormData(prev => ({
       ...prev,
-      preferencias: {
-        ...(prev.preferencias ?? {}),
-        [key]: !prev.preferencias?.[key],
-      },
+      preferencias: { ...(prev.preferencias ?? {}), [key]: !prev.preferencias?.[key] },
     }));
   };
 
@@ -113,13 +73,6 @@ const FormularioPerfil: React.FC<FormularioPerfilProps> = ({ perfil, modo, onSub
             alt="foto usuario"
             className="perfil-foto"
           />
-
-          {modo === "editar" && (
-            <label className="btn-cambiar-foto">
-              Cambiar foto
-              <input type="file" accept="image/*" onChange={handleFotoChange} hidden />
-            </label>
-          )}
 
           {subiendo && <div className="subiendo-texto">Subiendo foto...</div>}
         </div>
@@ -182,6 +135,21 @@ const FormularioPerfil: React.FC<FormularioPerfilProps> = ({ perfil, modo, onSub
             onToggle={togglePreferencia}
             textoVacio="Sin preferencias especificadas"
           />
+
+          {/* SOLO MOSTRAR EL GESTOR DE FOTOS EN EDITAR */}
+          {modo === "editar" && (
+            <GestorFotos
+              fotos={formData.fotoPerfil ? [formData.fotoPerfil] : []}
+              onFotosChange={(nuevasFotos) =>
+                setFormData(prev => ({
+                  ...prev,
+                  fotoPerfil: nuevasFotos[0] || "",
+                }))
+              }
+              disabled={false}
+              titulo="Foto de perfil"
+            />
+          )}
 
           <BotonesFormulario modo={modo} />
         </form>
