@@ -8,8 +8,6 @@ interface FormLoginProps {
   onTogglePassword: () => void;
   onSubmit: (e: React.FormEvent) => void;
   onSwitch: () => void;
-
-  // 👇 AGREGADO
   onGoogleLogin?: () => void;
 }
 
@@ -25,10 +23,10 @@ const FormularioLogin: React.FC<FormLoginProps> = ({
   onSwitch,
   onGoogleLogin,
 }) => (
-  <form onSubmit={onSubmit} className="form-container page-transition">
+  <form onSubmit={onSubmit} className="form-container">
     <h2 className="form-title">Iniciar sesión</h2>
 
-    <div>
+    <div className="form-group">
       <label>Email</label>
       <input
         type="email"
@@ -37,10 +35,11 @@ const FormularioLogin: React.FC<FormLoginProps> = ({
         placeholder="Email"
         required
         disabled={loading}
+        //pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}$" //sacar si no podemos entrar
       />
     </div>
 
-    <div>
+    <div className="form-group">
       <label>Contraseña</label>
 
       <div className="password-wrapper">
@@ -51,7 +50,6 @@ const FormularioLogin: React.FC<FormLoginProps> = ({
           placeholder="********"
           required
           minLength={8}
-          pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$"
           title="La contraseña debe tener al menos 8 caracteres, incluyendo mayúsculas, minúsculas y un número"
           disabled={loading}
         />
@@ -80,9 +78,10 @@ const FormularioLogin: React.FC<FormLoginProps> = ({
     >
       Iniciar sesión con Google
     </button>
-    <p>
+
+    <p className="switch-text">
       ¿No tenés cuenta?{" "}
-      <button type="button" onClick={onSwitch} disabled={loading}>
+      <button type="button" onClick={onSwitch} disabled={loading} className="switch-button">
         Registrate
       </button>
     </p>
