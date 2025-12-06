@@ -20,6 +20,7 @@ export const USER_ROUTES = {
 
 export const ADMIN_ROUTES = {
   PANEL: "/admin",
+  REPORTE_DETALLE:(id?:string)=>`/admin/reportes/${id}`,
 };
 
 export const GENERAL = {
@@ -32,6 +33,6 @@ export const ROUTE = {
   CHAT: (id: string) => `/chat/${id}`,
   MENSAJE: "/mensajes",
   OTRO_PERFIL: (id: string) => `/perfil/${id}`,
-  DENUNCIA: "/denuncia"
+  DENUNCIA:(id: string)=> `/denuncia/${id}`,
 };
 

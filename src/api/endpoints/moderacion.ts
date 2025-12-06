@@ -1,15 +1,25 @@
 import axiosApi from "../config/axios.config";
 import { TokenService } from "../../services/auth/tokenService";
+import { MiniReporte } from "../../modelos/Reporte";
 
 const urlApi = import.meta.env.VITE_URL_MODERACION;
 
+interface RevisarReporte{
+  idReporte: string,
+  accion: "dejado" | "eliminado",
+  motivo?: string
+}
+interface RespuestaRevisarReporte {
+  mensaje: string;
+}
+
 const apiModeracion = {
-  listarReportes: async (): Promise<any> => {
+  listarReportes: async (): Promise<MiniReporte[]> => {
     try {
       const usuarioId = TokenService.getUserId();
       if (!usuarioId) throw new Error("Usuario no autenticado");
 
-      const res = await axiosApi.get(`${urlApi}`);
+      const res = await axiosApi.get<MiniReporte[]>(`${urlApi}`);
 
       return res.data;
     } catch (error: any) {
@@ -18,19 +28,15 @@ const apiModeracion = {
     }
   },
 
-  revisarReporte: async (
-    idReporte: string,
-    accion: "dejado" | "eliminado",
-    motivo?: string
-  ): Promise<any> => {
+  revisarReporte: async ( revisar: RevisarReporte): Promise<RespuestaRevisarReporte> => {
     try {
       const usuarioId = TokenService.getUserId();
       if (!usuarioId) throw new Error("Usuario no autenticado");
 
-      const body = { accion, motivo };
+      const body = { accion:revisar.accion , motivo:revisar.motivo };
 
-      const res = await axiosApi.post(
-        `${urlApi}/${idReporte}/revisar`,
+      const res = await axiosApi.post<RespuestaRevisarReporte>(
+        `${urlApi}/${revisar.idReporte}/revisar`,
         body,
       );
 

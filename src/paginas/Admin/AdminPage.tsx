@@ -1,17 +1,37 @@
 import { useState } from "react";
-import ReportesPage from "./ReportePage";
+import ReportesPage from "./Reporte/ReportePage";
+import UsuariosRolesPage from "./Usuario/UsuariosRolesPage";
 
 const AdminPage = () => {
   const [tab, setTab] = useState("reportes");
-
+  
   return (
-    <div>
-      <h1>Panel de administración</h1>
+    <div className="container-fluid py-4">
+      <div className="row mb-4">
+        <div className="col">
+          <h1 className="display-5 fw-bold">🛡️ Panel de administración</h1>
+          <p className="text-muted">Gestiona reportes, usuarios y roles</p>
+        </div>
+      </div>
 
-      <nav className="tabs">
-        <button onClick={() => setTab("reportes")}>Reportes</button>
-        <button onClick={() => setTab("usuarios")}>Usuarios / Roles</button>
-      </nav>
+      <ul className="nav nav-tabs mb-4">
+        <li className="nav-item">
+          <button 
+            className={`nav-link ${tab === "reportes" ? "active" : ""}`}
+            onClick={() => setTab("reportes")}
+          >
+            📋 Reportes
+          </button>
+        </li>
+        <li className="nav-item">
+          <button 
+            className={`nav-link ${tab === "usuarios" ? "active" : ""}`}
+            onClick={() => setTab("usuarios")}
+          >
+            👥 Usuarios / Roles
+          </button>
+        </li>
+      </ul>
 
       <div className="content">
         {tab === "reportes" && <ReportesPage />}
@@ -22,43 +42,3 @@ const AdminPage = () => {
 };
 
 export default AdminPage;
-
-
-
-
-export function ReportesList() {
-  return (
-    <div className="reportes-list">
-      {reportes.map((r) => (
-        <ReporteItem key={r.id} reporte={r} />
-      ))}
-    </div>
-  );
-}
-
-export function ReporteItem({ reporte }) {
-  return (
-    <div className="reporte-item">
-      <div>
-        <strong>{reporte.tipo}</strong> - {reporte.descripcion}
-      </div>
-      <div>{reporte.fecha}</div>
-
-      <div className="acciones">
-        <button>Ver</button>
-        <button>Eliminar</button>
-        <button>Ignorar</button>
-      </div>
-    </div>
-  );
-}
-
-function UsuariosRolesPage() {
-  return (
-    <div>
-      <h2>Gestionar roles</h2>
-      <input placeholder="Buscar usuario" />
-      {/* tabla con usuarios */}
-    </div>
-  );
-}

@@ -36,11 +36,11 @@ export const Navegar = {
     chat: (id: string) => go(ROUTE.CHAT(id)),
     chatCompleto: () => go(ROUTE.MENSAJE) ,
     notificaciones: () => go("aun no existe"),
-    denuncia: () => go(ROUTE.DENUNCIA) ,
+    denunciaConId: (id: string) => go(ROUTE.DENUNCIA(id)) ,
     contactos: () => go("aun no existe"),
     usuarioPerfil: (id: string) => go(ROUTE.OTRO_PERFIL(id)),
     admin: () => go(ADMIN_ROUTES.PANEL),
-
+    verReporte:(id:string)=> go(ADMIN_ROUTES.REPORTE_DETALLE(id)),
     
 
     volverAtras: () => go(-1 as any),

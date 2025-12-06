@@ -16,6 +16,7 @@ import { Navegar } from "../navigation/navigationService";
 import { ChatCompleto } from "../paginas/Chat/ChatCompleto";
 import DenunciaPage from "../paginas/Nosotros/DenunciaPage";
 import { hasRole } from "../helpers/funcion";
+import ReporteDetallePage from "../paginas/Admin/Reporte/ReporteDetallePage";
 
 
 const ProtectedRouter = () => {
@@ -40,9 +41,12 @@ const ProtectedRouter = () => {
       )}
 
       {hasRole(Rol.ADMIN) && (
+        <>
         <Route path={ADMIN_ROUTES.PANEL} element={<AdminPage />} />
+        <Route path={"/admin/reportes/:id"} element={<ReporteDetallePage/>}/>
+        </>
       )}
-      <Route path={ROUTE.DENUNCIA} element={<DenunciaPage/>}/>
+      <Route path={"/denuncia/:id"} element={<DenunciaPage/>}/>
       <Route path={ROUTE.MENSAJE} element={<ChatCompleto idUsuario={TokenService.getUserId()!} onBack={()=>Navegar.volverAtras()} />}/>
       <Route path={GENERAL.CONFIGURACION} element={<Configuracion/>}/>
       <Route path={GENERAL.NOT_FOUND} element={<NotFoundPage/>} />

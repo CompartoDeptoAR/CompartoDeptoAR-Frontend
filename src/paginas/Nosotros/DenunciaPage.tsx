@@ -1,21 +1,16 @@
 import React from "react";
 import { useDenuncia } from "../../hooks/pagina/nosotros/useDenuncia";
-import FormularioGenerico from "../../componentes/Nosotros/FormContactanosGenerico";
+import FormularioDenuncia from "../../componentes/Nosotros/FormDenuncia";
+import { useParams } from "react-router-dom";
+
 
 const DenunciaPage: React.FC = () => {
-  const denunciaProps = useDenuncia();
+const denunciaProps = useDenuncia();
+const { id } = useParams();
 
-  return (
-    <FormularioGenerico
-      {...denunciaProps}
-      titulo="Realizar Denuncia"
-      mensajeLabel="Descripción de la denuncia"
-      mensajePlaceholder="Describí la situación que querés denunciar"
-      mensajeExito="Tu denuncia fue recibida. Será procesada a la brevedad."
-      textoBoton="Enviar denuncia"
-      maxPalabras={500}
-    />
-  );
+
+return <FormularioDenuncia {...denunciaProps} idContenido={id || ""} />;
 };
+
 
 export default DenunciaPage;

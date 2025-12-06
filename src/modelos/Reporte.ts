@@ -1,11 +1,17 @@
+import { Timestamp } from "firebase/firestore";
+
 export interface Reporte {
-  id: string;
-  fecha: string;
-  titulo: string;
-  descripcion: string;
-  estado: "PENDIENTE" | "RESUELTO" | "ELIMINADO";
-  usuarioId: string;
-  publicacionId?: string;  // si reportan una publicación
+  id?: string;
+  tipo: "publicacion" | "mensaje";
+  idContenido: string;
+  motivo: string;
+  descripcion:string;
+  reportanteId?: string;
+  fechaReporte: Timestamp;
+  revisado?: boolean;
+  accionTomada?: "dejado" | "eliminado" | null;
+  adminId?: string | null;
+  motivoEliminacion?: string | null;  
 }
 
 export interface ListaReportesRes {
@@ -14,3 +20,14 @@ export interface ListaReportesRes {
   page: number;
   pageSize: number;
 }
+
+
+export interface MiniReporte{
+  descripcion: string;
+  id: string;
+  tipo: "publicacion" | "mensaje";
+  motivo:string;
+  fechaReporte: Timestamp;
+  revisado?: boolean;
+}
+

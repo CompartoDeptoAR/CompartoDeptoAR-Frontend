@@ -5,7 +5,9 @@ interface Props {
   texto?: string;
   className?: string;
 }
-
+interface PropsDenunciaConId extends Props {
+  idContenido: string;
+}
 export function BotonVolver({ texto = "Volver", className = "" }: Props) {
   return (
     <button
@@ -18,11 +20,15 @@ export function BotonVolver({ texto = "Volver", className = "" }: Props) {
   );
 }
 
-export function BotonDenunciaLink({ texto = "Denunciar", className = "" }: Props) {
+export function BotonDenunciaConId({ 
+  texto = "Denunciar", 
+  className = "",
+  idContenido,
+}: PropsDenunciaConId) {
   return (
     <span
       className={`boton-denuncia-link ${className}`}
-      onClick={() => Navegar.denuncia()}
+      onClick={() => Navegar.denunciaConId(idContenido)}
     >
       {texto}
     </span>
