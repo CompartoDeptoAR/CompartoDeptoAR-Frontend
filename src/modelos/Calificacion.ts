@@ -3,7 +3,7 @@ export interface Calificacion {
   idCalificador: string;
   idCalificado: string | number;
   puntuacion: number;
-  comentario: string;
+  comentario?: string;
   fecha: Date;
   nombreCalificador?: string;
 }

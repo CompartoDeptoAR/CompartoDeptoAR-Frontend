@@ -8,8 +8,9 @@ import GaleriaPublicacion from "../componenteSecundario/View/GaleriaPublicacion"
 import { InfoBasicaPublicacion } from "../componenteSecundario/View/InfoBasicaPublicacion";
 import { PrecioYContacto } from "../componenteSecundario/View/PrecioYContacto";
 import { SeccionLecturaCheckboxes } from "../componenteSecundario/View/SeccionLecturaCheckboxes";
-import { MiniChat } from "../../Chat/MiniChat/MiniChat";
+
 import { Navegar } from "../../../navigation/navigationService";
+import { MiniChat } from "../../Chat/MiniChat";
 
 interface PublicacionDetalleViewProps {
   publicacion: PublicacionResponce;
@@ -25,8 +26,6 @@ const PublicacionDetalleView: React.FC<PublicacionDetalleViewProps> = ({
   const [mostrarChat, setMostrarChat] = useState(false);
 
   const nombreUsuario = publicacion.usuarioNombre || "Usuario";
-
-  // Fallback seguro: si vienen undefined, usamos objetos vacíos
   const habitos = publicacion.habitos || {};
   const preferencias = publicacion.preferencias || {};
 

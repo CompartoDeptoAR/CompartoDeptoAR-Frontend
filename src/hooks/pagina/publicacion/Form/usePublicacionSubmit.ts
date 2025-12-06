@@ -53,10 +53,9 @@ export const usePublicacionSubmit = (formData: Publicacion) => {
 
       console.log("✅ Publicación creada:", response);
 
-      // Mostramos toast antes de navegar
-      showSuccess(response.mensaje || "¡Publicación creada exitosamente!");
 
-      // Redirigimos a Mis Publicaciones después de 1 segundo
+      showSuccess(response.mensaje || "¡Publicación creada exitosamente!");
+      //aca estaria bueno tener un cartelito que dice que funciono
       setTimeout(() => Navegar.misPublicaciones(), 1000);
 
     } catch (error: any) {

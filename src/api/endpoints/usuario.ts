@@ -1,7 +1,12 @@
 import { data } from "react-router-dom";
-import type { UsuarioPerfil } from "../../modelos/Usuario";
+import type { HabitosUsuario, PreferenciasUsuario, UsuarioPerfil } from "../../modelos/Usuario";
 import axiosApi from "../config/axios.config";
-import { LocalStorageService, STORAGE_KEYS } from "../../services/storage/localStorage.service";
+import { handleApiError } from "../../helpers/handleApiError";
+
+interface PerfilHabitosPreferenciasResponse {
+  habitos: HabitosUsuario;
+  preferencias: PreferenciasUsuario;
+}
 
 
 const apiUsuario = {
@@ -47,6 +52,29 @@ const apiUsuario = {
                         error.response.data.message ||
                         "Error al obtener el perfil del usuario"
                     );
+                }
+                throw new Error("Error de conexión");
+            }
+        },
+        obtener: async ():Promise<PerfilHabitosPreferenciasResponse> => {
+        try {
+            const result = await axiosApi.get<PerfilHabitosPreferenciasResponse>(
+                import.meta.env.VITE_URL_PERFIL_HABITOS_PREFERECIAS
+            );
+            console.log(result.data)
+            console.log(result.status)
+            if (result.status === 200) return result.data;
+
+                return handleApiError(
+                result.status,
+                "No se pudieron obtener los hábitos y preferencias"
+                );
+            } catch (error: any) {
+                if (error.response) {
+                throw new Error(
+                    error.response.data.message ||
+                    "Error al obtener hábitos y preferencias"
+                );
                 }
                 throw new Error("Error de conexión");
             }

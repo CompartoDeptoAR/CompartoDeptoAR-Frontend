@@ -1,11 +1,19 @@
 import React from "react";
 import { useContactanos } from "../../hooks/pagina/nosotros/useContactanos";
-import  FormContactanos  from "../../componentes/Nosotros/FormContactanos";
+import FormularioGenerico from "../../componentes/Nosotros/FormContactanosGenerico";
+
 
 const ContactanosPage: React.FC = () => {
   const contactanosProps = useContactanos();
 
-  return <FormContactanos {...contactanosProps} />;
+  return (
+    <FormularioGenerico
+      {...contactanosProps}
+      titulo="Contáctanos"
+      mensajePlaceholder="Escribí tu mensaje"
+      maxPalabras={300}
+    />
+  );
 };
 
 export default ContactanosPage;

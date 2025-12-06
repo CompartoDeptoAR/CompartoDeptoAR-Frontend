@@ -46,11 +46,14 @@ const NavbarApp: React.FC = () => {
                   onClick={() => Navegar.notificaciones()}
                 >
                   <Bell size={20} />
-
+                {/* ---Aca va algo parecido a NotificacionesBandeg pero es de sistema, notificaciones 
+                    de calificaciones,...
                   <NotificacionesBadge
                     idUsuario={TokenService.getUserId()}
                   
                   />
+                  
+                  */}
                 </Nav.Link>
 
                 {/* Mensajes */}

@@ -53,9 +53,6 @@ const FormularioPublicacion: React.FC<FormularioPublicacionProps> = ({
     cargarDesdePerfil: true,
   });
 
-  // ---------------------------
-  //  FIX: sincroniza sin romper
-  // ---------------------------
   useEffect(() => {
     if (cargandoPerfil) return;
     if (!habitos || !preferencias) return;
@@ -164,7 +161,7 @@ const FormularioPublicacion: React.FC<FormularioPublicacionProps> = ({
               </div>
             )}
 
-            {/* FIX: evitar pantalla en blanco */}
+
             {!cargandoPerfil && (
               <SelectorHabitosPreferencias
                 habitos={habitos ?? {}}

@@ -1,7 +1,5 @@
 import axiosApi from "../config/axios.config";
-import { handleApiError } from "../../helpers/handleApiError"; 
-
-interface SolicitudContacto {
+interface Denuncia {
   mail: string;
   mensaje: string;
 }
@@ -10,14 +8,13 @@ interface RespuestaContacto {
     mensaje?: string; 
 }
 
-const rutaEndpoint = import.meta.env.VITE_URL_CONTACTO;
-
-const apiContactanos = {
-  contacto: {
-    enviarMensaje: async (data: SolicitudContacto): Promise<RespuestaContacto> => {
+const rutaEndpoint = import.meta.env.VITE_URL_REPORTES;
+const apiDenuncia = {
+    denuncia:{
+        enviarDenuncia: async (data: Denuncia): Promise<RespuestaDenuncia> => {
 
       if (!rutaEndpoint) {
-          throw new Error("Error de Configuración: VITE_URL_CONTACTO no está definido. Revisa tu archivo .env y asegúrate de reiniciar el servidor de desarrollo.");
+          throw new Error("Error de Configuración: VITE_URL_REPORTES no está definido. Revisa tu archivo .env y asegúrate de reiniciar el servidor de desarrollo.");
       }
 
       try {
@@ -47,7 +44,7 @@ const apiContactanos = {
         throw new Error("Error de conexión. El servidor de Render podría no estar disponible.");
       }
     },
-  },
-};
+    }
+}
 
-export default apiContactanos;
+export default apiDenuncia;
