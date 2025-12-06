@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+//npm install react-argentina-geo
 
 interface Provincia {
   id: string;
@@ -18,7 +19,7 @@ interface SelectorUbicacionProps {
   disabled?: boolean;
   required?: boolean;
 }
-
+//https://github.com/facufrau/react-argentina-geo
 const SelectorUbicacionArgentina: React.FC<SelectorUbicacionProps> = ({
   provincia,
   localidad,
@@ -32,7 +33,7 @@ const SelectorUbicacionArgentina: React.FC<SelectorUbicacionProps> = ({
   const [loadingProvincias, setLoadingProvincias] = useState(true);
   const [loadingMunicipios, setLoadingMunicipios] = useState(false);
 
-  // Cargar provincias al montar el componente
+
   useEffect(() => {
     const fetchProvincias = async () => {
       try {
@@ -51,7 +52,7 @@ const SelectorUbicacionArgentina: React.FC<SelectorUbicacionProps> = ({
     fetchProvincias();
   }, []);
 
-  // Cargar municipios cuando cambia la provincia
+
   useEffect(() => {
     if (!provincia) {
       setMunicipios([]);

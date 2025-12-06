@@ -1,11 +1,11 @@
+import { handleApiError } from "../../helpers/handleApiError";
 import axiosApi from "../config/axios.config";
 interface Denuncia {
-  mail: string;
   mensaje: string;
 }
 
-interface RespuestaContacto {
-    mensaje?: string; 
+interface RespuestaDenuncia {
+    mensaje: string; 
 }
 
 const rutaEndpoint = import.meta.env.VITE_URL_REPORTES;
@@ -18,7 +18,7 @@ const apiDenuncia = {
       }
 
       try {
-        const resultado = await axiosApi.post<RespuestaContacto>(
+        const resultado = await axiosApi.post<RespuestaDenuncia>(
           rutaEndpoint, 
           data
         );

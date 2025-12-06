@@ -32,5 +32,6 @@ export const ROUTE = {
   CHAT: (id: string) => `/chat/${id}`,
   MENSAJE: "/mensajes",
   OTRO_PERFIL: (id: string) => `/perfil/${id}`,
+  DENUNCIA: "/denuncia"
 };
 

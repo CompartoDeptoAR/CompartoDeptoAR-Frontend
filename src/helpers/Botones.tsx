@@ -17,3 +17,14 @@ export function BotonVolver({ texto = "Volver", className = "" }: Props) {
     </button>
   );
 }
+
+export function BotonDenunciaLink({ texto = "Denunciar", className = "" }: Props) {
+  return (
+    <span
+      className={`boton-denuncia-link ${className}`}
+      onClick={() => Navegar.denuncia()}
+    >
+      {texto}
+    </span>
+  );
+}

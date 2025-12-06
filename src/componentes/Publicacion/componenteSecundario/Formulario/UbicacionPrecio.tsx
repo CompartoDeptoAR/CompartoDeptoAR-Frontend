@@ -28,7 +28,6 @@ const UbicacionPrecio: React.FC<UbicacionPrecioProps> = ({
     const inputElement = precioInputRef.current;
     
     if (inputElement) {
-      // Prevenir cambio de valor con scroll
       const handleWheel = (e: WheelEvent) => {
         e.preventDefault();
       };

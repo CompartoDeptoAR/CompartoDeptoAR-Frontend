@@ -14,19 +14,16 @@ import NotFoundPage from "../paginas/Configuracion/NotFound";
 
 import { Navegar } from "../navigation/navigationService";
 import { ChatCompleto } from "../paginas/Chat/ChatCompleto";
+import DenunciaPage from "../paginas/Nosotros/DenunciaPage";
+import { hasRole } from "../helpers/funcion";
 
 
 const ProtectedRouter = () => {
   const loggedIn = TokenService.getAuthData();
-  const userRol = TokenService.getUserRol();
-  
   
   if (!loggedIn) {
     return <Navigate to={GENERAL.RESTRICTED} replace />;
   }
-  
-  const hasRole = (role: Rol) => 
-    Array.isArray(userRol) && userRol.includes(role);
     
   return (
     <Routes>
@@ -45,6 +42,7 @@ const ProtectedRouter = () => {
       {hasRole(Rol.ADMIN) && (
         <Route path={ADMIN_ROUTES.PANEL} element={<AdminPage />} />
       )}
+      <Route path={ROUTE.DENUNCIA} element={<DenunciaPage/>}/>
       <Route path={ROUTE.MENSAJE} element={<ChatCompleto idUsuario={TokenService.getUserId()!} onBack={()=>Navegar.volverAtras()} />}/>
       <Route path={GENERAL.CONFIGURACION} element={<Configuracion/>}/>
       <Route path={GENERAL.NOT_FOUND} element={<NotFoundPage/>} />

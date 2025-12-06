@@ -36,9 +36,10 @@ export const Navegar = {
     chat: (id: string) => go(ROUTE.CHAT(id)),
     chatCompleto: () => go(ROUTE.MENSAJE) ,
     notificaciones: () => go("aun no existe"),
+    denuncia: () => go(ROUTE.DENUNCIA) ,
     contactos: () => go("aun no existe"),
     usuarioPerfil: (id: string) => go(ROUTE.OTRO_PERFIL(id)),
-    adminPanel: () => go(ADMIN_ROUTES.PANEL),
+    admin: () => go(ADMIN_ROUTES.PANEL),
 
     
 

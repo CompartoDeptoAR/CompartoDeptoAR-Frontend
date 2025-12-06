@@ -9,7 +9,6 @@ interface FormLoginProps {
   onSubmit: (e: React.FormEvent) => void;
   onSwitch: () => void;
 
-  // 👇 AGREGADO
   onGoogleLogin?: () => void;
 }
 
