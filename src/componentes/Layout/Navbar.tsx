@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Navbar, Nav, Form, FormControl, Button, NavDropdown } from "react-bootstrap";
 import { Bell, MessageCircle, Settings } from "lucide-react";
 
@@ -8,8 +8,10 @@ import { Navegar } from "../../navigation/navigationService";
 import { NotificacionesBadge } from "../Chat/NotificacionesBadge";
 import { Rol } from "../../modelos/Roles";
 import { hasRole, isLoggedIn } from "../../helpers/funcion";
+import { FiltrosBusqueda } from "../Buscador/FiltrosBusqueda";
 
 const NavbarApp: React.FC = () => {
+  const [showFiltros, setShowFiltros] = useState(false);
 
   function cerrarSesion() {
     apiAuth.auth.logout();
@@ -35,7 +37,20 @@ const NavbarApp: React.FC = () => {
         <Form className="d-flex mx-auto" style={{ maxWidth: "400px" }}>
           <FormControl type="search" placeholder="Buscar..." className="me-2" />
           <Button variant="outline-light">Buscar</Button>
+          <Button 
+            variant="outline-light" 
+            className="ms-2"
+            onClick={() => setShowFiltros(true)}
+          >
+            Filtros
+          </Button>
         </Form>
+        
+        <FiltrosBusqueda 
+          show={showFiltros}
+          onClose={() => setShowFiltros(false)}
+          onApply={(filtros) => console.log("filtros", filtros)}
+        />
 
         <Nav className="ms-auto align-items-center">
 

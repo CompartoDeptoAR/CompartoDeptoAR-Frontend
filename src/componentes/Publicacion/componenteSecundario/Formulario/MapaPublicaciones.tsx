@@ -1,5 +1,6 @@
+
 import React from "react";
-import Map, { Marker } from "react-map-gl";
+//import Map, { Marker } from "react-map-gl";
 
 interface MapaProps {
   lat: number;
@@ -10,7 +11,13 @@ interface MapaProps {
 export const MapaPublicacion: React.FC<MapaProps> = ({ lat, lng, zoom = 12 }) => {
   return (
     <div style={{ width: "100%", height: "400px", marginBottom: "20px" }}>
-      <Map
+      
+    </div>
+  );
+};
+/*
+
+<Map
         initialViewState={{
           latitude: lat,
           longitude: lng,
@@ -22,6 +29,5 @@ export const MapaPublicacion: React.FC<MapaProps> = ({ lat, lng, zoom = 12 }) =>
       >
         <Marker latitude={lat} longitude={lng} />
       </Map>
-    </div>
-  );
-};
+
+      */
