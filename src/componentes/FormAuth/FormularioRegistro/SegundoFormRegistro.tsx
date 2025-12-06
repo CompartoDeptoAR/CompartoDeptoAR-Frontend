@@ -8,7 +8,7 @@ import {
   type HabitoKey,
   type PreferenciaKey
 } from "../../../modelos/Usuario";
-import "../../../styles/auth.css";
+import "../../../styles/FormularioLogin.css";
 
 interface SegundoFormRegistroProps {
   edad: number;
@@ -41,8 +41,6 @@ const SegundoFormRegistro: React.FC<SegundoFormRegistroProps> = ({
   onCancelar,
   loading = false,
 }) => {
-  // Funciones de toggle simplificadas
-
   const toggleOpcionHabito = (opcion: HabitoKey) => {
     setHabitos(
       habitos.includes(opcion)
@@ -63,20 +61,20 @@ const SegundoFormRegistro: React.FC<SegundoFormRegistroProps> = ({
   const restantes = MAX_DESCRIPCION - descripcion.length;
 
   return (
-    <div className="form-container page-transition"> {/* ← CAMBIO AQUÍ */}
-      <h2 className="form-title">Completá tu perfil</h2>
-      <p className="form-subtitle">
-        Esta información ayuda a encontrar mejores compañeros
-      </p>
+    <div className="login-page">
+      <form onSubmit={handleSubmit} className="form-container">
+        <h2 style={{ marginBottom: "1rem", color: "#333" }}>Completá tu perfil</h2>
+        <p style={{ marginBottom: "2rem", color: "#666" }}>
+          Esta información ayuda a encontrar mejores compañeros
+        </p>
 
-      <form onSubmit={handleSubmit}>
         {/* Edad */}
-        <div className="form-group">
-          <label>Edad *</label>
+        <div style={{ textAlign: "left" }}>
+        <label style={{ textAlign: "left", display: "block", width: "100%" }}>Edad*</label>
           <input
             type="number"
             placeholder="Ej: 25"
-            value={edad}
+            value={edad || ''}
             onChange={(e) => setEdad(Number(e.target.value))}
             required
             min={18}
@@ -86,8 +84,8 @@ const SegundoFormRegistro: React.FC<SegundoFormRegistroProps> = ({
         </div>
 
         {/* Género */}
-        <div className="form-group">
-          <label>Género</label>
+      <div style={{ textAlign: "left" }}>
+        <label style={{ textAlign: "left", display: "block", width: "100%" }}>Género</label>
           <select
             value={genero}
             onChange={(e) => setGenero(e.target.value as Genero)}
@@ -101,73 +99,124 @@ const SegundoFormRegistro: React.FC<SegundoFormRegistroProps> = ({
         </div>
 
         {/* Descripción */}
-        <div className="form-group">
-          <label>Descripción</label>
+      <div style={{ textAlign: "left" }}>
+        <label style={{ textAlign: "left", display: "block", width: "100%" }}>Descripción</label>
           <textarea
-            placeholder="Ej: Hola, soy Juan..."
+            placeholder="Ej: Hola, soy Juan. Me gusta el deporte, la música y conocer nuevas personas..."
             value={descripcion}
             onChange={(e) => setDescripcion(e.target.value)}
             maxLength={MAX_DESCRIPCION}
             rows={4}
             disabled={loading}
           />
-          <small className={restantes < 50 ? "warning" : ""}>
+          <small style={{ 
+            color: restantes < 50 ? "#dc3545" : "#666", 
+            fontSize: "12px", 
+            display: "block", 
+            textAlign: "right",
+            marginTop: "-0.5rem",
+            marginBottom: "1rem"
+          }}>
             {restantes} caracteres restantes
           </small>
         </div>
 
         {/* Hábitos */}
-        <div className="form-section">
-          <h4>Tus hábitos</h4>
-          <p className="section-description">Seleccioná lo que realmente te describe</p>
+        <div style={{ margin: "2rem 0" }}>
+          <h4 style={{ color: "#333", marginBottom: "0.5rem" }}>Tus hábitos</h4>
+          <p style={{ color: "#666", fontSize: "14px", marginBottom: "1rem" }}>
+            Seleccioná lo que realmente te describe
+          </p>
 
-          <div className="opciones-grid">
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "0.75rem" }}>
             {OPCIONES_HABITOS.map((op) => (
               <label
                 key={op}
-                className={`opcion-item ${habitos.includes(op) ? "selected" : ""}`}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "0.75rem",
+                  padding: "0.75rem",
+                  border: `1px solid ${habitos.includes(op) ? "#007bff" : "#ccc"}`,
+                  borderRadius: "0.5rem",
+                  backgroundColor: habitos.includes(op) ? "#e7f1ff" : "white",
+                  cursor: "pointer",
+                  transition: "all 0.2s ease"
+                }}
               >
                 <input
                   type="checkbox"
                   checked={habitos.includes(op)}
                   onChange={() => toggleOpcionHabito(op)}
                   disabled={loading}
+                  style={{
+                    width: "18px",
+                    height: "18px",
+                    accentColor: "#007bff"
+                  }}
                 />
-                <span>{LABELS_HABITOS[op]}</span>
+                <span style={{ color: "#333", fontSize: "14px" }}>{LABELS_HABITOS[op]}</span>
               </label>
             ))}
           </div>
         </div>
 
         {/* Preferencias */}
-        <div className="form-section">
-          <h4>Tus preferencias</h4>
-          <p className="section-description">Seleccioná lo que aceptás en tu compañero</p>
+        <div style={{ margin: "2rem 0" }}>
+          <h4 style={{ color: "#333", marginBottom: "0.5rem" }}>Tus preferencias</h4>
+          <p style={{ color: "#666", fontSize: "14px", marginBottom: "1rem" }}>
+            Seleccioná lo que aceptás en tu compañero
+          </p>
 
-          <div className="opciones-grid">
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "0.75rem" }}>
             {OPCIONES_PREFERENCIAS.map((op) => (
               <label
                 key={op}
-                className={`opcion-item ${preferencias.includes(op) ? "selected" : ""}`}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "0.75rem",
+                  padding: "0.75rem",
+                  border: `1px solid ${preferencias.includes(op) ? "#007bff" : "#ccc"}`,
+                  borderRadius: "0.5rem",
+                  backgroundColor: preferencias.includes(op) ? "#e7f1ff" : "white",
+                  cursor: "pointer",
+                  transition: "all 0.2s ease"
+                }}
               >
                 <input
                   type="checkbox"
                   checked={preferencias.includes(op)}
                   onChange={() => toggleOpcionPreferencia(op)}
                   disabled={loading}
+                  style={{
+                    width: "18px",
+                    height: "18px",
+                    accentColor: "#007bff"
+                  }}
                 />
-                <span>{LABELS_PREFERENCIAS[op]}</span>
+                <span style={{ color: "#333", fontSize: "14px" }}>{LABELS_PREFERENCIAS[op]}</span>
               </label>
             ))}
           </div>
         </div>
 
         {/* BOTONES */}
-        <div className="form-actions">
+        <div style={{ display: "flex", gap: "1rem", marginTop: "2rem" }}>
           <button
             type="button"
             onClick={onCancelar}
-            className="btn-secondary"
+            style={{
+              flex: 1,
+              padding: "0.75rem 1.5rem",
+              backgroundColor: "#f8f9fa",
+              color: "#495057",
+              border: "1px solid #ced4da",
+              borderRadius: "0.5rem",
+              cursor: "pointer",
+              fontSize: "1rem",
+              fontWeight: "600"
+            }}
             disabled={loading}
           >
             Volver
@@ -175,7 +224,17 @@ const SegundoFormRegistro: React.FC<SegundoFormRegistroProps> = ({
 
           <button
             type="submit"
-            className="btn-primary"
+            style={{
+              flex: 1,
+              padding: "0.75rem 1.5rem",
+              backgroundColor: "#007bff",
+              color: "white",
+              border: "none",
+              borderRadius: "0.5rem",
+              cursor: "pointer",
+              fontSize: "1rem",
+              fontWeight: "600"
+            }}
             disabled={loading}
           >
             {loading ? "Registrando..." : "Completar registro"}

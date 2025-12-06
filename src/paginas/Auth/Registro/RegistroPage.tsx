@@ -3,7 +3,6 @@ import PrimerFormRegistro from "../../../componentes/FormAuth/FormularioRegistro
 import ToastNotification from "../../../componentes/ToastNotification/ToastNotification";
 import { useRegistro } from "../../../hooks/auth/useRegistro";
 
-
 const RegistroPage = ({ onSwitch }: { onSwitch: () => void }) => {
   const {
     paso,
@@ -34,41 +33,35 @@ const RegistroPage = ({ onSwitch }: { onSwitch: () => void }) => {
 
   return (
     <>
-      <div className={`registro-pasos-container paso-${paso}`}>
-
-        <div className="registro-step paso-1">
-          <PrimerFormRegistro
-            nombreCompleto={nombreCompleto}
-            correo={correo}
-            contraseña={contraseña}
-            mostrarPassword={mostrarPassword}
-            setNombreCompleto={setNombreCompleto}
-            setCorreo={setCorreo}
-            setContraseña={setContraseña}
-            togglePassword={togglePassword}
-            handleSubmit={handlePaso1Submit}
-            onSwitch={onSwitch}
-          />
-        </div>
-
-        <div className="registro-step paso-2">
-          <SegundoFormRegistro
-            edad={edad}
-            genero={genero}
-            descripcion={descripcion}
-            habitos={habitos}
-            preferencias={preferencias}
-            setEdad={setEdad}
-            setGenero={setGenero}
-            setDescripcion={setDescripcion}
-            setHabitos={setHabitos}
-            setPreferencias={setPreferencias}
-            handleSubmit={handlePaso2Submit}
-            onCancelar={handleCancelarPaso2}
-          />
-        </div>
-
-      </div>
+      {paso === 1 ? (
+        <PrimerFormRegistro
+          nombreCompleto={nombreCompleto}
+          correo={correo}
+          contraseña={contraseña}
+          mostrarPassword={mostrarPassword}
+          setNombreCompleto={setNombreCompleto}
+          setCorreo={setCorreo}
+          setContraseña={setContraseña}
+          togglePassword={togglePassword}
+          handleSubmit={handlePaso1Submit}
+          onSwitch={onSwitch}
+        />
+      ) : (
+        <SegundoFormRegistro
+          edad={edad}
+          genero={genero}
+          descripcion={descripcion}
+          habitos={habitos}
+          preferencias={preferencias}
+          setEdad={setEdad}
+          setGenero={setGenero}
+          setDescripcion={setDescripcion}
+          setHabitos={setHabitos}
+          setPreferencias={setPreferencias}
+          handleSubmit={handlePaso2Submit}
+          onCancelar={handleCancelarPaso2}
+        />
+      )}
 
       <ToastNotification
         show={toast.show}
