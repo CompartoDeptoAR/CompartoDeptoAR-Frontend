@@ -28,7 +28,7 @@ export const InfoBasicaPublicacion: React.FC<InfoBasicaProps> = ({ publicacion }
               <i className="bi bi-geo-alt-fill text-primary me-2 fs-5"></i>
               <div>
                 <small className="text-muted d-block">Ubicación</small>
-                <strong>{formatearDireccion(publicacion.ubicacion)}</strong>
+                <strong>{publicacion.ubicacion}</strong>
               </div>
             </div>
           </div>

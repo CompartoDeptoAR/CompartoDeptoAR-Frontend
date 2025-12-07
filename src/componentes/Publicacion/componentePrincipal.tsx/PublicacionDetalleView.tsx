@@ -12,7 +12,7 @@ import { SeccionLecturaCheckboxes } from "../componenteSecundario/View/SeccionLe
 import { Navegar } from "../../../navigation/navigationService";
 import { MiniChat } from "../../Chat/MiniChat";
 import { BotonDenunciaConId } from "../../../helpers/Botones";
-import { MapaPublicacion } from "../componenteSecundario/Formulario/MapaPublicaciones";
+import { MapaPublicacion } from "../componenteSecundario/View/MapaPublicacion";
 
 interface PublicacionDetalleViewProps {
   publicacion: PublicacionResponce;
@@ -32,10 +32,14 @@ const PublicacionDetalleView: React.FC<PublicacionDetalleViewProps> = ({
   const [coords, setCoords] = useState<{ lat: number; lng: number } | null>(null);
 
   useEffect(() => {
+    if (!publicacion.ubicacion) return;
+
     obtenerCoordenadas(publicacion.ubicacion).then((res) => {
       if (res) setCoords(res);
     });
-  }, [publicacion.calle, publicacion.numeral, publicacion.localidad, publicacion.provincia]);
+
+  }, [publicacion.ubicacion]);
+
 
   async function obtenerCoordenadas(direccion: string) {
   const token = import.meta.env.VITE_MAPBOX_TOKEN;
