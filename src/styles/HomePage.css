@@ -1,20 +1,16 @@
 .home-fondo {
-  background-image: url("../assets/fondoGris.jpg");
-  background-size: cover;   
+  background: #E0E0E0;
+  
+  /* El fondo se queda fijo mientras scrolleas */
+  min-height: 100vh;
+  background-attachment: fixed;
+  background-size: cover;
   background-position: center;
-  background-repeat: no-repeat;
-
-  min-height: 100vh; 
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  padding-top: 30px;
 }
 
 .contenido-home {
-  background: rgba(255, 255, 255, 0.7);
-  padding: 20px;
+  background: rgba(255, 255, 255, 0.589);
+  padding: 90px;
   border-radius: 10px;
 }
 
