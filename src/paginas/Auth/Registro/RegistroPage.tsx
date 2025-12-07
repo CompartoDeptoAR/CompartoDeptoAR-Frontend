@@ -15,6 +15,7 @@ const RegistroPage = ({ onSwitch }: { onSwitch: () => void }) => {
     descripcion,
     habitos,
     preferencias,
+    loading,
     toast,
     setNombreCompleto,
     setCorreo,
@@ -29,7 +30,7 @@ const RegistroPage = ({ onSwitch }: { onSwitch: () => void }) => {
     handlePaso2Submit,
     handleCancelarPaso2,
     hideToast
-  } = useRegistro();
+  } = useRegistro(onSwitch);
 
   return (
     <>
@@ -53,6 +54,7 @@ const RegistroPage = ({ onSwitch }: { onSwitch: () => void }) => {
           descripcion={descripcion}
           habitos={habitos}
           preferencias={preferencias}
+          loading={loading}
           setEdad={setEdad}
           setGenero={setGenero}
           setDescripcion={setDescripcion}

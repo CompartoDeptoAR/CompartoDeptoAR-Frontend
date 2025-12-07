@@ -6,7 +6,7 @@ import HomePage from "../paginas/Home/HomePage";
 import ContactanosPage from "../paginas/Nosotros/ContactanosPage";
 import NosotrosPage from "../paginas/Nosotros/NosotosPage";
 import TodasLasPublicaciones from "../paginas/Publicacion/Listar/TodasLasPublicaciones";
-import {  PUBLIC_ROUTES, GENERAL, ROUTE } from "./Routes";
+import {  PUBLIC_ROUTES, GENERAL, } from "./Routes";
 
 import { TokenService } from "../services/auth/tokenService";
 import VerPublicacion from "../paginas/Publicacion/Funcionalidades/VerPublicacion";
@@ -23,7 +23,6 @@ const Router: React.FC = () => {
           path={PUBLIC_ROUTES.AUTH}
           element={!authData ? <AuthPage /> : <Navigate to={PUBLIC_ROUTES.HOME} replace />}
         />
-      
       
         
         <Route path={PUBLIC_ROUTES.HOME} element={<HomePage />} />

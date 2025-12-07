@@ -27,17 +27,15 @@ const PublicacionDetalleView: React.FC<PublicacionDetalleViewProps> = ({
 }) => {
   const [mostrarChat, setMostrarChat] = useState(false);
 
-  const nombreUsuario = publicacion.usuarioNombre || "Usuario";
   const habitos = publicacion.habitos || {};
   const preferencias = publicacion.preferencias || {};
   const [coords, setCoords] = useState<{ lat: number; lng: number } | null>(null);
-  
+
   useEffect(() => {
-    const direccionCompleta = `${publicacion.direccion}, ${publicacion.localidad}, ${publicacion.provincia}`;
-    obtenerCoordenadas(direccionCompleta).then((res) => {
+    obtenerCoordenadas(publicacion.ubicacion).then((res) => {
       if (res) setCoords(res);
     });
-  }, [publicacion.direccion, publicacion.localidad, publicacion.provincia]);
+  }, [publicacion.calle, publicacion.numeral, publicacion.localidad, publicacion.provincia]);
 
   async function obtenerCoordenadas(direccion: string) {
   const token = import.meta.env.VITE_MAPBOX_TOKEN;

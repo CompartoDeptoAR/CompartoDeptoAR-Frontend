@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useChatCompleto } from "../../hooks/chat/useChatCompleto";
 import { VentanaChat } from "../../componentes/Chat/VentanaChat";
 import { ListaConversaciones } from "../../componentes/Chat/ListaConversaciones";
+import { useLoading } from "../../contexts/LoadingContext";
 
 
 interface ChatCompletoProps {
@@ -19,10 +20,17 @@ export const ChatCompleto = ({ idUsuario, onBack }: ChatCompletoProps) => {
     seleccionarConversacion,
     cerrarConversacion,
     enviarMensaje,
+    loading,
   } = useChatCompleto(idUsuario);
+  
 
   const [esMobile, setEsMobile] = useState(window.innerWidth < 768);
-
+    const { showLoader, hideLoader } = useLoading();
+  
+  useEffect(() => {
+    if ( loading) showLoader();
+      else hideLoader();
+    }, [loading]);
   useEffect(() => {
     const handleResize = () => setEsMobile(window.innerWidth < 768);
     window.addEventListener("resize", handleResize);

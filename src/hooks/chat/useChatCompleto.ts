@@ -8,31 +8,30 @@ export const useChatCompleto = (idUsuarioActual: string) => {
   const [conversacionActiva, setConversacionActiva] = useState<string | null>(null);
   const [mensajes, setMensajes] = useState<MensajeUI[]>([]);
   const [cargando, setCargando] = useState(false);
-
+  const [loading, setLoading] = useState(false);
   // 🔍 LOG
   console.log("🎯 useChatCompleto - idUsuarioActual:", idUsuarioActual);
 
   // Escuchar lista de conversaciones en tiempo real
   useEffect(() => {
-    if (!idUsuarioActual) {
-      console.log("❌ No hay idUsuarioActual");
-      return;
-    }
+    if (!idUsuarioActual) return;
 
-    console.log("🔄 Iniciando listener de conversaciones...");
+    setLoading(true);
+    let firstLoad = true;
 
     const unsubscribe = chatService.escucharConversaciones(
       idUsuarioActual,
       (nuevasConversaciones) => {
-        console.log("📬 Conversaciones recibidas:", nuevasConversaciones);
         setConversaciones(nuevasConversaciones);
+
+        if (firstLoad) {
+          setLoading(false); 
+          firstLoad = false;
+        }
       }
     );
 
-    return () => {
-      console.log("🛑 Desuscribiendo listener de conversaciones");
-      unsubscribe();
-    };
+    return () => unsubscribe();
   }, [idUsuarioActual]);
 
   // Escuchar mensajes de la conversación activa
@@ -125,6 +124,7 @@ export const useChatCompleto = (idUsuarioActual: string) => {
     conversacionSeleccionada,
     mensajes,
     cargando,
+    loading,
     seleccionarConversacion,
     cerrarConversacion,
     enviarMensaje,

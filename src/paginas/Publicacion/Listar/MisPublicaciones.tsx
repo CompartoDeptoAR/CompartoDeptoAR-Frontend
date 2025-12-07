@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import ListarPublicaciones from "../../../componentes/Publicacion/ListarPublicacion/ListarPublicacion";
 import ToastNotification from "../../../componentes/ToastNotification/ToastNotification";
 import { useMisPublicaciones } from "../../../hooks/pagina/publicacion/listar/useMisPublicaciones";
+import { useLoading } from "../../../contexts/LoadingContext";
 
 const MisPublicaciones: React.FC = () => {
   const {
@@ -15,7 +16,12 @@ const MisPublicaciones: React.FC = () => {
     handleEstado,
     handleCrearNueva,
   } = useMisPublicaciones();
+  const { showLoader, hideLoader } = useLoading();
 
+  useEffect(() => {
+      if (loading) showLoader();
+      else hideLoader();
+    }, [loading]);
   return (
     <>
       <div className="container mt-4 mb-5">

@@ -4,7 +4,8 @@ import SelectorUbicacionArgentina from "../../../SelectorUbicacionArgentina/Sele
 interface UbicacionPrecioProps {
   provincia: string;
   localidad: string;
-  direccion: string;
+  calle:string;
+  numeral: string;
   precio: number;
   onProvinciaChange: (provincia: string) => void;
   onLocalidadChange: (localidad: string) => void;
@@ -15,7 +16,8 @@ interface UbicacionPrecioProps {
 const UbicacionPrecio: React.FC<UbicacionPrecioProps> = ({
   provincia,
   localidad,
-  direccion,
+  calle,
+  numeral,
   precio,
   onProvinciaChange,
   onLocalidadChange,
@@ -58,22 +60,35 @@ const UbicacionPrecio: React.FC<UbicacionPrecioProps> = ({
         </div>
 
         <div className="mb-3">
-          <label htmlFor="direccion" className="form-label fw-semibold">
-            Dirección (opcional)
+          <label htmlFor="calle" className="form-label fw-semibold">
+            Calle <span className="text-danger">*</span>
           </label>
           <input
             type="text"
             className="form-control"
-            id="direccion"
-            name="direccion"
-            value={direccion}
+            id="calle"
+            name="calle"
+            value={calle}
             onChange={onChange}
-            placeholder="Ej: Av. Santa Fe 1234"
+            placeholder="Ej: Av. Santa Fe"
             disabled={disabled}
+            required
           />
-          <div className="form-text">
-            La dirección exacta solo se mostrará a interesados confirmados
-          </div>
+          
+          <label htmlFor="numeral" className="form-label fw-semibold">
+            Numeral <span className="text-danger">*</span> 
+          </label>
+          <input
+            type="text"
+            className="form-control"
+            id="numeral"
+            name="numeral"
+            value={numeral}
+            onChange={onChange}
+            placeholder="Ej: 698"
+            disabled={disabled}
+            required
+          />
         </div>
 
         <div className="mb-0">

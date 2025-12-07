@@ -3,10 +3,10 @@ import type { Genero, HabitoKey, PreferenciaKey } from "../../modelos/Usuario";
 import { useToast } from "../useToast";
 import { arrayToHabitos, arrayToPreferencias } from "../../helpers/convertersHabitosPreferncias";
 import apiAuth from "../../api/endpoints/auth";
-import { Navegar } from "../../navigation/navigationService";
 
 
-export function useRegistro() {
+
+export function useRegistro(onSwitch: () => void) {
   // Paso actual
   const [paso, setPaso] = useState<1 | 2>(1);
 
@@ -22,6 +22,7 @@ export function useRegistro() {
   const [descripcion, setDescripcion] = useState("");
   const [habitos, setHabitos] = useState<HabitoKey[]>([]);
   const [preferencias, setPreferencias] = useState<PreferenciaKey[]>([]);
+  const [loading, setLoading] = useState(false);
 
   const { toast, showSuccess, showError, showWarning, hideToast } = useToast();
 
@@ -65,7 +66,10 @@ export function useRegistro() {
 
       showSuccess("¡Registro exitoso! Redirigiendo al login...");
 
-      setTimeout(() => Navegar.auth(), 1500);
+      setTimeout(() => {
+        onSwitch();        
+        setLoading(false);
+      }, 1500);
 
     } catch (err: any) {
       console.error(err);
@@ -86,7 +90,7 @@ export function useRegistro() {
     descripcion,
     habitos,
     preferencias,
-
+    loading,
     toast,
 
     setNombreCompleto,
@@ -97,6 +101,7 @@ export function useRegistro() {
     setDescripcion,
     setHabitos,
     setPreferencias,
+    setLoading,
 
     togglePassword,
     handlePaso1Submit,

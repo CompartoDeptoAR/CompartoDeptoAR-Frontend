@@ -1,3 +1,4 @@
+import { formatearDireccion } from "../../../../helpers/direccion";
 import { PublicacionResponce } from "../../../../modelos/Publicacion";
 
 interface InfoBasicaProps {
@@ -27,7 +28,7 @@ export const InfoBasicaPublicacion: React.FC<InfoBasicaProps> = ({ publicacion }
               <i className="bi bi-geo-alt-fill text-primary me-2 fs-5"></i>
               <div>
                 <small className="text-muted d-block">Ubicación</small>
-                <strong>{publicacion.ubicacion}</strong>
+                <strong>{formatearDireccion(publicacion.ubicacion)}</strong>
               </div>
             </div>
           </div>

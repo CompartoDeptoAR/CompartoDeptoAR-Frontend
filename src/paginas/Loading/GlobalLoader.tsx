@@ -1,18 +1,35 @@
 import React from "react";
 import { useGlobalLoader } from "../../hooks/sistema/useGlobalLoader";
 
-
 const GlobalLoader: React.FC = () => {
-   const { loading } = useGlobalLoader();
+  const { loading } = useGlobalLoader();
+
   if (!loading) return null;
 
   return (
-    <div className="fixed inset-0 flex flex-col items-center justify-center bg-white/80 backdrop-blur-sm z-50">
-      <div className="animate-spin border-4 border-gray-300 border-t-blue-500 rounded-full w-12 h-12 mb-3"></div>
-      <p className="text-gray-600">Cargando...</p>
+    <div
+      style={{
+        position: "fixed",
+        top: 0, 
+        left: 0,
+        right: 0,
+        bottom: 0,
+        background: "rgba(255,255,255,0.8)",
+        backdropFilter: "blur(3px)",
+        zIndex: 9999,
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <div className="spinner-border text-primary" style={{ width: "3rem", height: "3rem" }} role="status">
+        <span className="visually-hidden">Loading...</span>
+      </div>
+
+      <p className="mt-3 text-secondary">Cargando...</p>
     </div>
   );
 };
 
 export default GlobalLoader;
-

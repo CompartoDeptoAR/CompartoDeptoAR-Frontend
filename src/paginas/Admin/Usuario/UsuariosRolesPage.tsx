@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useUsuariosRoles } from "../../../hooks/pagina/admin/useUsuariosRoles";
 import { Rol } from "../../../modelos/Roles";
+import { useLoading } from "../../../contexts/LoadingContext";
 
 const UsuariosRolesPage = () => {
   const {
@@ -13,7 +14,13 @@ const UsuariosRolesPage = () => {
     toggleRol,
     tieneRol,
   } = useUsuariosRoles();
+ const { showLoader, hideLoader } = useLoading();   
 
+  useEffect(() => {
+    if (cargando) showLoader();
+    else hideLoader();
+  }, [cargando]);
+  
   useEffect(() => {
     cargarUsuarios();
   }, [cargarUsuarios]);

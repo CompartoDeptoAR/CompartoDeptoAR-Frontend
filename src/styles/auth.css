@@ -82,10 +82,13 @@
   text-align: center;
   margin: 0 auto;
   overflow-y: auto;
-  max-height: 80vh;
+  max-height: 90vh;
   /* BORDE VIOLETA AÑADIDO */
   border: 3px solid var(--violeta-secundario);
   box-sizing: border-box;
+}
+.auth-page .form-container-mas-ancho {
+  width: 700px !important; 
 }
 
 .auth-page .form-title {

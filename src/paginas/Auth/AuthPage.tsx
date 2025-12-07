@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import LoginPage from "./Login/LoginPage";
 import RegistroPage from "./Registro/RegistroPage";
 import '../../styles/auth.css';
@@ -7,6 +7,10 @@ const AuthPage = () => {
   const [isLogin, setIsLogin] = useState(true);
 
   const handleSwitch = () => setIsLogin(!isLogin);
+  
+  useEffect(() => {
+  setIsLogin(true);
+}, []);
 
   return (
     <div className="auth-page">

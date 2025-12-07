@@ -25,7 +25,8 @@ export interface Publicacion {
   precio: number;
   provincia: string;
   localidad: string;
-  direccion: string;
+  calle: string;
+  numeral:string;
   foto: string[]; 
   reglas?: string[];
   reglasTexto: string;

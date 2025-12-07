@@ -19,6 +19,8 @@ export const useEditarPublicacionSubmit = (
     if (!formData.titulo.trim()) return showWarning("El título es obligatorio");
     if (!formData.provincia) return showWarning("Selecciona una provincia");
     if (!formData.localidad) return showWarning("Selecciona una localidad");
+    if (!formData.calle) return showWarning("Falte la calle");
+    if (!formData.numeral) return showWarning("Falte el numeral");
     if (formData.precio <= 0) return showWarning("El precio debe ser mayor a 0");
     if (!formData.descripcion.trim())
       return showWarning("La descripción es obligatoria");
@@ -28,9 +30,7 @@ export const useEditarPublicacionSubmit = (
     setLoading(true);
 
     try {
-      const ubicacion = formData.direccion?.trim()
-        ? `${formData.direccion}, ${formData.localidad}, ${formData.provincia}`
-        : `${formData.localidad}, ${formData.provincia}`;
+      const ubicacion = `${formData.calle} ${formData.numeral}, ${formData.localidad}, ${formData.provincia}`
 
       const dataParaEnviar = {
         titulo: formData.titulo.trim(),

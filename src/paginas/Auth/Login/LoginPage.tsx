@@ -5,6 +5,8 @@ import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import apiAuth from "../../../api/endpoints/auth";
 import { TokenService } from "../../../services/auth/tokenService";
 import { Navegar } from "../../../navigation/navigationService";
+import { useLoading } from "../../../contexts/LoadingContext";
+import { useEffect } from "react";
 
 const LoginPage = ({ onSwitch }: { onSwitch: () => void }) => {
   const {
@@ -20,7 +22,11 @@ const LoginPage = ({ onSwitch }: { onSwitch: () => void }) => {
     hideToast,
     setUsuario, 
   } = useLogin();
-
+const { showLoader, hideLoader } = useLoading();
+useEffect(() => {
+      if (loading) showLoader();
+      else hideLoader();
+    }, [loading]);
   async function handleGoogleLogin() {
     try {
       const auth = getAuth();

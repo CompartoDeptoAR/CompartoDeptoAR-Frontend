@@ -6,7 +6,7 @@ const PerfilView: React.FC = () => {
   const { perfil } = usePerfilView();
 
   if (!perfil) return null;
-
+  
   return <FormularioPerfil perfil={perfil} modo="view" />;
 };
 

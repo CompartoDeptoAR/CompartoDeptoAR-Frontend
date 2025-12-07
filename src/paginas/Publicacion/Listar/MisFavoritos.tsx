@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useFavoritos } from "../../../hooks/pagina/favorito/useFavoritos";
 import { useToast } from "../../../hooks/useToast";
 import ListarPublicaciones from "../../../componentes/Publicacion/ListarPublicacion/ListarPublicacion";
 import ToastNotification from "../../../componentes/ToastNotification/ToastNotification";
+import { useLoading } from "../../../contexts/LoadingContext";
 
 
 
@@ -17,6 +18,7 @@ const MisFavoritos: React.FC = () => {
   } = useFavoritos();
 
   const { toast, hideToast } = useToast();
+  const { showLoader, hideLoader } = useLoading();
 
   const handleToggleFavorite = async (id: string) => {
     await eliminarFavorito(id);
@@ -26,6 +28,11 @@ const MisFavoritos: React.FC = () => {
     await limpiarTodosFavoritos();
   };
 
+
+  useEffect(() => {
+      if (loading) showLoader();
+      else hideLoader();
+    }, [loading]);
   return (
     <>
       <div className="container mt-4 mb-5">

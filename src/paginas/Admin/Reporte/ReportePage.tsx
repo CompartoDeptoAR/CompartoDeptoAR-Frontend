@@ -1,6 +1,8 @@
 
 import { useReportes } from "../../../hooks/pagina/admin/useReportes";
 import ReportesList from "../../../componentes/Reporte/ReporteList";
+import { useLoading } from "../../../contexts/LoadingContext";
+import { useEffect } from "react";
 
 const ReportesPage = () => {
   const {
@@ -12,10 +14,12 @@ const ReportesPage = () => {
     handleIgnorar,
     refrescar
   } = useReportes();
+  const { showLoader, hideLoader } = useLoading();   
 
-  if (cargando) {
-    return null;
-  }
+   useEffect(() => {
+      if (cargando) showLoader();
+      else hideLoader();
+    }, [cargando]);
 
   if (error) {
     return (

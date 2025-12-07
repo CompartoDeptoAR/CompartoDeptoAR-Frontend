@@ -89,7 +89,8 @@ const FormularioPublicacion: React.FC<FormularioPublicacionProps> = ({
             <UbicacionPrecio
               provincia={publicacion.provincia}
               localidad={publicacion.localidad}
-              direccion={publicacion.direccion}
+              calle={publicacion.calle}
+              numeral={publicacion.numeral}
               precio={publicacion.precio}
               onProvinciaChange={onProvinciaChange}
               onLocalidadChange={onLocalidadChange}
