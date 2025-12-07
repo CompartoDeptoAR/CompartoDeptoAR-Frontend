@@ -1,13 +1,14 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Navbar, Nav, Form, FormControl, Button, NavDropdown, Container, Row, Col, Card, Spinner, Alert } from "react-bootstrap";
-import { Bell, MessageCircle, Search, X, Filter } from "lucide-react";
+// 💡 Importamos el ícono 'Home' para la casita
+import { Bell, MessageCircle, Search, X, Filter, Home } from "lucide-react"; 
 
 import { TokenService } from "../../services/auth/tokenService";
 import apiAuth from "../../api/endpoints/auth";
 import { Navegar } from "../../navigation/navigationService";
 import { NotificacionesBadge } from "../Chat/NotificacionesBadge";
 import { Rol } from "../../modelos/Roles";
-import { hasRole, isLoggedIn } from "../../helpers/funcion"; // <--- Usamos esta función
+import { hasRole, isLoggedIn } from "../../helpers/funcion";
 import { FiltrosBusqueda } from "../Buscador/FiltrosBusqueda";
 import apiBuscador from "../../api/endpoints/buscador";
 import "../../styles/NavbarApp.css";
@@ -21,9 +22,12 @@ const NavbarApp: React.FC = () => {
   const [mostrarResultados, setMostrarResultados] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
 
-  // --- LÓGICA EXISTENTE ---
+  // 💡 Estado para controlar el logueo y forzar re-render
+  const [estaLogueado, setEstaLogueado] = useState(isLoggedIn());
+
   function cerrarSesion() {
     apiAuth.auth.logout();
+    setEstaLogueado(false); // Actualiza estado local
     Navegar.home();
   }
 
@@ -43,6 +47,10 @@ const NavbarApp: React.FC = () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [mostrarResultados]);
+    
+    useEffect(() => {
+        setEstaLogueado(isLoggedIn());
+    }, []); 
 
   const ejecutarBusqueda = async (e?: React.FormEvent) => {
     e?.preventDefault();
@@ -108,7 +116,6 @@ const NavbarApp: React.FC = () => {
     } catch (e) {}
     window.location.href = `/publicacion/${id}`;
   };
-  // --- FIN LÓGICA EXISTENTE ---
 
   return (
     <>
@@ -121,8 +128,20 @@ const NavbarApp: React.FC = () => {
           className="fw-bold text-uppercase d-flex align-items-center"
           style={{ cursor: "pointer" }}
         >
-          <span className="d-none d-md-inline">Comparto DeptoAR</span>
-          <span className="d-inline d-md-none">CDAR</span>
+            {/* INICIO: Ícono de Casa y Estilo de Marca */}
+            <Home 
+                size={24} // Tamaño del ícono de la casita
+                className="d-inline-block align-top me-2 text-info" // Clase para el color azul/cyan
+            />
+            <span 
+                className="d-none d-md-inline" 
+                style={{ fontSize: '1.4rem', letterSpacing: '1px' }}
+            >
+                <span className="text-info fw-bold">Comparto</span> 
+                <span className="text-light" style={{ fontWeight: 300 }}>DeptoAR</span>
+            </span>
+            <span className="d-inline d-md-none">CDAR</span>
+            {/* FIN: Ícono de Casa y Estilo de Marca */}
         </Navbar.Brand>
 
         <Navbar.Toggle aria-controls="navbar-content" />
@@ -184,7 +203,7 @@ const NavbarApp: React.FC = () => {
               </div>
             </Form>
 
-            {/* Dropdown de resultados... (sin cambios) */}
+            {/* Dropdown de resultados... */}
             {mostrarResultados && (
               <div className="search-results-dropdown shadow-lg">
                 <div className="search-results-header d-flex justify-content-between align-items-center p-3 border-bottom">
@@ -262,7 +281,7 @@ const NavbarApp: React.FC = () => {
           {/* Menú de navegación */}
           <Nav className="ms-auto align-items-center">
             {/* Íconos de Notificaciones y Chat: Solo si está logueado */}
-            {isLoggedIn() && (
+            {estaLogueado && (
               <>
                 <Nav.Link className="position-relative" onClick={() => Navegar.notificaciones()}>
                   <Bell size={20} />
@@ -276,7 +295,7 @@ const NavbarApp: React.FC = () => {
             )}
 
             {/* LÓGICA DE INICIO DE SESIÓN / MI CUENTA */}
-            {isLoggedIn() ? (
+            {estaLogueado ? (
               // MOSTRAR MENÚ DESPLEGABLE DE "MI CUENTA"
               <NavDropdown title="Mi Cuenta" align="end" id="dropdown-usuario">
                 <NavDropdown.Item onClick={() => Navegar.miPerfil()}>Perfil</NavDropdown.Item>
@@ -306,7 +325,7 @@ const NavbarApp: React.FC = () => {
         </Navbar.Collapse>
       </Navbar>
 
-      {/* Filtros en modal (mantenemos el offcanvas para móviles) */}
+      {/* Filtros en modal (sin cambios) */}
       <FiltrosBusqueda
         show={showFiltros}
         onClose={() => setShowFiltros(false)}
