@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { Conversacion, MensajeUI } from "../../../services/chat/ types";
+import { Conversacion, MensajeUI } from "../../services/chat/ types";
 
 interface VentanaChatProps {
   mensajes: MensajeUI[];
