@@ -76,7 +76,7 @@ const FormularioPublicacion: React.FC<FormularioPublicacionProps> = ({
         </div>
       </div>
 
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={(e) => handleSubmit(e)}>
         <div className="row g-4">
           {/* IZQUIERDA */}
           <div className="col-lg-8">
