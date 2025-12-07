@@ -1,12 +1,11 @@
-import { Publicacion } from "../../modelos/Publicacion";
+import { FiltrosBusqueda, Publicacion } from "../../modelos/Publicacion";
 import axiosApi from "../config/axios.config";
 
 const urlApi = import.meta.env.VITE_URL_PUBLICACION;
 
 const apiBuscador = {
-  // texto  solito
+  // texto solito
   buscar: async (texto: string): Promise<Publicacion[]> => {
-    //onsole.log("Iniciando búsqueda con texto:", texto);
     const textoLimpio = texto.trim();
     
     if (!textoLimpio) {
@@ -18,12 +17,9 @@ const apiBuscador = {
           q: textoLimpio
         }
       });
-      //console.log("Búsqueda exitosa. Resultados:", res.data.length);
       return res.data;
       
     } catch (error: any) {
-      //console.error(" Error en búsqueda:", error);
-    
       if (error.response?.data?.mensaje) {
         throw new Error(error.response.data.mensaje);
       }
@@ -44,38 +40,58 @@ const apiBuscador = {
     }
   },
 
-  //filtros, ver desp los filtros del modelo
-  buscarConFiltros: async (filtros: any): Promise<Publicacion[]> => {
-    console.log("🔍 Aplicando filtros:", filtros);
+  buscarConFiltros: async (filtros: FiltrosBusqueda): Promise<Publicacion[]> => {
+    console.log("🔍 Enviando filtros al backend:", filtros);
     
     try {
+      const filtrosLimpios: Partial<FiltrosBusqueda> = {};
       
-      const filtrosLimpios: any = {};
-      Object.keys(filtros).forEach(key => {
-        if (filtros[key] !== undefined && filtros[key] !== null && filtros[key] !== '') {
-          filtrosLimpios[key] = filtros[key];
+      (Object.keys(filtros) as Array<keyof FiltrosBusqueda>).forEach(key => {
+        const valor = filtros[key];
+        if (typeof valor === 'string' && valor.trim() !== '') {
+          filtrosLimpios[key] = valor.trim() as any;
+        }
+        else if (typeof valor === 'number' && !isNaN(valor)) {
+          filtrosLimpios[key] = valor as any;
+        }
+        else if (typeof valor === 'boolean' && valor === true) {
+          filtrosLimpios[key] = true as any;
         }
       });
       
-  
-      const res = await axiosApi.post<Publicacion[]>(
-        `${urlApi}/buscarConFiltros`, 
-        filtrosLimpios
-      );
+      console.log("🧹 Filtros limpios enviados:", filtrosLimpios);
       
-     // console.log("Filtros aplicados. Resultados:", res.data.length);
+      // 🔥 FIX: Usar la misma estructura que el método buscar()
+      // Si urlApi = "/api/publicaciones", entonces:
+      // ${urlApi}/buscarConFiltros = "/api/publicaciones/buscarConFiltros" ✅
+      const url = `${urlApi}/buscarConFiltros`;
+      console.log("📍 URL completa de filtros:", url);
+      
+      const res = await axiosApi.post<Publicacion[]>(url, filtrosLimpios);
+      
+      console.log(`✅ Resultados encontrados: ${res.data.length}`);
       return res.data;
       
     } catch (error: any) {
-     // console.error("Error al aplicar filtros:", error);
+      console.error("❌ Error al aplicar filtros:", error);
+      console.error("📍 URL intentada:", `${urlApi}/buscarConFiltros`);
+      console.error("📍 Base URL de axios:", axiosApi.defaults.baseURL);
+      
+      if (error.response?.data?.error) {
+        throw new Error(error.response.data.error);
+      }
       
       if (error.response?.data?.mensaje) {
         throw new Error(error.response.data.mensaje);
       }
       
+      if (error.response?.status === 404) {
+        throw new Error("Endpoint de filtros no encontrado. Verifica la configuración del backend.");
+      }
+      
       throw new Error("Error al aplicar los filtros. Intenta nuevamente.");
     }
   }
-};
+}
 
 export default apiBuscador;

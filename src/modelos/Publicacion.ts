@@ -58,7 +58,8 @@ export interface FiltrosBusqueda {
   ubicacion?: string;
   precioMin?: number;
   precioMax?: number;
-  preferencias?: string[];
-  [key: string]: any;
+  noFumadores?: boolean;
+  sinMascotas?: boolean;
+  tranquilo?: boolean;
+  social?: boolean;
 }
-
