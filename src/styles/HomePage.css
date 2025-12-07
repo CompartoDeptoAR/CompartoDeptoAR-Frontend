@@ -1,5 +1,5 @@
 .home-fondo {
-  background-image: url("/public/fondopub.jpg");
+  background-image: url("../assets/fondoGris.jpg");
   background-size: cover;   
   background-position: center;
   background-repeat: no-repeat;
@@ -21,9 +21,7 @@
 .titulo-home {
   font-size: 3rem;
   font-weight: 700;
-  color: #000000;
-  text-shadow: 0 2px 8px rgba(9, 96, 155, 0.4);
-
+	color: rgb(0, 0, 0);
   animation: fadeInDown 0.9s ease-out;
   letter-spacing: 1.5px;
 }
