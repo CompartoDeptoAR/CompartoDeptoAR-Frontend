@@ -3,12 +3,12 @@ import ToastNotification from "../../../componentes/ToastNotification/ToastNotif
 import { usePublicacionDetalle } from "../../../hooks/pagina/publicacion/Ver/usePublicacionDetalle";
 import { useToast } from "../../../hooks/useToast";
 import { Navegar } from "../../../navigation/navigationService";
-import { TokenService } from "../../../services/auth/tokenService";
+
 
 const VerPublicacion = () => {
   const { toast, hideToast } = useToast();
   const { publicacion } = usePublicacionDetalle();
-  const usuarioIdActual = TokenService.getAuthData()?.ID || "";
+ 
 
   if (publicacion === null) {
     return (

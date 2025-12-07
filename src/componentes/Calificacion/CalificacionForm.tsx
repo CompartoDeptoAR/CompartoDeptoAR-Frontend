@@ -53,7 +53,7 @@ export const CalificacionForm: React.FC<CalificacionFormProps> = ({
     <form onSubmit={handleSubmit} className="mt-3 p-3 border rounded bg-white">
       <h6>Calificar a {nombreCalificado}</h6>
 
-      {/* ⭐ SELECTOR DE ESTRELLAS */}
+      {/* SELECTOR DE ESTRELLAS */}
       <div className="mb-3">
         <label className="form-label">Puntuación</label>
         <div>
@@ -73,7 +73,7 @@ export const CalificacionForm: React.FC<CalificacionFormProps> = ({
         </div>
       </div>
 
-      {/* 💬 COMENTARIO */}
+      {/* COMENTARIO */}
       <div className="mb-3">
         <label className="form-label">Comentario (opcional)</label>
         <textarea
@@ -85,7 +85,7 @@ export const CalificacionForm: React.FC<CalificacionFormProps> = ({
         />
       </div>
 
-      {/* ❌ ERROR */}
+      {/*  ERROR */}
       {errorMsg && <p className="text-danger">{errorMsg}</p>}
 
       {/* BOTONES */}

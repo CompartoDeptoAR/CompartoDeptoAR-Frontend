@@ -190,3 +190,13 @@ img {
 }
 
 
+.boton-denuncia-link {
+  color: #007bff;        /* azul */
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.boton-denuncia-link:hover {
+  color: #0056b3;        /* azul más oscuro al pasar el mouse */
+}

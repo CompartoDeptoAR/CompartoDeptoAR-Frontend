@@ -5,7 +5,7 @@ export interface Usuario{
   id?: string;
   correo: string;
   contraseña: string;
-  rol: Rol;
+  rol: Rol[];
   fechaCreacion: Date;
   perfil: UsuarioPerfil;
 }

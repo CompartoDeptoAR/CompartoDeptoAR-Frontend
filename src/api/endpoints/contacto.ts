@@ -12,7 +12,7 @@ interface RespuestaContacto {
 
 const rutaEndpoint = import.meta.env.VITE_URL_CONTACTO;
 
-const apiContacto = {
+const apiContactanos = {
   contacto: {
     enviarMensaje: async (data: SolicitudContacto): Promise<RespuestaContacto> => {
 
@@ -50,4 +50,4 @@ const apiContacto = {
   },
 };
 
-export default apiContacto;
+export default apiContactanos;

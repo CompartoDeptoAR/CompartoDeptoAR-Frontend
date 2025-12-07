@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
-import { useChatCompleto } from "../../../hooks/chat/useChatCompleto";
-import { ListaConversaciones } from "./ListaConversaciones";
-import { VentanaChat } from "./VentanaChat";
+import { useChatCompleto } from "../../hooks/chat/useChatCompleto";
+import { VentanaChat } from "../../componentes/Chat/VentanaChat";
+import { ListaConversaciones } from "../../componentes/Chat/ListaConversaciones";
+
 
 interface ChatCompletoProps {
   idUsuario: string;
@@ -33,7 +34,6 @@ export const ChatCompleto = ({ idUsuario, onBack }: ChatCompletoProps) => {
 
   return (
     <div className="vh-100 d-flex flex-column">
-      {/* Header */}
       <div className="bg-success text-white p-3 d-flex align-items-center">
         {onBack && (
           <button className="btn btn-link text-white p-0 me-3" onClick={onBack}>
@@ -44,9 +44,8 @@ export const ChatCompleto = ({ idUsuario, onBack }: ChatCompletoProps) => {
         <h5 className="m-0">Mensajes</h5>
       </div>
 
-      {/* Contenido */}
       <div className="row g-0 flex-grow-1" style={{ overflow: "hidden" }}>
-        {/* Sidebar */}
+  
         {mostrarSidebar && (
           <div
             className={`${esMobile ? "col-12" : "col-md-4 col-lg-3"} border-end bg-white`}
@@ -60,7 +59,6 @@ export const ChatCompleto = ({ idUsuario, onBack }: ChatCompletoProps) => {
           </div>
         )}
 
-        {/* Chat principal */}
         {mostrarChat && (
           <div className={`${esMobile ? "col-12" : "col-md-8 col-lg-9"}`} style={{ height: "100%" }}>
             <VentanaChat

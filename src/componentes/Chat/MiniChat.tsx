@@ -1,6 +1,6 @@
 import { useRef, useEffect } from "react";
-import { useMiniChat } from "../../../hooks/chat/useMiniChat";
-import "../../../styles/MiniChat.css";
+import { useMiniChat } from "../../hooks/chat/useMiniChat";
+import "../../styles/MiniChat.css";
 
 interface MiniChatProps {
   visible: boolean;

@@ -11,21 +11,20 @@ import MisFavoritos from "../paginas/Publicacion/Listar/MisFavoritos";
 import Configuracion from "../paginas/Configuracion/Configuracion";
 import { ADMIN_ROUTES, GENERAL, USER_ROUTES, ROUTE } from "./Routes";
 import NotFoundPage from "../paginas/Configuracion/NotFound";
-import { ChatCompleto } from "../componentes/Chat/ChatCompleto/ChatCompleto";
+
 import { Navegar } from "../navigation/navigationService";
+import { ChatCompleto } from "../paginas/Chat/ChatCompleto";
+import DenunciaPage from "../paginas/Nosotros/DenunciaPage";
+import { hasRole } from "../helpers/funcion";
+import ReporteDetallePage from "../paginas/Admin/Reporte/ReporteDetallePage";
 
 
 const ProtectedRouter = () => {
   const loggedIn = TokenService.getAuthData();
-  const userRol = TokenService.getUserRol();
-  
   
   if (!loggedIn) {
     return <Navigate to={GENERAL.RESTRICTED} replace />;
   }
-  
-  const hasRole = (role: Rol) => 
-    Array.isArray(userRol) && userRol.includes(role);
     
   return (
     <Routes>
@@ -42,8 +41,12 @@ const ProtectedRouter = () => {
       )}
 
       {hasRole(Rol.ADMIN) && (
+        <>
         <Route path={ADMIN_ROUTES.PANEL} element={<AdminPage />} />
+        <Route path={"/admin/reportes/:id"} element={<ReporteDetallePage/>}/>
+        </>
       )}
+      <Route path={"/denuncia/:id"} element={<DenunciaPage/>}/>
       <Route path={ROUTE.MENSAJE} element={<ChatCompleto idUsuario={TokenService.getUserId()!} onBack={()=>Navegar.volverAtras()} />}/>
       <Route path={GENERAL.CONFIGURACION} element={<Configuracion/>}/>
       <Route path={GENERAL.NOT_FOUND} element={<NotFoundPage/>} />

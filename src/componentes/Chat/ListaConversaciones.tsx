@@ -1,4 +1,4 @@
-import { Conversacion } from "../../../services/chat/ types";
+import { Conversacion } from "../../services/chat/ types";
 
 
 interface ListaConversacionesProps {

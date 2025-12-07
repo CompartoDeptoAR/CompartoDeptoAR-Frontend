@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import type { HabitosUsuario, PreferenciasUsuario } from "../modelos/Usuario";
-import apiHabitosPreferencias from "../api/endpoints/otros";
+import apiUsuario from "../api/endpoints/usuario";
+
 
 
 interface UseHabitosPreferenciasProps {
@@ -33,7 +34,7 @@ export const useHabitosPreferencias = ({
       setError(null);
 
     
-      const data = await apiHabitosPreferencias.perfil.obtener();
+      const data = await apiUsuario.usuario.obtener();
       console.log("desde useHP: "+data)
       if (data.habitos) setHabitos(data.habitos);
       if (data.preferencias) setPreferencias(data.preferencias);

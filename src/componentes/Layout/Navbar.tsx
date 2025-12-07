@@ -1,96 +1,131 @@
-import React from "react";
-import { Navbar, Nav, Form, FormControl, Button, NavDropdown, Badge } from "react-bootstrap";
+import React, { useState } from "react";
+import { Navbar, Nav, Form, FormControl, Button, NavDropdown } from "react-bootstrap";
 import { Bell, MessageCircle, Settings } from "lucide-react";
 
 import { TokenService } from "../../services/auth/tokenService";
 import apiAuth from "../../api/endpoints/auth";
 import { Navegar } from "../../navigation/navigationService";
 import { NotificacionesBadge } from "../Chat/NotificacionesBadge";
-import { LocalStorageService } from "../../services/storage/localStorage.service";
+import { Rol } from "../../modelos/Roles";
+import { hasRole, isLoggedIn } from "../../helpers/funcion";
+import { FiltrosBusqueda } from "../Buscador/FiltrosBusqueda";
 
 const NavbarApp: React.FC = () => {
+  const [showFiltros, setShowFiltros] = useState(false);
 
-  const authData = TokenService.getAuthData(); 
-  const isLoggedIn = !!authData; 
-  
   function cerrarSesion() {
     apiAuth.auth.logout();
-    Navegar.home(); 
+    Navegar.home();
   }
-  
+
   return (
     <Navbar bg="dark" variant="dark" expand="lg" className="px-4 shadow-sm">
-      <Navbar.Brand onClick={() => Navegar.home()} className="fw-bold text-uppercase" style={{ cursor: "pointer" }}>
+      
+      {/* Logo */}
+      <Navbar.Brand 
+        onClick={() => Navegar.home()} 
+        className="fw-bold text-uppercase" 
+        style={{ cursor: "pointer" }}
+      >
         Comparto DeptoAR
       </Navbar.Brand>
 
       <Navbar.Toggle aria-controls="navbar-content" />
       <Navbar.Collapse id="navbar-content">
+        
         {/* Buscador */}
         <Form className="d-flex mx-auto" style={{ maxWidth: "400px" }}>
-          <FormControl
-            type="search"
-            placeholder="Buscar..."
-            className="me-2"
-            aria-label="Buscar"
-          />
+          <FormControl type="search" placeholder="Buscar..." className="me-2" />
           <Button variant="outline-light">Buscar</Button>
+          <Button 
+            variant="outline-light" 
+            className="ms-2"
+            onClick={() => setShowFiltros(true)}
+          >
+            Filtros
+          </Button>
         </Form>
-       
+        
+        <FiltrosBusqueda 
+          show={showFiltros}
+          onClose={() => setShowFiltros(false)}
+          onApply={(filtros) => console.log("filtros", filtros)}
+        />
+
         <Nav className="ms-auto align-items-center">
-          {isLoggedIn && (
+
+          {/* 🔔 ICONOS: sólo si está logueado */}
+          {isLoggedIn() && (
+            <>
+              {/* Notificaciones */}
+              <Nav.Link 
+                className="position-relative"
+                onClick={() => Navegar.notificaciones()}
+              >
+                <Bell size={20} />
+              </Nav.Link>
+
+              {/* Mensajes */}
+              <Nav.Link 
+                className="position-relative" 
+                onClick={() => Navegar.chatCompleto()}
+              >
+                <MessageCircle size={20} />
+                <NotificacionesBadge idUsuario={TokenService.getUserId()} />
+              </Nav.Link>
+            </>
+          )}
+
+          {/* 🔽 MENU MI CUENTA */}
+          <NavDropdown title="Mi Cuenta" align="end" id="dropdown-usuario">
+
+            {isLoggedIn() && (
               <>
-                {/* Notificaciones */}
-                <Nav.Link 
-                  className="position-relative" 
-                  onClick={() => Navegar.notificaciones()}
+                <NavDropdown.Item onClick={() => Navegar.miPerfil()}>
+                  Perfil
+                </NavDropdown.Item>
+
+                <NavDropdown.Item onClick={() => Navegar.contactos()}>
+                  Contactos
+                </NavDropdown.Item>
+
+                <NavDropdown.Item onClick={() => Navegar.misPublicaciones()}>
+                  Mis publicaciones
+                </NavDropdown.Item>
+
+                <NavDropdown.Item onClick={() => Navegar.misFavoritos()}>
+                  Mis Favoritos
+                </NavDropdown.Item>
+
+                <NavDropdown.Divider />
+
+                {/* ⚠️ SOLO PARA ADMIN */}
+                {hasRole(Rol.ADMIN) && (
+                  <NavDropdown.Item onClick={() => Navegar.admin()}>
+                    Panel Admin
+                  </NavDropdown.Item>
+                )}
+
+                <NavDropdown.Divider />
+
+                <NavDropdown.Item 
+                  onClick={cerrarSesion} 
+                  className="text-danger fw-semibold"
                 >
-                  <Bell size={20} />
-
-                  <NotificacionesBadge
-                    idUsuario={TokenService.getUserId()}
-                  
-                  />
-                </Nav.Link>
-
-                {/* Mensajes */}
-                <Nav.Link 
-                  className="position-relative" 
-                  onClick={() => Navegar.chatCompleto()}
-                >
-                  <MessageCircle size={20} />
-
-                  <NotificacionesBadge
-                    idUsuario={TokenService.getUserId()}
-           
-                  />
-                </Nav.Link>
+                  Cerrar sesión
+                </NavDropdown.Item>
               </>
             )}
 
-
-          {/* 👤 Menú desplegable del usuario */}
-          <NavDropdown title="Mi Cuenta" align="end" id="dropdown-usuario">
-            <NavDropdown.Item onClick={() => Navegar.miPerfil()}>Perfil</NavDropdown.Item>
-            <NavDropdown.Item onClick={() => Navegar.contactos()}>Contactos</NavDropdown.Item>
-            <NavDropdown.Item onClick={() => Navegar.misPublicaciones()}>Mis publicaciones</NavDropdown.Item>
-            <NavDropdown.Item onClick={() => Navegar.misFavoritos()}>Mis Favoritos</NavDropdown.Item>
-            <NavDropdown.Divider />
-            <NavDropdown.Item onClick={() => Navegar.configuracion()}>
-              <Settings size={16} className="me-2" /> Configuración
-            </NavDropdown.Item>
-            <NavDropdown.Divider />
-            {isLoggedIn ? (
-              <NavDropdown.Item onClick={cerrarSesion} className="text-danger fw-semibold">
-                Cerrar sesión
-              </NavDropdown.Item>
-            ) : (
+            {!isLoggedIn() && (
               <NavDropdown.Item onClick={() => Navegar.auth()}>
                 Iniciar sesión
               </NavDropdown.Item>
             )}
           </NavDropdown>
+
         </Nav>
+
       </Navbar.Collapse>
     </Navbar>
   );
