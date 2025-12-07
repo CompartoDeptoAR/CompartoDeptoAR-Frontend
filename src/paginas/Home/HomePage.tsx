@@ -5,16 +5,16 @@ import "../../styles/HomePage.css";
 import { isLoggedIn } from "../../helpers/funcion";
 
 const HomePage = () => {
-    const [estaLogueado, setEstaLogueado] = useState(isLoggedIn());
+    const [estaIn, setIn] = useState(isLoggedIn());
     useEffect(() => {
-        setEstaLogueado(isLoggedIn());
+        setIn(isLoggedIn());
     }, []);
 
     return (
         <div className="home-fondo">
             <div className="text-center">
                 <h1 className="titulo-home mb-4">Bienvenido a CompartoDeptoAr</h1>
-                {estaLogueado && (
+                {estaIn && (
                     <button className="btn btn-primary mb-3" onClick={() => Navegar.crearPublicacion()}>
                         Nueva Publicación
                     </button>
