@@ -1,0 +1,42 @@
+.home-fondo {
+  background-image: url("/fondopub.jpg");
+  background-size: cover;   
+  background-position: center;
+  background-repeat: no-repeat;
+
+  min-height: 100vh; 
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 30px;
+}
+
+.contenido-home {
+  background: rgba(255, 255, 255, 0.7);
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.titulo-home {
+  font-size: 3rem;
+  font-weight: 700;
+  color: #ffffff;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+
+  animation: fadeInDown 0.9s ease-out;
+  letter-spacing: 1.5px;
+}
+
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
