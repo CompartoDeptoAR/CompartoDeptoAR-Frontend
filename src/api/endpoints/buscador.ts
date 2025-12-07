@@ -4,33 +4,30 @@ import axiosApi from "../config/axios.config";
 const urlApi = import.meta.env.VITE_URL_PUBLICACION;
 
 const apiBuscador = {
-  // 🔍 Buscar por texto usando query parameters
+  // texto  solito
   buscar: async (texto: string): Promise<Publicacion[]> => {
-    console.log("🔍 Iniciando búsqueda con texto:", texto);
-    
+    //onsole.log("Iniciando búsqueda con texto:", texto);
     const textoLimpio = texto.trim();
     
     if (!textoLimpio) {
       throw new Error("Por favor, ingresá algo para buscar");
     }
-
     try {  
       const res = await axiosApi.get<Publicacion[]>(`${urlApi}/search`, {
         params: {
           q: textoLimpio
         }
       });
-      
-      console.log("✅ Búsqueda exitosa. Resultados:", res.data.length);
+      //console.log("Búsqueda exitosa. Resultados:", res.data.length);
       return res.data;
       
     } catch (error: any) {
-      console.error("❌ Error en búsqueda:", error);
-      
+      //console.error(" Error en búsqueda:", error);
+    
       if (error.response?.data?.mensaje) {
         throw new Error(error.response.data.mensaje);
       }
-      
+    
       if (error.response?.status === 404) {
         throw new Error("Servicio de búsqueda no disponible. Intenta más tarde.");
       }
@@ -47,7 +44,7 @@ const apiBuscador = {
     }
   },
 
-  // 🔎 Buscar con filtros avanzados
+  //filtros, ver desp los filtros del modelo
   buscarConFiltros: async (filtros: any): Promise<Publicacion[]> => {
     console.log("🔍 Aplicando filtros:", filtros);
     
@@ -66,11 +63,11 @@ const apiBuscador = {
         filtrosLimpios
       );
       
-      console.log("✅ Filtros aplicados. Resultados:", res.data.length);
+     // console.log("Filtros aplicados. Resultados:", res.data.length);
       return res.data;
       
     } catch (error: any) {
-      console.error("❌ Error al aplicar filtros:", error);
+     // console.error("Error al aplicar filtros:", error);
       
       if (error.response?.data?.mensaje) {
         throw new Error(error.response.data.mensaje);

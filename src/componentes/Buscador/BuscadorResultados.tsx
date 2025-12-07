@@ -5,14 +5,13 @@ import { Navegar } from "../../navigation/navigationService";
 interface Props {
   show: boolean;
   onClose: () => void;
-  resultados: any[]; // PublicacionResumida[]
+  resultados: any[]; 
   loading?: boolean;
   error?: string | null;
 }
 
 const BuscadorResultados: React.FC<Props> = ({ show, onClose, resultados, loading, error }) => {
   const abrirPublicacion = (id: string) => {
-    // intenta usar Navegar.publicacion si existe, sino fallback a window.location
     try {
       // @ts-ignore
       if (Navegar && typeof Navegar.publicacion === "function") {
