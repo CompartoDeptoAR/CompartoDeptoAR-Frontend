@@ -27,7 +27,8 @@ export const useFetchPublicacion = (
 
         const provincia = parts[parts.length - 1] || "";
         const localidad = parts[parts.length - 2] || "";
-        const direccion = parts.length > 2 ? parts.slice(0, -2).join(", ") : "";
+        const calle = parts.length > 2 ? parts.slice(0, -2).join(", ") : "";
+        const numeral = parts.length > 2 ? parts.slice(0, -2).join(", ") : "";
 
         setFormData({
           titulo: data.titulo || "",
@@ -35,7 +36,8 @@ export const useFetchPublicacion = (
           precio: data.precio || 0,
           provincia,
           localidad,
-          direccion,
+          calle,
+          numeral,
           foto: Array.isArray(data.foto) ? data.foto : [],
           reglas: Array.isArray(data.reglas) ? data.reglas : [],
           preferencias: data.preferencias || {},

@@ -8,7 +8,7 @@ import {
   type HabitoKey,
   type PreferenciaKey
 } from "../../../modelos/Usuario";
-import "../../../styles/FormularioLogin.css";
+
 
 interface SegundoFormRegistroProps {
   edad: number;
@@ -62,7 +62,7 @@ const SegundoFormRegistro: React.FC<SegundoFormRegistroProps> = ({
 
   return (
     <div className="login-page">
-      <form onSubmit={handleSubmit} className="form-container">
+      <form onSubmit={handleSubmit} className="form-container form-container-mas-ancho" >
         <h2 style={{ marginBottom: "1rem", color: "#333" }}>Completá tu perfil</h2>
         <p style={{ marginBottom: "2rem", color: "#666" }}>
           Esta información ayuda a encontrar mejores compañeros

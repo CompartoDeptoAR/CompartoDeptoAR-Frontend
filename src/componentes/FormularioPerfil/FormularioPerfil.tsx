@@ -8,7 +8,7 @@ import CampoTextArea from "./helpers/CampoTextArea";
 import BotonesFormulario from "./helpers/BotonesFormulario";
 import SeccionCheckboxes from "./helpers/SeccionCheckboxes";
 import GestorFotos from "../Publicacion/componenteSecundario/Formulario/GestorFotos";
-import axiosApi from "../../api/config/axios.config";
+
 
 interface FormularioPerfilProps {
   perfil: UsuarioPerfil;

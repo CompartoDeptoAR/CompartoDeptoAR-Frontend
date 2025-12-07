@@ -55,7 +55,7 @@ const ListarPublicaciones: React.FC<ListarPublicacionesProps> = ({
   };
 
   if (loading) {
-    return null;
+    return <></>; 
   }
 
   if (error) {

@@ -1,3 +1,4 @@
+import { formatearDireccion } from "../../../../helpers/direccion";
 import { PublicacionResponce } from "../../../../modelos/Publicacion";
 
 interface InfoBasicaProps {

@@ -92,7 +92,7 @@ const SelectorUbicacionArgentina: React.FC<SelectorUbicacionProps> = ({
   return (
     <div className="row">
       <div className="col-md-6 mb-3">
-        <label htmlFor="provincia" className="form-label">
+        <label htmlFor="provincia" className="form-label fw-semibold">
           Provincia {required && <span className="text-danger">*</span>}
         </label>
         <select
@@ -115,7 +115,7 @@ const SelectorUbicacionArgentina: React.FC<SelectorUbicacionProps> = ({
       </div>
 
       <div className="col-md-6 mb-3">
-        <label htmlFor="localidad" className="form-label">
+        <label htmlFor="localidad" className="form-label fw-semibold">
           Localidad/Municipio {required && <span className="text-danger">*</span>}
         </label>
         <select

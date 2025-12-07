@@ -5,9 +5,12 @@ import ToastNotification from "../../../componentes/ToastNotification/ToastNotif
 import { useToast } from "../../../hooks/useToast";
 import { usePublicacionesPaginadas } from "../../../hooks/pagina/publicacion/listar/usePublicacionesPaginadas";
 import { useFavoritos } from "../../../hooks/pagina/favorito/useFavoritos";
+import { useLoading } from "../../../contexts/LoadingContext";  
 
 const TodasLasPublicaciones: React.FC = () => {
   const { toast, hideToast } = useToast();
+  const { showLoader, hideLoader } = useLoading();                
+
   const {
     publicaciones,
     loading,
@@ -24,10 +27,18 @@ const TodasLasPublicaciones: React.FC = () => {
     return favoritos.map(pub => pub.id);
   }, [favoritos]);
 
+
+  useEffect(() => {
+    if (loading) showLoader();
+    else hideLoader();
+  }, [loading]);
+
+
+  // cargar publicaciones al inicio
   useEffect(() => {
     cargarPublicaciones();
   }, []);
-  
+
   const total = publicaciones.length;
 
   return (

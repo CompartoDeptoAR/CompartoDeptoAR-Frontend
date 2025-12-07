@@ -12,7 +12,7 @@ import { SeccionLecturaCheckboxes } from "../componenteSecundario/View/SeccionLe
 import { Navegar } from "../../../navigation/navigationService";
 import { MiniChat } from "../../Chat/MiniChat";
 import { BotonDenunciaConId } from "../../../helpers/Botones";
-import { MapaPublicacion } from "../componenteSecundario/Formulario/MapaPublicaciones";
+import { MapaPublicacion } from "../componenteSecundario/View/MapaPublicacion";
 
 interface PublicacionDetalleViewProps {
   publicacion: PublicacionResponce;
@@ -27,17 +27,19 @@ const PublicacionDetalleView: React.FC<PublicacionDetalleViewProps> = ({
 }) => {
   const [mostrarChat, setMostrarChat] = useState(false);
 
-  const nombreUsuario = publicacion.usuarioNombre || "Usuario";
   const habitos = publicacion.habitos || {};
   const preferencias = publicacion.preferencias || {};
   const [coords, setCoords] = useState<{ lat: number; lng: number } | null>(null);
-  
+
   useEffect(() => {
-    const direccionCompleta = `${publicacion.direccion}, ${publicacion.localidad}, ${publicacion.provincia}`;
-    obtenerCoordenadas(direccionCompleta).then((res) => {
+    if (!publicacion.ubicacion) return;
+
+    obtenerCoordenadas(publicacion.ubicacion).then((res) => {
       if (res) setCoords(res);
     });
-  }, [publicacion.direccion, publicacion.localidad, publicacion.provincia]);
+
+  }, [publicacion.ubicacion]);
+
 
   async function obtenerCoordenadas(direccion: string) {
   const token = import.meta.env.VITE_MAPBOX_TOKEN;
