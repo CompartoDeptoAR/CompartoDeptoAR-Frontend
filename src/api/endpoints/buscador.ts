@@ -1,107 +1,84 @@
+import { Publicacion } from "../../modelos/Publicacion";
 import axiosApi from "../config/axios.config";
-import { handleApiError } from "../../helpers/handleApiError";
-import { PublicacionResumida } from "../../modelos/Publicacion";
 
-const rutaEndpoint = import.meta.env.VITE_URL_PUBLICACIONES;
-
-
-export interface FiltrosBusqueda {
-  texto?: string;
-  categoria?: string;
-  usuarioId?: string;
-  orden?: string;
-  [key: string]: any;
-}
+const urlApi = import.meta.env.VITE_URL_PUBLICACION;
 
 const apiBuscador = {
+  // 🔍 Buscar por texto usando query parameters
+  buscar: async (texto: string): Promise<Publicacion[]> => {
+    console.log("🔍 Iniciando búsqueda con texto:", texto);
+    
+    const textoLimpio = texto.trim();
+    
+    if (!textoLimpio) {
+      throw new Error("Por favor, ingresá algo para buscar");
+    }
 
-  /** ============================
-   *  GET: Buscar por texto simple
-   *  /buscar?texto=xxx
-   *  ============================ */
-  buscar: async (texto: string): Promise<PublicacionResumida[]> => {
-
-    if (!rutaEndpoint)
-      throw new Error("Error de configuración: falta VITE_URL_PUBLICACIONES");
-
-    if (!texto)
-      throw new Error("Debe ingresar texto para buscar");
-
-    try {
-      const respuesta = await axiosApi.get<PublicacionResumida[]>(
-        `${rutaEndpoint}/buscar`,
-        {
-          params: { texto },
+    try {  
+      const res = await axiosApi.get<Publicacion[]>(`${urlApi}/search`, {
+        params: {
+          q: textoLimpio
         }
-      );
-
-      if (respuesta.status === 200) {
-        return respuesta.data || [];
-      }
-
-      return handleApiError(
-        respuesta.status,
-        "Respuesta inesperada del servidor al buscar publicaciones"
-      );
+      });
+      
+      console.log("✅ Búsqueda exitosa. Resultados:", res.data.length);
+      return res.data;
       
     } catch (error: any) {
-
-      if (error.response) {
-        const status = error.response.status;
-
-        if (status === 404) {
-          throw new Error(`No se encontraron publicaciones relacionadas a "${texto}"`);
-        }
-
-        throw new Error(error.response.data?.mensaje || "Error del servidor");
+      console.error("❌ Error en búsqueda:", error);
+      
+      if (error.response?.data?.mensaje) {
+        throw new Error(error.response.data.mensaje);
+      }
+      
+      if (error.response?.status === 404) {
+        throw new Error("Servicio de búsqueda no disponible. Intenta más tarde.");
       }
 
-      throw new Error("Error de conexión, el servidor podría no estar disponible.");
+      if (error.response?.status === 400) {
+        throw new Error("Búsqueda inválida. Intenta con otras palabras.");
+      }
+ 
+      if (error.request) {
+        throw new Error("No se pudo conectar con el servidor. Verifica tu conexión.");
+      }
+    
+      throw new Error("Error al realizar la búsqueda. Intenta nuevamente.");
     }
   },
 
-
-
-  /** ============================
-   *  POST: Buscar con filtros
-   *  /buscarConFiltros
-   *  ============================ */
-  buscarConFiltros: async (filtros: FiltrosBusqueda): Promise<PublicacionResumida[]> => {
-
-    if (!rutaEndpoint)
-      throw new Error("Error de configuración: falta VITE_URL_PUBLICACIONES");
-
+  // 🔎 Buscar con filtros avanzados
+  buscarConFiltros: async (filtros: any): Promise<Publicacion[]> => {
+    console.log("🔍 Aplicando filtros:", filtros);
+    
     try {
-      const respuesta = await axiosApi.post<PublicacionResumida[]>(
-        `${rutaEndpoint}/buscarConFiltros`,
-        filtros
-      );
-
-      if (respuesta.status === 200) {
-        return respuesta.data || [];
-      }
-
-      return handleApiError(
-        respuesta.status,
-        "Respuesta inesperada del servidor al buscar con filtros"
-      );
-
-    } catch (error: any) {
-
-      if (error.response) {
-        const status = error.response.status;
-
-        if (status === 404) {
-          throw new Error("No se encontraron publicaciones con los filtros aplicados");
+      
+      const filtrosLimpios: any = {};
+      Object.keys(filtros).forEach(key => {
+        if (filtros[key] !== undefined && filtros[key] !== null && filtros[key] !== '') {
+          filtrosLimpios[key] = filtros[key];
         }
-
-        throw new Error(error.response.data?.mensaje || "Error del servidor");
+      });
+      
+  
+      const res = await axiosApi.post<Publicacion[]>(
+        `${urlApi}/buscarConFiltros`, 
+        filtrosLimpios
+      );
+      
+      console.log("✅ Filtros aplicados. Resultados:", res.data.length);
+      return res.data;
+      
+    } catch (error: any) {
+      console.error("❌ Error al aplicar filtros:", error);
+      
+      if (error.response?.data?.mensaje) {
+        throw new Error(error.response.data.mensaje);
       }
-
-      throw new Error("Error de conexión, el servidor podría no estar disponible.");
+      
+      throw new Error("Error al aplicar los filtros. Intenta nuevamente.");
     }
   }
-
 };
 
 export default apiBuscador;
