@@ -4,9 +4,10 @@ interface GestorFotosProps {
   fotos: string[];
   onFotosChange: (fotos: string[]) => void;
   disabled?: boolean;
+  titulo?: string; // <- nuevo prop opcional para el título
 }
 
-const GestorFotos: React.FC<GestorFotosProps> = ({ fotos, onFotosChange, disabled = false }) => {
+const GestorFotos: React.FC<GestorFotosProps> = ({ fotos, onFotosChange, disabled = false, titulo }) => {
   const {
     arrastrando,
     errorFoto,
@@ -36,11 +37,9 @@ const GestorFotos: React.FC<GestorFotosProps> = ({ fotos, onFotosChange, disable
   return (
     <div className="card shadow-sm mb-4">
       <div className="card-header bg-info text-white">
-        <h5 className="mb-0">📸 Fotos de la Propiedad</h5>
+        <h5 className="mb-0">{titulo || "📸 Fotos de la Propiedad"}</h5>
       </div>
       <div className="card-body">
-    
-
         <div
           className={`border-2 border-dashed rounded p-4 mb-3 text-center ${
             arrastrando ? "border-primary bg-primary bg-opacity-10" : "border-secondary"
@@ -78,10 +77,7 @@ const GestorFotos: React.FC<GestorFotosProps> = ({ fotos, onFotosChange, disable
 
           {fotos.length > 0 && (
             <p className="text-primary small mb-0 mt-2">
-              <strong>
-                {fotos.length}/{MAX_FOTOS}
-              </strong>{" "}
-              fotos agregadas
+              <strong>{fotos.length}/{MAX_FOTOS}</strong> fotos agregadas
             </p>
           )}
         </div>
@@ -131,10 +127,7 @@ const GestorFotos: React.FC<GestorFotosProps> = ({ fotos, onFotosChange, disable
                         src={foto}
                         alt={`Foto ${index + 1}`}
                         className="card-img-top"
-                        style={{
-                          height: "180px",
-                          objectFit: "cover",
-                        }}
+                        style={{ height: "180px", objectFit: "cover" }}
                       />
                       {index === 0 && (
                         <span className="badge bg-primary position-absolute top-0 start-0 m-2">
@@ -175,9 +168,7 @@ const GestorFotos: React.FC<GestorFotosProps> = ({ fotos, onFotosChange, disable
           </>
         ) : (
           <div className="alert alert-light text-center py-4">
-            <div className="mb-2" style={{ fontSize: "3rem" }}>
-              📷
-            </div>
+            <div className="mb-2" style={{ fontSize: "3rem" }}>📷</div>
             <p className="mb-0 text-muted">Aún no has agregado fotos. ¡Agrega al menos una!</p>
           </div>
         )}

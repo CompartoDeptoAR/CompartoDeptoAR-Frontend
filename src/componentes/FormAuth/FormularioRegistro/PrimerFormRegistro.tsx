@@ -1,5 +1,5 @@
 import React from "react";
-import "../../../styles/auth.css";
+import "../../../styles/FormularioLogin.css";
 
 interface PrimerFormRegistroProps {
   nombreCompleto: string;
@@ -27,66 +27,95 @@ const PrimerFormRegistro: React.FC<PrimerFormRegistroProps> = ({
   onSwitch,
 }) => {
   return (
-    <form onSubmit={handleSubmit} className="form-container page-transition">
-      <h2 className="form-title">Crear cuenta</h2>
+    <div className="login-page">
+      <form onSubmit={handleSubmit} className="form-container">
+        <h2 style={{ marginBottom: "1rem", color: "#333" }}>Crear cuenta</h2>
+        <p style={{ marginBottom: "2rem", color: "#666" }}>
+          Comienza tu viaje con nosotros
+        </p>
 
-      {/* Nombre */}
-      <div>
-        <label>Nombre completo</label>
-        <input
-          type="text"
-          placeholder="Ej: Juan Pérez"
-          value={nombreCompleto}
-          onChange={(e) => setNombreCompleto(e.target.value)}
-          required
-          minLength={3}
-        />
-      </div>
-
-      {/* Correo */}
-      <div>
-        <label>Correo electrónico</label>
-        <input
-          type="email"
-          placeholder="Ej: usuario@email.com"
-          value={correo}
-          onChange={(e) => setCorreo(e.target.value)}
-          required
-        />
-      </div>
-
-      {/* Contraseña */}
-      <div>
-       <label>Contraseña</label>
-        <div >
+        {/* Nombre */}
+          <div style={{ textAlign: "left" }}>
+          <label style={{ textAlign: "left", display: "block", width: "100%" }}>Nombre completo*</label>
           <input
-            type={mostrarPassword ? "text" : "password"}
-            placeholder="********"
-            value={contraseña}
-            onChange={(e) => setContraseña(e.target.value)}
+            type="text"
+            placeholder="Ej: Juan Perez"
+            value={nombreCompleto}
+            onChange={(e) => setNombreCompleto(e.target.value)}
             required
-            minLength={8}
-            pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$"
-            title="La contraseña debe tener al menos 8 caracteres, incluyendo mayúsculas, minúsculas y un número"
+            minLength={3}
           />
-          <button
-            type="button"
-            onClick={togglePassword}
-          >
-            {mostrarPassword ? "Ocultar" : "Ver"}
-          </button>
         </div>
-      </div>
 
-      <button type="submit">Siguiente</button>
+        {/* Correo */}
+        <div style={{ textAlign: "left" }}>
+        <label style={{ textAlign: "left", display: "block", width: "100%" }}>Correo electrónico*</label>
+          <input
+            type="email"
+            placeholder="valentinperrone@gmail.com"
+            value={correo}
+            onChange={(e) => setCorreo(e.target.value)}
+            required
+          />
+        </div>
 
-      <p>
-        ¿Ya tienes cuenta?{" "}
-        <a href="#" onClick={(e) => { e.preventDefault(); onSwitch(); }}>
-          Inicia sesión
-        </a>
-      </p>
-    </form>
+        {/* Contraseña */}
+      <div style={{ textAlign: "left" }}>
+      <label style={{ textAlign: "left", display: "block", width: "100%" }}>Contraseña*</label>
+          <div className="password-wrapper">
+            <input
+              type={mostrarPassword ? "text" : "password"}
+              placeholder="********"
+              value={contraseña}
+              onChange={(e) => setContraseña(e.target.value)}
+              required
+              minLength={8}
+              pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$"
+            />
+            <button
+              type="button"
+              onClick={togglePassword}
+              className="toggle-password"
+            >
+              {mostrarPassword ? "Ocultar" : "Ver"}
+            </button>
+          </div>
+          <small style={{ color: "#666", fontSize: "12px", display: "block", marginTop: "-0.5rem", marginBottom: "1rem" }}>
+            Mínimo 8 caracteres, incluyendo mayúsculas, minúsculas y un número
+          </small>
+        </div>
+
+        <button 
+          type="submit"
+          style={{
+            backgroundColor: "#007bff",
+            color: "white",
+            padding: "0.75rem 1.5rem",
+            border: "none",
+            borderRadius: "0.5rem",
+            cursor: "pointer",
+            fontSize: "1rem",
+            fontWeight: "600",
+            width: "100%",
+            marginTop: "1rem",
+            marginBottom: "1.5rem"
+          }}
+        >
+          Siguiente
+        </button>
+
+        <div style={{ textAlign: "center", paddingTop: "1.5rem", borderTop: "1px solid #eee" }}>
+          <span style={{ color: "#666" }}>¿Ya tienes cuenta? </span>
+          <a 
+            href="#" 
+            onClick={(e) => { e.preventDefault(); onSwitch(); }}
+            style={{ color: "#007bff", textDecoration: "none", fontWeight: "600" }}
+          >
+            Inicia sesión
+          </a>
+        </div>
+      </form>
+    </div>
   );
 };
 

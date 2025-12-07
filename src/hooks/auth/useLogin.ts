@@ -12,7 +12,7 @@ export function useLogin() {
   const [mostrarPassword, setMostrarPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const [usuario, setUsuario] = useState<AuthData | null>(null); // 🔥 agregado
+  const [usuario, setUsuario] = useState<AuthData | null>(null); 
 
   const { toast, showSuccess, showError, hideToast } = useToast();
   const togglePassword = () => setMostrarPassword((p) => !p);

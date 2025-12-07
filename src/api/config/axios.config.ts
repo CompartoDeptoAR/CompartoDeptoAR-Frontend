@@ -15,4 +15,3 @@ const axiosApi = axios.create({
 });
 
 export default axiosApi;
-
