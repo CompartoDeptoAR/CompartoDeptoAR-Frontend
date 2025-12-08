@@ -1,27 +1,19 @@
-.home-fondo {
-  background: #b8a7a79c;
-  
-  /* El fondo se queda fijo mientras scrolleas */
-  min-height: 100vh;
-  background-attachment: fixed;
-  background-size: cover;
-  background-position: center;
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }
 
-.contenido-home {
-  background: rgba(255, 255, 255, 0.589);
-  padding: 90px;
-  border-radius: 10px;
+.home-fondo {
+  min-height: 100vh;
+  background: #b1acacbe;
+  padding: 20px;
 }
 
 .titulo-home {
-  font-size: 3rem;
-  font-weight: 700;
-	color: rgb(0, 0, 0);
-  animation: fadeInDown 0.9s ease-out;
-  letter-spacing: 1.5px;
+  color: black;
+  padding-top: 2rem;
 }
-
 
 @keyframes fadeInDown {
   from {
@@ -33,4 +25,3 @@
     transform: translateY(0);
   }
 }
-
