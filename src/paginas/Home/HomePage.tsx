@@ -9,10 +9,7 @@ const HomePage = () => {
 
     useEffect(() => {
         const actualizarEstado = () => setIn(isLoggedIn());
-
-        // 🔥 Escuchamos nuestro evento personalizado
         window.addEventListener("authChange", actualizarEstado);
-
         return () => {
             window.removeEventListener("authChange", actualizarEstado);
         };
