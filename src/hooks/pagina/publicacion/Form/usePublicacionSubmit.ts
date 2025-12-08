@@ -4,7 +4,7 @@ import { useToast } from "../../../useToast";
 import apiPublicacion from "../../../../api/endpoints/publicaciones";
 import { Navegar } from "../../../../navigation/navigationService";
 
-export const usePublicacionSubmit = (formData: Publicacion) => {
+export const usePublicacionSubmit = (formData: Publicacion, resetForm:()=>void) => {
   const [loading, setLoading] = useState(false);
   const { showSuccess, showError, showWarning } = useToast();
 
@@ -56,7 +56,7 @@ export const usePublicacionSubmit = (formData: Publicacion) => {
 
 
       showSuccess(response.mensaje || "¡Publicación creada exitosamente!");
-      //aca estaria bueno tener un cartelito que dice que funciono
+      resetForm();
       setTimeout(() => Navegar.misPublicaciones(), 1000);
 
     } catch (error: any) {

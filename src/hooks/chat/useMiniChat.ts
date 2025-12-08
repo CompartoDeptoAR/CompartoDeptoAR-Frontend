@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { MensajeUI } from "../../services/chat/ types";
+import { MensajeUI } from "../../services/chat/types";
 import chatService from "../../services/chat/chatService";
 
 

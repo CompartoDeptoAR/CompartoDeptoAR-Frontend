@@ -34,7 +34,7 @@ const FormularioPublicacion: React.FC<FormularioPublicacionProps> = ({
   onPreferenciasChange,
   handleSubmit,
   modo,
-  loading = false,
+  loading,
   onCancel,
 }) => {
   const {

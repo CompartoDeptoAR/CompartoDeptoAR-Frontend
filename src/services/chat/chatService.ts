@@ -11,7 +11,7 @@ import {
   Timestamp,
   getDoc,
 } from "firebase/firestore";
-import { Conversacion, Mensaje, MensajeUI } from "./ types";
+import { Conversacion, Mensaje, MensajeUI } from "./types";
 import { db } from "../../firebase/config";
 
 

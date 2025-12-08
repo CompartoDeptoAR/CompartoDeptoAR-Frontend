@@ -79,15 +79,17 @@ const SelectorUbicacionArgentina: React.FC<SelectorUbicacionProps> = ({
     fetchMunicipios();
   }, [provincia]);
 
-  const handleProvinciaChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const nuevaProvincia = e.target.value;
-    onProvinciaChange(nuevaProvincia);
-    onLocalidadChange(""); 
-  };
+  const handleProvinciaChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const nuevaProvincia = e.target.value;
+  onProvinciaChange(nuevaProvincia);
+  onLocalidadChange(""); 
+};
 
-  const handleLocalidadChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    onLocalidadChange(e.target.value);
-  };
+
+  const handleLocalidadChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  onLocalidadChange(e.target.value);
+};
+
 
   return (
     <div className="row">
@@ -95,50 +97,53 @@ const SelectorUbicacionArgentina: React.FC<SelectorUbicacionProps> = ({
         <label htmlFor="provincia" className="form-label fw-semibold">
           Provincia {required && <span className="text-danger">*</span>}
         </label>
-        <select
+        <input
+          list="lista-provincias"
+          className="form-control"
           id="provincia"
-          className="form-select"
+          placeholder={loadingProvincias ? "Cargando..." : "Escribe una provincia"}
           value={provincia}
-          onChange={handleProvinciaChange}
+          onChange={(e) => handleProvinciaChange(e as any)}
           disabled={disabled || loadingProvincias}
           required={required}
-        >
-          <option value="">
-            {loadingProvincias ? "Cargando..." : "Selecciona una provincia"}
-          </option>
+        />
+
+        <datalist id="lista-provincias">
           {provincias.map((prov) => (
-            <option key={prov.id} value={prov.nombre}>
-              {prov.nombre}
-            </option>
+            <option key={prov.id} value={prov.nombre} />
           ))}
-        </select>
+        </datalist>
+
       </div>
 
       <div className="col-md-6 mb-3">
         <label htmlFor="localidad" className="form-label fw-semibold">
           Localidad/Municipio {required && <span className="text-danger">*</span>}
         </label>
-        <select
-          id="localidad"
-          className="form-select"
-          value={localidad}
-          onChange={handleLocalidadChange}
-          disabled={disabled || !provincia || loadingMunicipios}
-          required={required}
-        >
-          <option value="">
-            {loadingMunicipios
-              ? "Cargando..."
-              : !provincia
-              ? "Primero selecciona una provincia"
-              : "Selecciona una localidad"}
-          </option>
-          {municipios.map((mun) => (
-            <option key={mun.id} value={mun.nombre}>
-              {mun.nombre}
-            </option>
-          ))}
-        </select>
+        <input
+            list="lista-localidades"
+            className="form-control"
+            id="localidad"
+            placeholder={
+              loadingMunicipios
+                ? "Cargando..."
+                : !provincia
+                ? "Primero elige una provincia"
+                : "Escribe una localidad"
+            }
+            value={localidad}
+            onChange={(e) => handleLocalidadChange(e as any)}
+            disabled={disabled || !provincia || loadingMunicipios}
+            required={required}
+          />
+
+          <datalist id="lista-localidades">
+            {municipios.map((mun) => (
+              <option key={mun.id} value={mun.nombre} />
+            ))}
+          </datalist>
+
+
       </div>
     </div>
   );

@@ -58,9 +58,27 @@ export const usePublicacionForm = () => {
   const handleFotosChange = (fotos: string[]) => {
     setFormData((prev) => ({ ...prev, foto: fotos }));
   };
+  const resetForm = () => {
+  setFormData({
+    titulo: "",
+    descripcion: "",
+    precio: 0,
+    provincia: "",
+    localidad: "",
+    calle: "",
+    numeral:"",
+    foto: [],
+    reglas: [],      
+    reglasTexto: "",   
+    preferencias: {},
+    habitos: {},
+    estado: "activa",
+  });
+};
 
   return {
     formData,
+    resetForm,
     setFormData,
     handleChange,
     handleProvinciaChange,
