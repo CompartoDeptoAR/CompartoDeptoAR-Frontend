@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 import { useChatCompleto } from "../../hooks/chat/useChatCompleto";
-import { VentanaChat } from "../../componentes/Chat/VentanaChat";
-import { ListaConversaciones } from "../../componentes/Chat/ListaConversaciones";
+
+
 import { useLoading } from "../../contexts/LoadingContext";
+import ListaConversaciones from "../../componentes/Chat/ListaConversaciones";
+import VentanaChat from "../../componentes/Chat/VentanaChat";
 
 
 interface ChatCompletoProps {

@@ -14,6 +14,7 @@ import { MiniChat } from "../../Chat/MiniChat";
 import { BotonDenunciaConId } from "../../../helpers/Botones";
 import { MapaPublicacion } from "../componenteSecundario/View/MapaPublicacion";
 import { isLoggedIn } from "../../../helpers/funcion";
+import { TokenService } from "../../../services/auth/tokenService";
 
 interface PublicacionDetalleViewProps {
   publicacion: PublicacionResponce;
@@ -34,7 +35,6 @@ const PublicacionDetalleView: React.FC<PublicacionDetalleViewProps> = ({
   const [coords, setCoords] = useState<{ lat: number; lng: number } | null>(null);
 
   useEffect(() => {
-    // Verificar estado de login
     setEstaLogueado(isLoggedIn());
 
     const verificarLogin = () => {
@@ -72,7 +72,6 @@ const PublicacionDetalleView: React.FC<PublicacionDetalleViewProps> = ({
     return null;
   }
 
-  // Handler para el botón de contactar
   const handleContactar = () => {
     if (!estaLogueado) {
       Navegar.restrictedAccess();
@@ -138,7 +137,7 @@ const PublicacionDetalleView: React.FC<PublicacionDetalleViewProps> = ({
           onClose={() => setMostrarChat(false)}
           idPublicacion={publicacion.id || ""}
           idDestinatario={publicacion.usuarioId || ""}
-          idUsuarioActual={usuarioId}
+          idUsuarioActual={TokenService.getUid()!}
           nombreDestinatario={usuarioNombre}
         />
       )}

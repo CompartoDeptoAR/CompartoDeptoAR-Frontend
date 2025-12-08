@@ -7,11 +7,7 @@ interface ListaConversacionesProps {
   onSeleccionar: (id: string) => void;
 }
 
-export const ListaConversaciones = ({
-  conversaciones,
-  conversacionActiva,
-  onSeleccionar,
-}: ListaConversacionesProps) => {
+const ListaConversaciones:React.FC<ListaConversacionesProps> = ({ conversaciones, conversacionActiva, onSeleccionar }) => {
   const formatearFecha = (fecha: Date) => {
     const hoy = new Date();
     const ayer = new Date(hoy);
@@ -29,83 +25,86 @@ export const ListaConversaciones = ({
   if (conversaciones.length === 0) {
     return (
       <div className="text-center text-muted p-5">
-        <i className="bi bi-chat-dots fs-1 d-block mb-3 text-muted"></i>
-        <h6>No tienes conversaciones</h6>
+        <div style={{ fontSize: "48px" }}>💬</div>
+        <h6 className="mt-3">No tienes conversaciones</h6>
         <small>Contacta a un anunciante desde una publicación</small>
       </div>
     );
   }
 
   return (
-    <div className="list-group list-group-flush">
+    <div>
       {conversaciones.map((conv) => (
         <div
           key={conv.idPublicacion}
-          className={`list-group-item list-group-item-action border-bottom p-3 ${
-            conversacionActiva === conv.idPublicacion ? "active" : ""
-          }`}
           onClick={() => onSeleccionar(conv.idPublicacion)}
-          style={{ cursor: "pointer" }}
+          style={{
+            padding: "12px 16px",
+            cursor: "pointer",
+            borderBottom: "1px solid #e0e0e0",
+            backgroundColor: conversacionActiva === conv.idPublicacion ? "#e3f2fd" : "white",
+          }}
         >
-          <div className="d-flex align-items-start">
-
+          <div style={{ display: "flex", alignItems: "start", gap: "12px" }}>
             <div
-              className={`rounded-circle d-flex align-items-center justify-content-center me-3 ${
-                conversacionActiva === conv.idPublicacion
-                  ? "bg-white text-primary"
-                  : "bg-primary text-white"
-              }`}
               style={{
                 width: "50px",
                 height: "50px",
+                borderRadius: "50%",
+                backgroundColor: conversacionActiva === conv.idPublicacion ? "#1976d2" : "#4caf50",
+                color: "white",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
                 fontSize: "20px",
+                fontWeight: "bold",
                 flexShrink: 0,
               }}
             >
               {conv.nombreOtraPersona.charAt(0).toUpperCase()}
             </div>
 
-            {/* Contenido */}
-            <div className="flex-grow-1 overflow-hidden">
-              <div className="d-flex justify-content-between mb-1">
-                <h6 className="mb-0 text-truncate">{conv.nombreOtraPersona}</h6>
-                <small
-                  className={
-                    conversacionActiva === conv.idPublicacion ? "text-white-50" : "text-muted"
-                  }
-                >
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "4px" }}>
+                <h6 style={{ margin: 0, fontWeight: "600" }}>{conv.nombreOtraPersona}</h6>
+                <small style={{ color: "#666", whiteSpace: "nowrap" }}>
                   {formatearFecha(conv.fechaUltimoMensaje)}
                 </small>
               </div>
 
-              <div className="d-flex justify-content-between align-items-center">
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                 <small
-                  className={`text-truncate ${
-                    conversacionActiva === conv.idPublicacion
-                      ? "text-white-50"
-                      : conv.noLeidos > 0
-                      ? "fw-semibold text-dark"
-                      : "text-muted"
-                  }`}
-                  style={{ maxWidth: "80%" }}
+                  style={{
+                    color: conv.noLeidos > 0 ? "#000" : "#666",
+                    fontWeight: conv.noLeidos > 0 ? "600" : "normal",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap",
+                    flex: 1,
+                  }}
                 >
-                  {conv.esUltimoMensajePropio && (
-                    <i className="bi bi-check-all me-1"></i>
-                  )}
+                  {conv.esUltimoMensajePropio && "✓ "}
                   {conv.ultimoMensaje}
                 </small>
 
                 {conv.noLeidos > 0 && (
-                  <span className="badge bg-success rounded-pill">{conv.noLeidos}</span>
+                  <span
+                    style={{
+                      backgroundColor: "#4caf50",
+                      color: "white",
+                      borderRadius: "12px",
+                      padding: "2px 8px",
+                      fontSize: "12px",
+                      fontWeight: "bold",
+                      marginLeft: "8px",
+                    }}
+                  >
+                    {conv.noLeidos}
+                  </span>
                 )}
               </div>
 
-              <small
-                className={`text-truncate d-block ${
-                  conversacionActiva === conv.idPublicacion ? "text-white-50" : "text-muted"
-                }`}
-                style={{ fontSize: "11px" }}
-              >
+              <small style={{ color: "#999", fontSize: "11px" }}>
                 📍 {conv.tituloPublicacion}
               </small>
             </div>
@@ -115,3 +114,5 @@ export const ListaConversaciones = ({
     </div>
   );
 };
+
+export default ListaConversaciones;

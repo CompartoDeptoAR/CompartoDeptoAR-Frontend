@@ -9,17 +9,10 @@ interface VentanaChatProps {
   onVolver?: () => void;
 }
 
-export const VentanaChat = ({
-  mensajes,
-  conversacion,
-  cargando,
-  onEnviar,
-  onVolver,
-}: VentanaChatProps) => {
+const VentanaChat:React.FC<VentanaChatProps> = ({ mensajes, conversacion, cargando, onEnviar, onVolver }) => {
   const [nuevoMensaje, setNuevoMensaje] = useState("");
   const [enviando, setEnviando] = useState(false);
   const mensajesEndRef = useRef<HTMLDivElement>(null);
-
 
   useEffect(() => {
     mensajesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -48,6 +41,7 @@ export const VentanaChat = ({
       setNuevoMensaje("");
     } catch (err) {
       console.error("Error al enviar:", err);
+      alert("Error al enviar mensaje");
     } finally {
       setEnviando(false);
     }
@@ -62,9 +56,17 @@ export const VentanaChat = ({
 
   if (!conversacion) {
     return (
-      <div className="d-flex align-items-center justify-content-center h-100 bg-light">
-        <div className="text-center text-muted">
-          <i className="bi bi-chat-square-text fs-1 d-block mb-3"></i>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          height: "100%",
+          backgroundColor: "#f5f5f5",
+        }}
+      >
+        <div style={{ textAlign: "center", color: "#999" }}>
+          <div style={{ fontSize: "64px", marginBottom: "16px" }}>💬</div>
           <h5>Selecciona una conversación</h5>
           <p>Elige un chat de la lista para comenzar</p>
         </div>
@@ -73,38 +75,62 @@ export const VentanaChat = ({
   }
 
   return (
-    <div className="d-flex flex-column h-100" style={{ background: "#e5ddd5" }}>
+    <div style={{ display: "flex", flexDirection: "column", height: "100%", backgroundColor: "#e5ddd5" }}>
       {/* Header */}
-      <div className="p-3 bg-light border-bottom d-flex align-items-center">
+      <div
+        style={{
+          padding: "16px",
+          backgroundColor: "white",
+          borderBottom: "1px solid #e0e0e0",
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
         {onVolver && (
-          <button className="btn btn-link p-0 me-2" onClick={onVolver}>
-            <i className="bi bi-arrow-left fs-5"></i>
+          <button
+            onClick={onVolver}
+            style={{
+              background: "none",
+              border: "none",
+              fontSize: "20px",
+              cursor: "pointer",
+              marginRight: "12px",
+            }}
+          >
+            ←
           </button>
         )}
         <div
-          className="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center me-3"
-          style={{ width: "40px", height: "40px" }}
+          style={{
+            width: "40px",
+            height: "40px",
+            borderRadius: "50%",
+            backgroundColor: "#4caf50",
+            color: "white",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            marginRight: "12px",
+            fontWeight: "bold",
+          }}
         >
           {conversacion.nombreOtraPersona.charAt(0).toUpperCase()}
         </div>
-        <div className="flex-grow-1">
-          <h6 className="mb-0">{conversacion.nombreOtraPersona}</h6>
-          <small className="text-muted">
-            <i className="bi bi-geo-alt-fill"></i> {conversacion.tituloPublicacion}
-          </small>
+        <div>
+          <h6 style={{ margin: 0 }}>{conversacion.nombreOtraPersona}</h6>
+          <small style={{ color: "#666" }}>📍 {conversacion.tituloPublicacion}</small>
         </div>
       </div>
 
       {/* Mensajes */}
-      <div className="flex-grow-1 overflow-auto p-3">
+      <div style={{ flex: 1, overflowY: "auto", padding: "16px" }}>
         {cargando ? (
-          <div className="text-center py-5">
-            <div className="spinner-border text-success" role="status">
-              <span className="visually-hidden">Cargando...</span>
-            </div>
+          <div style={{ textAlign: "center", padding: "40px" }}>
+            <div style={{ fontSize: "24px" }}>⏳</div>
+            <p>Cargando...</p>
           </div>
         ) : mensajes.length === 0 ? (
-          <div className="text-center text-muted py-5">
+          <div style={{ textAlign: "center", color: "#999", padding: "40px" }}>
             <small>No hay mensajes aún. ¡Inicia la conversación! 👋</small>
           </div>
         ) : (
@@ -112,29 +138,29 @@ export const VentanaChat = ({
             {mensajes.map((msg) => (
               <div
                 key={msg.id}
-                className={`d-flex mb-2 ${msg.esPropio ? "justify-content-end" : ""}`}
+                style={{
+                  display: "flex",
+                  justifyContent: msg.esPropio ? "flex-end" : "flex-start",
+                  marginBottom: "8px",
+                }}
               >
                 <div
-                  className={`p-2 rounded ${
-                    msg.esPropio ? "bg-light-green" : "bg-white"
-                  }`}
                   style={{
                     maxWidth: "65%",
-                    wordWrap: "break-word",
-                    boxShadow: "0 1px 0.5px rgba(0,0,0,0.13)",
+                    padding: "8px 12px",
+                    borderRadius: "8px",
                     backgroundColor: msg.esPropio ? "#dcf8c6" : "white",
+                    boxShadow: "0 1px 2px rgba(0,0,0,0.1)",
                   }}
                 >
-                  <div style={{ fontSize: "14px" }}>{msg.contenido}</div>
-                  <div className="text-end">
-                    <small className="text-muted" style={{ fontSize: "11px" }}>
+                  <div style={{ fontSize: "14px", marginBottom: "4px" }}>{msg.contenido}</div>
+                  <div style={{ textAlign: "right" }}>
+                    <small style={{ fontSize: "11px", color: "#666" }}>
                       {formatearFecha(msg.fechaEnvio)}
                       {msg.esPropio && (
-                        <i
-                          className={`bi bi-check-all ms-1 ${
-                            msg.leido ? "text-info" : "text-muted"
-                          }`}
-                        ></i>
+                        <span style={{ marginLeft: "4px", color: msg.leido ? "#4caf50" : "#999" }}>
+                          ✓✓
+                        </span>
                       )}
                     </small>
                   </div>
@@ -147,30 +173,42 @@ export const VentanaChat = ({
       </div>
 
       {/* Input */}
-      <div className="p-2 bg-light border-top">
-        <div className="input-group">
+      <div style={{ padding: "12px", backgroundColor: "white", borderTop: "1px solid #e0e0e0" }}>
+        <div style={{ display: "flex", gap: "8px" }}>
           <input
             type="text"
-            className="form-control"
             placeholder="Escribe un mensaje"
             value={nuevoMensaje}
             onChange={(e) => setNuevoMensaje(e.target.value)}
             onKeyPress={handleKeyPress}
             disabled={enviando}
+            style={{
+              flex: 1,
+              padding: "10px 16px",
+              border: "1px solid #ddd",
+              borderRadius: "24px",
+              outline: "none",
+            }}
           />
           <button
-            className="btn btn-success"
             onClick={handleEnviar}
             disabled={enviando || !nuevoMensaje.trim()}
+            style={{
+              padding: "10px 20px",
+              backgroundColor: enviando || !nuevoMensaje.trim() ? "#ccc" : "#4caf50",
+              color: "white",
+              border: "none",
+              borderRadius: "24px",
+              cursor: enviando || !nuevoMensaje.trim() ? "not-allowed" : "pointer",
+              fontWeight: "bold",
+            }}
           >
-            {enviando ? (
-              <span className="spinner-border spinner-border-sm"></span>
-            ) : (
-              <i className="bi bi-send-fill"></i>
-            )}
+            {enviando ? "..." : "Enviar"}
           </button>
         </div>
       </div>
     </div>
   );
 };
+
+export default VentanaChat;
