@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { Reporte } from "../../modelos/Reporte";
 import apiModeracion from "../../api/endpoints/moderacion";
+import { Navegar } from "../../navigation/navigationService";
 
 interface Props {
   reporte: Reporte;
-  onChange?: () => void; 
+  onChange?: () => void;
 }
 
 export const AccionesModeracion: React.FC<Props> = ({ reporte, onChange }) => {
@@ -29,7 +30,6 @@ export const AccionesModeracion: React.FC<Props> = ({ reporte, onChange }) => {
     if (!confirm("¿Seguro que querés eliminar esta publicación?")) return;
 
     setLoading(true);
-
     try {
       await apiModeracion.eliminarPublicacion(reporte.idContenido!, motivo);
       await procesar("eliminado", motivo);
@@ -72,22 +72,32 @@ export const AccionesModeracion: React.FC<Props> = ({ reporte, onChange }) => {
           Acciones de moderación
         </h5>
 
-        <div className="d-flex gap-2">
+        <div className="d-flex gap-2 justify-content-between">
+
+          <div className="d-flex gap-2">
+            <button
+              className="btn btn-danger"
+              disabled={loading}
+              onClick={handleEliminar}
+            >
+              🗑️ Eliminar Publicacion
+            </button>
+
+            <button
+              className="btn btn-secondary"
+              disabled={loading}
+              onClick={handleIgnorar}
+            >
+              ✖️ Ignorar Reporte
+            </button>
+          </div>
 
           <button
-            className="btn btn-danger"
+            className="btn btn-outline-primary"
             disabled={loading}
-            onClick={handleEliminar}
+            onClick={() => Navegar.volverAtras()}
           >
-            🗑️ Eliminar Publicacion
-          </button>
-
-          <button
-            className="btn btn-secondary"
-            disabled={loading}
-            onClick={handleIgnorar}
-          >
-            ✖️ Ignorar Reporte
+            ← Volver
           </button>
 
         </div>

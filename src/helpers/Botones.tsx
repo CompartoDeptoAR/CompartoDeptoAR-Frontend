@@ -28,6 +28,7 @@ export function BotonDenunciaConId({
   return (
     <span
       className={`boton-denuncia-link ${className}`}
+      style={{ color: 'white' }}
       onClick={() => Navegar.denunciaConId(idContenido)}
     >
       {texto}

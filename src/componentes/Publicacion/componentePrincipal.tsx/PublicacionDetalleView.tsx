@@ -13,6 +13,7 @@ import { Navegar } from "../../../navigation/navigationService";
 import { MiniChat } from "../../Chat/MiniChat";
 import { BotonDenunciaConId } from "../../../helpers/Botones";
 import { MapaPublicacion } from "../componenteSecundario/View/MapaPublicacion";
+import { isLoggedIn } from "../../../helpers/funcion";
 
 interface PublicacionDetalleViewProps {
   publicacion: PublicacionResponce;
@@ -26,10 +27,28 @@ const PublicacionDetalleView: React.FC<PublicacionDetalleViewProps> = ({
   usuarioId,
 }) => {
   const [mostrarChat, setMostrarChat] = useState(false);
+  const [estaLogueado, setEstaLogueado] = useState(isLoggedIn());
 
   const habitos = publicacion.habitos || {};
   const preferencias = publicacion.preferencias || {};
   const [coords, setCoords] = useState<{ lat: number; lng: number } | null>(null);
+
+  useEffect(() => {
+    // Verificar estado de login
+    setEstaLogueado(isLoggedIn());
+
+    const verificarLogin = () => {
+      setEstaLogueado(isLoggedIn());
+    };
+
+    window.addEventListener('storage', verificarLogin);
+    const interval = setInterval(verificarLogin, 500);
+
+    return () => {
+      window.removeEventListener('storage', verificarLogin);
+      clearInterval(interval);
+    };
+  }, []);
 
   useEffect(() => {
     if (!publicacion.ubicacion) return;
@@ -40,19 +59,27 @@ const PublicacionDetalleView: React.FC<PublicacionDetalleViewProps> = ({
 
   }, [publicacion.ubicacion]);
 
-
   async function obtenerCoordenadas(direccion: string) {
-  const token = import.meta.env.VITE_MAPBOX_TOKEN;
-  const response = await fetch(
-    `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(direccion)}.json?access_token=${token}&limit=1`
-  );
-  const data = await response.json();
-  if (data.features && data.features.length > 0) {
-    const [lng, lat] = data.features[0].center;
-    return { lat, lng };
+    const token = import.meta.env.VITE_MAPBOX_TOKEN;
+    const response = await fetch(
+      `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(direccion)}.json?access_token=${token}&limit=1`
+    );
+    const data = await response.json();
+    if (data.features && data.features.length > 0) {
+      const [lng, lat] = data.features[0].center;
+      return { lat, lng };
+    }
+    return null;
   }
-  return null;
-}
+
+  // Handler para el botón de contactar
+  const handleContactar = () => {
+    if (!estaLogueado) {
+      Navegar.restrictedAccess();
+    } else {
+      setMostrarChat(true);
+    }
+  };
 
   return (
     <>
@@ -85,7 +112,7 @@ const PublicacionDetalleView: React.FC<PublicacionDetalleViewProps> = ({
           <div className="col-lg-4">
             <PrecioYContacto
               precio={publicacion.precio}
-              onContactar={() => setMostrarChat(true)}
+              onContactar={handleContactar}
             />
             <AnuncianteCard nombre={usuarioNombre} usuarioId={usuarioId} />
             <CalificacionUsuario usuarioId={usuarioId} nombre={usuarioNombre} />
@@ -98,18 +125,25 @@ const PublicacionDetalleView: React.FC<PublicacionDetalleViewProps> = ({
           Volver
         </button>
       </div>
-      <BotonDenunciaConId texto="Reportar usuario" idContenido={publicacion.id!} />
 
-      <MiniChat
-        visible={mostrarChat}
-        onClose={() => setMostrarChat(false)}
-        idPublicacion={publicacion.id || ""}
-        idDestinatario={publicacion.usuarioId || ""}
-        idUsuarioActual={usuarioId}
-        nombreDestinatario={usuarioNombre}
-      />
+      <div className="btn-skip-container" style={{ bottom: '20px', left: '20px', right: 'auto' }}>
+        <button className="btn-skip" style={{ backgroundColor: '#dc3545' }}>
+          <BotonDenunciaConId texto="⚠️ Reportar usuario" idContenido={publicacion.id!} />
+        </button>
+      </div>
+
+      {estaLogueado && (
+        <MiniChat
+          visible={mostrarChat}
+          onClose={() => setMostrarChat(false)}
+          idPublicacion={publicacion.id || ""}
+          idDestinatario={publicacion.usuarioId || ""}
+          idUsuarioActual={usuarioId}
+          nombreDestinatario={usuarioNombre}
+        />
+      )}
     </>
   );
 };
-//react-leaflet para el mapa
+
 export default PublicacionDetalleView;

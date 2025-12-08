@@ -1,5 +1,6 @@
 import type { NavigateFunction } from "react-router-dom";
 import { PUBLIC_ROUTES, USER_ROUTES, ADMIN_ROUTES, GENERAL, ROUTE } from "../routers/Routes";
+import RestrictedAccess from "../paginas/Auth/RestrictedAccess";
 
 
 let navigator: NavigateFunction;
@@ -46,4 +47,5 @@ export const Navegar = {
     volverAtras: () => go(-1 as any),
     configuracion: () => go(GENERAL.CONFIGURACION),
     notFound: () => go("*"),
+    restrictedAccess: () => go(GENERAL.RESTRICTED),
 };
