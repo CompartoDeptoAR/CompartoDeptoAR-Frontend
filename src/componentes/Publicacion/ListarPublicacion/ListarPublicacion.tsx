@@ -1,4 +1,6 @@
 import React from "react";
+import { Spinner, Button } from "react-bootstrap";
+import { ChevronDown } from "lucide-react";
 import "../../../styles/ListarPublicacion.css";
 import type { PublicacionResumida } from "../../../modelos/Publicacion";
 import { useListarPublicaciones } from "../../../hooks/componente/publicacion/useListarPublicaciones";
@@ -7,26 +9,32 @@ import CartaPublicacion from "../componenteSecundario/CartaPublicacion";
 interface ListarPublicacionesProps {
   publicaciones: PublicacionResumida[];
   loading?: boolean;
+  loadingMore?: boolean;
   error?: string;
   emptyMessage?: string;
   showActions?: boolean;
+  hasMore?: boolean;
   onEdit?: (id: string) => void;
   onDelete?: (id: string) => void;
   onEstado?: (id: string, nuevoEstado: "activa" | "pausada") => void;
   onToggleFavorite?: (id: string) => void;
+  onCargarMas?: () => void;
   favoriteIds?: string[];
 }
 
 const ListarPublicaciones: React.FC<ListarPublicacionesProps> = ({
   publicaciones = [],
   loading = false,
+  loadingMore = false,
   error,
   emptyMessage = "No hay publicaciones disponibles",
   showActions = false,
+  hasMore = false,
   onEdit,
   onDelete,
   onEstado,
   onToggleFavorite,
+  onCargarMas,
   favoriteIds = [],
 }) => {
 
@@ -55,7 +63,11 @@ const ListarPublicaciones: React.FC<ListarPublicacionesProps> = ({
   };
 
   if (loading) {
-    return <></>; 
+    return (
+      <div className="container mt-5 d-flex justify-content-center">
+        <Spinner animation="border" variant="primary" />
+      </div>
+    );
   }
 
   if (error) {
@@ -97,6 +109,41 @@ const ListarPublicaciones: React.FC<ListarPublicacionesProps> = ({
           </div>
         ))}
       </div>
+
+      {/* Controles de paginación */}
+      {(hasMore || loadingMore) && (
+        <div className="row mt-5 mb-4">
+          <div className="col-12 d-flex justify-content-center">
+            {loadingMore ? (
+              <div className="d-flex flex-column align-items-center">
+                <Spinner animation="border" variant="primary" />
+                <small className="text-muted mt-2">Cargando más publicaciones...</small>
+              </div>
+            ) : hasMore ? (
+              <Button
+                variant="outline-primary"
+                onClick={onCargarMas}
+                className="px-4 py-2 d-flex align-items-center gap-2"
+              >
+                <span>Cargar más publicaciones</span>
+                <ChevronDown size={18} />
+              </Button>
+            ) : null}
+          </div>
+        </div>
+      )}
+
+      {/* Mensaje cuando no hay más */}
+      {!hasMore && !loadingMore && publicaciones.length > 0 && (
+        <div className="row mt-4 mb-4">
+          <div className="col-12">
+            <div className="text-center text-muted">
+              <hr className="my-4" />
+              <p className="mb-0">Ya todas las publicaciones disponibles</p>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

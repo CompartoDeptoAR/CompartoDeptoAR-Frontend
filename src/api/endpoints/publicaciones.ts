@@ -3,7 +3,7 @@ import axiosApi from "../config/axios.config";
 
 interface ResultadoPaginado {
   publicaciones: PublicacionResumida[];
-  lastId?: string;
+  ultId?: string;
 }
 
 interface FiltrosBusqueda {

@@ -27,19 +27,22 @@ export const usePublicacionesPaginadas = () => {
       setError("");
 
       try {
+        
         const data = await apiPublicacion.publicacion.traerPaginadas(
           ITEMS_PER_PAGE,
           startAfterId
         );
 
+        const ultimoId = (data as any).ultId || data.ultId;
+
         setPublicaciones((prev) =>
           startAfterId ? [...prev, ...data.publicaciones] : data.publicaciones
         );
 
-        setLastId(data.lastId);
-        setHasMore(Boolean(data.lastId && data.publicaciones.length > 0));
+        setLastId(ultimoId);
+        setHasMore(Boolean(ultimoId && data.publicaciones.length > 0));
       } catch (err: any) {
-        console.error("Error al cargar publicaciones:", err);
+        console.error("❌ Error al cargar publicaciones:", err);
         setError(err.message || "Error al cargar publicaciones");
         showError("Error al cargar las publicaciones");
       } finally {

@@ -27,12 +27,10 @@ const TodasLasPublicaciones: React.FC = () => {
     return favoritos.map(pub => pub.id);
   }, [favoritos]);
 
-
   useEffect(() => {
     if (loading) showLoader();
     else hideLoader();
   }, [loading]);
-
 
   // cargar publicaciones al inicio
   useEffect(() => {
@@ -51,24 +49,15 @@ const TodasLasPublicaciones: React.FC = () => {
         <ListarPublicaciones
           publicaciones={publicaciones}
           loading={loading && total === 0}
+          loadingMore={loadingMore}
           error={error}
           emptyMessage="No hay publicaciones disponibles"
+          hasMore={hasMore}
+          onCargarMas={cargarMas}
           favoriteIds={favoritosIds}
           onToggleFavorite={toggleFavorito}
           showActions={false}
         />
-
-        {hasMore && total > 0 && (
-          <div className="text-center my-5">
-            <button
-              className="btn btn-outline-primary btn-lg px-5"
-              onClick={cargarMas}
-              disabled={loadingMore}
-            >
-              {loadingMore ? "Cargando..." : "Cargar más"}
-            </button>
-          </div>
-        )}
       </div>
 
       <ToastNotification
