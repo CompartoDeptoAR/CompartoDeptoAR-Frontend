@@ -1,19 +1,21 @@
 import React, { useState } from "react";
-import { useCalificaciones } from "../../hooks/componente/calificacion/useCalificaciones";
-import apiCalificacion from "../../api/endpoints/calificacion";
+import { CalificacionCrear, CrearCalificacionResponse } from "../../api/endpoints/calificacion";
+import { TokenService } from "../../services/auth/tokenService";
+
 
 interface CalificacionFormProps {
   idCalificado: string;
   nombreCalificado: string;
-  onClose: () => void; // para cerrar el form si el padre quiere
+  onClose: () => void; 
+  onCreate: (data: CalificacionCrear) => Promise<CrearCalificacionResponse>;
 }
 
 export const CalificacionForm: React.FC<CalificacionFormProps> = ({
   idCalificado,
   nombreCalificado,
   onClose,
+  onCreate,
 }) => {
-  const { fetchPorUsuario } = useCalificaciones();
   
   const [puntuacion, setPuntuacion] = useState(0);
   const [comentario, setComentario] = useState("");
@@ -21,33 +23,31 @@ export const CalificacionForm: React.FC<CalificacionFormProps> = ({
   const [errorMsg, setErrorMsg] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setErrorMsg("");
+  e.preventDefault();
+  setErrorMsg("");
 
-    if (puntuacion === 0) {
-      setErrorMsg("Debes seleccionar una puntuación.");
-      return;
-    }
+  if (puntuacion === 0) {
+    setErrorMsg("Debes seleccionar una puntuación.");
+    return;
+  }
 
-    setLoading(true);
-    try {
-      await apiCalificacion.calificacion.crear({
-        idCalificado,
-        puntuacion,
-        comentario,
-        nombreCalificador: "Usuario", // acá podés pasar el nombre real si lo tenés
-      });
+  setLoading(true);
+  try {
+    await onCreate({
+      idCalificado,
+      puntuacion,
+      comentario,
+      nombreCalificador: TokenService.getUserEmail()!,
+    });
 
-      // refresca calificaciones del usuario
-      await fetchPorUsuario(idCalificado);
+    onClose();
+  } catch (error: any) {
+    setErrorMsg(error.message);
+  } finally {
+    setLoading(false);
+  }
+};
 
-      onClose();
-    } catch (error: any) {
-      setErrorMsg(error.message);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   return (
     <form onSubmit={handleSubmit} className="mt-3 p-3 border rounded bg-white">

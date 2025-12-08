@@ -21,41 +21,31 @@ class ChatService {
   private usuariosCollection = "usuarios";
 
   // ==================== ENVIAR MENSAJE ====================
+  async enviarMensaje(
+    contenido: string,
+    idRemitente: string,
+    idDestinatario: string,
+    idPublicacion: string
+  ): Promise<string> {
+    const participantes = [idRemitente, idDestinatario].sort();
 
-async enviarMensaje(
-  contenido: string,
-  idRemitente: string,
-  idDestinatario: string,
-  idPublicacion: string
-): Promise<string> {
-  // 🔴 VERIFICA QUE NO SEAN EL MISMO USUARIO
-  if (idRemitente === idDestinatario) {
-    console.error("❌ ERROR: El remitente y destinatario son el mismo usuario!");
-    throw new Error("No puedes enviarte mensajes a ti mismo");
+    const nuevoMensaje: Omit<Mensaje, "id"> = {
+      contenido: contenido.trim(),
+      idRemitente,
+      idDestinatario,
+      idPublicacion,
+      fechaEnvio: Timestamp.now(),
+      leido: false,
+      participantes,
+    };
+
+
+    const docRef = await addDoc(
+      collection(db, this.mensajesCollection),
+      nuevoMensaje
+    );
+    return docRef.id;
   }
-
-  const nuevoMensaje: Omit<Mensaje, "id"> = {
-    contenido: contenido.trim(),
-    idRemitente,
-    idDestinatario,
-    idPublicacion,
-    fechaEnvio: Timestamp.now(),
-    leido: false,
-    participantes: [idRemitente, idDestinatario],
-  };
-
-  console.log("📤 Enviando mensaje:", {
-    de: idRemitente,
-    para: idDestinatario,
-    pub: idPublicacion,
-  });
-
-  const docRef = await addDoc(
-    collection(db, this.mensajesCollection),
-    nuevoMensaje
-  );
-  return docRef.id;
-}
 
   // ==================== ESCUCHAR MENSAJES EN TIEMPO REAL ====================
   escucharMensajes(
@@ -282,37 +272,71 @@ async enviarMensaje(
     id: string
   ): Promise<{ titulo: string } | null> {
     try {
+      console.log("🔍 Buscando publicación con ID:", id);
+      
+      // Las publicaciones probablemente SÍ usan el ID del documento
       const docRef = doc(db, this.publicacionesCollection, id);
       const docSnap = await getDoc(docRef);
+      
       if (docSnap.exists()) {
-        return { titulo: docSnap.data().titulo };
+        const data = docSnap.data();
+        console.log("✅ Publicación encontrada:", data.titulo);
+        return { titulo: data.titulo };
       }
+      
+      console.warn("⚠️ Publicación NO encontrada con ID:", id);
       return null;
     } catch (error) {
-      console.error("Error obteniendo publicación:", error);
+      console.error("❌ Error obteniendo publicación:", error);
       return null;
     }
   }
 
+
   private async obtenerUsuario(
-    id: string
+    firebaseUid: string
   ): Promise<{ nombre: string; fotoPerfil?: string } | null> {
     try {
-      const docRef = doc(db, this.usuariosCollection, id);
-      const docSnap = await getDoc(docRef);
-      if (docSnap.exists()) {
-        const data = docSnap.data();
-        return {
-          nombre: data.perfil?.nombreCompleto || data.nombre || "Usuario",
-          fotoPerfil: data.perfil?.fotoPerfil,
-        };
+      console.log("🔍 Buscando usuario con UID:", firebaseUid);
+
+      const q = query(
+        collection(db, this.usuariosCollection),
+        where("firebaseUid", "==", firebaseUid)
+      );
+
+      const querySnap = await getDocs(q);
+
+      if (querySnap.empty) {
+        console.warn("⚠️ No se encontró usuario con firebaseUid:", firebaseUid);
+        return null;
       }
-      return null;
+
+      const doc = querySnap.docs[0];
+      const data = doc.data();
+
+      console.log("📄 DOCUMENTO COMPLETO DEL USUARIO:", JSON.stringify(data, null, 2));
+      console.log("📝 Campos disponibles:", Object.keys(data));
+
+      const nombre =
+        data.perfil?.nombreCompleto ||
+        data.nombre ||
+        data.displayName ||
+        data.email?.split('@')[0] ||
+        "Usuario";
+
+      console.log("✅ Nombre extraído:", nombre);
+
+      return {
+        nombre,
+        fotoPerfil: data.perfil?.fotoPerfil || data.photoURL,
+      };
+
     } catch (error) {
-      console.error("Error obteniendo usuario:", error);
+      console.error("❌ Error obteniendo usuario:", error);
       return null;
     }
   }
+
 }
 
 export default new ChatService();

@@ -56,7 +56,7 @@ export const useMiniChat = ({
         mensaje,
         idUsuarioActual,
         idDestinatario,
-        idPublicacion
+        idPublicacion,
       );
       setMensaje("");
     } catch (err: any) {

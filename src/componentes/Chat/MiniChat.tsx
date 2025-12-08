@@ -27,7 +27,6 @@ export const MiniChat = ({
     visible,
   });
 
-  // Auto-scroll
   useEffect(() => {
     mensajesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [mensajes]);
@@ -43,7 +42,6 @@ export const MiniChat = ({
 
   return (
     <div className="mini-chat">
-      {/* Header */}
       <div className="mini-chat-header">
         <div className="d-flex align-items-center">
           <div
@@ -57,7 +55,7 @@ export const MiniChat = ({
         <button onClick={onClose} className="btn-close btn-close-white btn-sm"></button>
       </div>
 
-      {/* Mensajes */}
+
       <div className="mini-chat-mensajes">
         {mensajes.length === 0 ? (
           <div className="text-center text-muted py-5">
@@ -84,14 +82,13 @@ export const MiniChat = ({
         )}
       </div>
 
-      {/* Error */}
       {error && (
         <div className="alert alert-danger alert-sm mx-2 mb-2 py-1">
           <small>{error}</small>
         </div>
       )}
 
-      {/* Input */}
+
       <div className="mini-chat-input">
         <input
           type="text"

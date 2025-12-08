@@ -11,7 +11,7 @@ export const CalificacionUsuario: React.FC<CalificacionUsuarioProps> = ({
   usuarioId,
   nombre,
 }) => {
-  const { promedio, calificaciones, fetchPorUsuario, loading } = useCalificaciones();
+  const { promedio, calificaciones, fetchPorUsuario, loading, crearCalificacion } = useCalificaciones();
 
   const [mostrarForm, setMostrarForm] = useState(false);
 
@@ -42,11 +42,12 @@ export const CalificacionUsuario: React.FC<CalificacionUsuarioProps> = ({
         </button>
 
         {mostrarForm && (
-            <CalificacionForm
-              idCalificado={usuarioId}
-              nombreCalificado={nombre}
-              onClose={() => setMostrarForm(false)}
-            />
+          <CalificacionForm
+            idCalificado={usuarioId}
+            nombreCalificado={nombre}
+            onClose={() => setMostrarForm(false)}
+            onCreate={crearCalificacion}
+          />
         )}
 
         <hr />

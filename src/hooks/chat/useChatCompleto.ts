@@ -9,19 +9,14 @@ export const useChatCompleto = (idUsuarioActual: string) => {
   const [cargando, setCargando] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
-  // Referencias para evitar llamadas duplicadas
   const unsubscribeConversacionesRef = useRef<(() => void) | null>(null);
   const unsubscribeMensajesRef = useRef<(() => void) | null>(null);
 
-  // ==================== ESCUCHAR CONVERSACIONES ====================
   useEffect(() => {
     if (!idUsuarioActual) {
       setLoading(false);
       return;
     }
-
-    console.log("🎯 Iniciando escucha de conversaciones para:", idUsuarioActual);
     setLoading(true);
     setError(null);
 
@@ -161,21 +156,11 @@ export const useChatCompleto = (idUsuarioActual: string) => {
     [conversacionActiva, conversaciones, idUsuarioActual]
   );
 
-  // Obtener conversación seleccionada
+
   const conversacionSeleccionada = conversaciones.find(
     (c) => c.idPublicacion === conversacionActiva
   );
 
-  // Log del estado actual
-  console.log("📊 Estado del hook:", {
-    totalConversaciones: conversaciones.length,
-    conversacionActiva,
-    conversacionSeleccionada: !!conversacionSeleccionada,
-    totalMensajes: mensajes.length,
-    cargando,
-    loading,
-    error,
-  });
 
   return {
     conversaciones,

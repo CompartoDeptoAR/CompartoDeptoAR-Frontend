@@ -29,7 +29,7 @@ const apiCalificacion = {
     crear: async ( data: CalificacionCrear ): Promise<CrearCalificacionResponse> => {
       try {
         const res = await axiosApi.post<CrearCalificacionResponse>(
-          import.meta.env.VITE_URL_CALIFICACIONES,
+          import.meta.env.VITE_URL_CALIFICACION,
           data
         );
         if (res.status === 201) {

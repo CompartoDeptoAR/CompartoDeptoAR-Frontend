@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import apiCalificacion, { CalificacionCrear, CrearCalificacionResponse } from "../../../api/endpoints/calificacion";
+import apiCalificacion, { CalificacionCrear } from "../../../api/endpoints/calificacion";
 import { Calificacion } from "../../../modelos/Calificacion";
 
 
@@ -35,25 +35,32 @@ export const useCalificaciones = () => {
     }
   }, []);
 
-  const crearCalificacion = useCallback(
-    async (data: CalificacionCrear) => {
-      setLoading(true);
-      setError(null);
-      try {
-        const res = await apiCalificacion.calificacion.crear(data);
-        if (res && typeof res.promedio === "number") {
-          setPromedio(res.promedio);
-        }
-        return res;
-      } catch (err: any) {
-        setError(err.message ?? "Error inesperado");
-        throw err;
-      } finally {
-        setLoading(false);
+ const crearCalificacion = useCallback(
+  async (data: CalificacionCrear) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await apiCalificacion.calificacion.crear(data);
+
+      // Actualizo promedio
+      if (res && typeof res.promedio === "number") {
+        setPromedio(res.promedio);
       }
-    },
-    []
-  );
+
+      // refresco calificaciones (usa el idCalificado)
+      await fetchPorUsuario(data.idCalificado);
+
+      return res;
+    } catch (err: any) {
+      setError(err.message ?? "Error inesperado");
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  },
+  [fetchPorUsuario]
+);
+
 
   return {
     promedio,

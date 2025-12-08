@@ -1,7 +1,5 @@
 import { useState, useEffect } from "react";
 import { useChatCompleto } from "../../hooks/chat/useChatCompleto";
-
-
 import { useLoading } from "../../contexts/LoadingContext";
 import ListaConversaciones from "../../componentes/Chat/ListaConversaciones";
 import VentanaChat from "../../componentes/Chat/VentanaChat";
@@ -27,7 +25,7 @@ export const ChatCompleto = ({ idUsuario, onBack }: ChatCompletoProps) => {
   
 
   const [esMobile, setEsMobile] = useState(window.innerWidth < 768);
-    const { showLoader, hideLoader } = useLoading();
+  const { showLoader, hideLoader } = useLoading();
   
   useEffect(() => {
     if ( loading) showLoader();
@@ -50,7 +48,6 @@ export const ChatCompleto = ({ idUsuario, onBack }: ChatCompletoProps) => {
             <i className="bi bi-arrow-left fs-5"></i>
           </button>
         )}
-        <i className="bi bi-whatsapp fs-4 me-2"></i>
         <h5 className="m-0">Mensajes</h5>
       </div>
 
