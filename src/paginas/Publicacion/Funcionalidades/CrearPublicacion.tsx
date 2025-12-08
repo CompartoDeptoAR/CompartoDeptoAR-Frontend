@@ -8,6 +8,7 @@ import { useNavigationActions } from "../../../hooks/sistema/useNavigationAction
 const CrearPublicacion = () => {
   const {
     formData,
+    resetForm,
     handleChange,
     handleProvinciaChange,
     handleLocalidadChange,
@@ -16,7 +17,7 @@ const CrearPublicacion = () => {
     handleHabitosChange,
   } = usePublicacionForm();
 
-  const { handleSubmit, loading } = usePublicacionSubmit(formData);
+  const { handleSubmit, loading } = usePublicacionSubmit(formData, resetForm);
   const { handleCancel } = useNavigationActions();
   const { toast, hideToast } = useToast();
 

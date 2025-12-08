@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { Conversacion, MensajeUI } from "../../services/chat/ types";
+import { Conversacion, MensajeUI } from "../../services/chat/types";
 
 interface VentanaChatProps {
   mensajes: MensajeUI[];
@@ -20,7 +20,7 @@ export const VentanaChat = ({
   const [enviando, setEnviando] = useState(false);
   const mensajesEndRef = useRef<HTMLDivElement>(null);
 
-  // Auto-scroll
+
   useEffect(() => {
     mensajesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [mensajes]);

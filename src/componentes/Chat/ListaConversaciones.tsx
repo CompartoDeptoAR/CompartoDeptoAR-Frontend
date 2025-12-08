@@ -1,4 +1,4 @@
-import { Conversacion } from "../../services/chat/ types";
+import { Conversacion } from "../../services/chat/types";
 
 
 interface ListaConversacionesProps {
@@ -48,7 +48,7 @@ export const ListaConversaciones = ({
           style={{ cursor: "pointer" }}
         >
           <div className="d-flex align-items-start">
-            {/* Avatar */}
+
             <div
               className={`rounded-circle d-flex align-items-center justify-content-center me-3 ${
                 conversacionActiva === conv.idPublicacion

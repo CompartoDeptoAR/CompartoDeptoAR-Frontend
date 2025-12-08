@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import chatService from "../../services/chat/chatService";
-import { Conversacion, MensajeUI } from "../../services/chat/ types";
+import { Conversacion, MensajeUI } from "../../services/chat/types";
 
 
 export const useChatCompleto = (idUsuarioActual: string) => {
