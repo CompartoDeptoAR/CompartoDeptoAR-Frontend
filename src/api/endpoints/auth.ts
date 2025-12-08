@@ -109,15 +109,18 @@ const apiAuth = {
       }
     },
 
-    logout: (mostrarMensaje = false) => {
-      TokenService.clearAuthData();
-      limpiarSesionFirebase();
-      if (mostrarMensaje) {
-        window.alert(
-          "Tu sesión ha expirado. Por favor, inicia sesión nuevamente."
-        );
-      }
-    },
+   logout: (mostrarMensaje = false) => {
+    TokenService.clearAuthData();
+    limpiarSesionFirebase();
+    window.dispatchEvent(new Event("authChange"));
+
+    if (mostrarMensaje) {
+      window.alert(
+        "Tu sesión ha expirado. Por favor, inicia sesión nuevamente."
+      );
+    }
+  },
+
   },
 
 };

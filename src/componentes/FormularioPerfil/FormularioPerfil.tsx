@@ -7,7 +7,7 @@ import CampoSelect from "./helpers/CampoSelect";
 import CampoTextArea from "./helpers/CampoTextArea";
 import BotonesFormulario from "./helpers/BotonesFormulario";
 import SeccionCheckboxes from "./helpers/SeccionCheckboxes";
-import GestorFotos from "../Publicacion/componenteSecundario/Formulario/GestorFotos";
+import { Navegar } from "../../navigation/navigationService";
 
 
 interface FormularioPerfilProps {
@@ -23,10 +23,14 @@ interface SubirFotoResponse {
 
 const FormularioPerfil: React.FC<FormularioPerfilProps> = ({ perfil, modo, onSubmit }) => {
   const [formData, setFormData] = useState<UsuarioPerfil>(perfil);
+  const [preview, setPreview] = useState<string>(perfil.fotoPerfil || "");
   const [subiendo, setSubiendo] = useState(false);
 
   useEffect(() => {
-    if (perfil) setFormData(perfil);
+    if (perfil) {
+      setFormData(perfil);
+      setPreview(perfil.fotoPerfil || "");
+    }
   }, [perfil]);
 
   const handleChange = (
@@ -37,6 +41,24 @@ const FormularioPerfil: React.FC<FormularioPerfilProps> = ({ perfil, modo, onSub
       ...prev,
       [name]: name === "edad" ? parseInt(value) : value,
     }));
+  };
+
+  const handleFotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setSubiendo(true);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const result = reader.result as string;
+        setPreview(result);
+        setFormData(prev => ({
+          ...prev,
+          fotoPerfil: result,
+        }));
+        setSubiendo(false);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const toggleHabito = (key: keyof HabitosUsuario) => {
@@ -68,12 +90,28 @@ const FormularioPerfil: React.FC<FormularioPerfilProps> = ({ perfil, modo, onSub
 
         {/* FOTO DE PERFIL */}
         <div className="perfil-foto-area">
-          <img
-            src={formData.fotoPerfil || "/default-user.jpg"}
-            alt="foto usuario"
-            className="perfil-foto"
-          />
+          <div className="perfil-foto-wrapper">
+            <img
+              src={preview || "/default-user.jpg"}
+              alt="foto usuario"
+              className="perfil-foto"
+            />
+            {subiendo && <div className="subiendo-spinner"></div>}
+          </div>
 
+          {!esSoloVista && modo === "editar" && (
+            <label htmlFor="fotoPerfil" className="btn-cambiar-foto">
+              📷 Cambiar foto
+            </label>
+          )}
+          <input
+            type="file"
+            id="fotoPerfil"
+            className="input-foto-hidden"
+            accept="image/*"
+            onChange={handleFotoChange}
+            disabled={subiendo}
+          />
           {subiendo && <div className="subiendo-texto">Subiendo foto...</div>}
         </div>
 
@@ -87,27 +125,32 @@ const FormularioPerfil: React.FC<FormularioPerfilProps> = ({ perfil, modo, onSub
             required
           />
 
-          <CampoTexto
-            label="Edad"
-            name="edad"
-            value={formData.edad}
-            type="number"
-            esSoloVista={esSoloVista}
-            onChange={handleChange}
-            required
-            min={18}
-            max={100}
-          />
-
-          <CampoSelect
-            label="Género"
-            name="genero"
-            value={formData.genero}
-            opciones={opcionesGenero}
-            esSoloVista={esSoloVista}
-            onChange={handleChange}
-            required
-          />
+          <div className="campos-fila">
+            <div className="campo-grupo">
+              <CampoTexto
+                label="Edad"
+                name="edad"
+                value={formData.edad}
+                type="number"
+                esSoloVista={esSoloVista}
+                onChange={handleChange}
+                required
+                min={18}
+                max={100}
+              />
+            </div>
+            <div className="campo-grupo">
+              <CampoSelect
+                label="Género"
+                name="genero"
+                value={formData.genero}
+                opciones={opcionesGenero}
+                esSoloVista={esSoloVista}
+                onChange={handleChange}
+                required
+              />
+            </div>
+          </div>
 
           <CampoTextArea
             label="Descripción"
@@ -136,22 +179,17 @@ const FormularioPerfil: React.FC<FormularioPerfilProps> = ({ perfil, modo, onSub
             textoVacio="Sin preferencias especificadas"
           />
 
-          {/* SOLO MOSTRAR EL GESTOR DE FOTOS EN EDITAR */}
-          {modo === "editar" && (
-            <GestorFotos
-              fotos={formData.fotoPerfil ? [formData.fotoPerfil] : []}
-              onFotosChange={(nuevasFotos) =>
-                setFormData(prev => ({
-                  ...prev,
-                  fotoPerfil: nuevasFotos[0] || "",
-                }))
-              }
-              disabled={false}
-              titulo="Foto de perfil"
-            />
-          )}
-
           <BotonesFormulario modo={modo} />
+
+          {modo === "view" && (
+            <button 
+              type="button"
+              className="btn-volver-atras-perfil"
+              onClick={() => Navegar.home()}
+            >
+              Volver
+            </button>
+          )}
         </form>
       </div>
     </div>

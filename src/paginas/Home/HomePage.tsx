@@ -6,19 +6,32 @@ import { isLoggedIn } from "../../helpers/funcion";
 
 const HomePage = () => {
     const [estaIn, setIn] = useState(isLoggedIn());
+
     useEffect(() => {
-        setIn(isLoggedIn());
+        const actualizarEstado = () => setIn(isLoggedIn());
+
+        // 🔥 Escuchamos nuestro evento personalizado
+        window.addEventListener("authChange", actualizarEstado);
+
+        return () => {
+            window.removeEventListener("authChange", actualizarEstado);
+        };
     }, []);
 
     return (
         <div className="home-fondo">
             <div className="text-center">
                 <h1 className="titulo-home mb-4">Bienvenido a CompartoDeptoAr</h1>
+
                 {estaIn && (
-                    <button className="btn btn-primary mb-3" onClick={() => Navegar.crearPublicacion()}>
+                    <button
+                        className="btn btn-primary mb-3"
+                        onClick={() => Navegar.crearPublicacion()}
+                    >
                         Nueva Publicación
                     </button>
                 )}
+
                 <TodasLasPublicaciones />
             </div>
         </div>
