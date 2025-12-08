@@ -94,7 +94,7 @@ const PublicacionDetalleView: React.FC<PublicacionDetalleViewProps> = ({
       </div>
 
       <div className="btn-skip-container">
-        <button className="btn-skip" onClick={() => Navegar.home()}>
+        <button className="btn-skip" onClick={() => Navegar.volverAtras()}>
           Volver
         </button>
       </div>
