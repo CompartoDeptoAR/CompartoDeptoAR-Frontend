@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { MiniReporte } from "../../modelos/Reporte";
 import ReporteItem from "./ReporteItem";
 
+
 interface ReporteListProps{
     reportes:MiniReporte[],
     onVer:(id:string)=>void;

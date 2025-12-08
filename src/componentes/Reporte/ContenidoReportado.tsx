@@ -43,7 +43,7 @@ export const ContenidoReportado: React.FC<Props> = ({ reporte }) => {
         {tipo === "publicacion" && (
           <Button
             onClick={()=>Navegar.verPublicacion(idContenido)}
-            className="btn btn-sm btn-outline-primary"
+            className="btn btn-sm "
           >
             Ver publicación
           </Button>

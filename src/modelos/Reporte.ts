@@ -14,17 +14,11 @@ export interface Reporte {
   motivoEliminacion?: string | null;  
 }
 
-export interface ListaReportesRes {
-  reportes: Reporte[];
-  total: number;
-  page: number;
-  pageSize: number;
-}
-
 
 export interface MiniReporte{
   descripcion: string;
   id: string;
+  idContenido: string;
   tipo: "publicacion" | "mensaje";
   motivo:string;
   fechaReporte: Timestamp;

@@ -7,7 +7,7 @@ const urlApi = import.meta.env.VITE_URL_MODERACION;
 interface RevisarReporte{
   idReporte: string,
   accion: "dejado" | "eliminado",
-  motivo?: string
+  motivo: string
 }
 interface RespuestaRevisarReporte {
   mensaje: string;
@@ -47,15 +47,11 @@ const apiModeracion = {
     }
   },
 
-  eliminarPublicacion: async (
-    idPublicacion: string,
-    motivo?: string
-  ): Promise<any> => {
+  eliminarPublicacion: async (idPublicacion: string, motivo: string): Promise<any> => {
     try {
-      const usuarioId = TokenService.getUserId();
-      if (!usuarioId) throw new Error("Usuario no autenticado");
-
-      const res = await axiosApi.delete(`${urlApi}/${idPublicacion}`);
+      const res = await axiosApi.delete(`${urlApi}/${idPublicacion}`, {
+        data: { motivo }
+      } as any);
 
       return res.data;
     } catch (error: any) {
@@ -63,6 +59,7 @@ const apiModeracion = {
       throw error;
     }
   },
+
 
   eliminarMensaje: async (
     idMensaje: string,

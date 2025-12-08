@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Container, Form, Button, Alert, Card } from "react-bootstrap";
-import { useParams } from "react-router-dom";
+
 
 interface FormularioDenunciaProps {
     email: string;
@@ -160,7 +160,6 @@ const FormularioDenuncia: React.FC<FormularioDenunciaProps> = ({
               </Form.Select>
             </Form.Group>
 
-            {/* Descripción */}
             <Form.Group className="mb-4">
               <Form.Label>
                 Descripción detallada <span className="text-danger">*</span>
@@ -199,7 +198,7 @@ const FormularioDenuncia: React.FC<FormularioDenunciaProps> = ({
         </Card.Body>
       </Card>
 
-      {/* Información adicional */}
+
       <Alert variant="light" className="mt-4">
         <h6 className="fw-bold">📌 Información importante</h6>
         <ul className="mb-0">

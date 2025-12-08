@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-
 import { Reporte } from "../../modelos/Reporte";
 import apiModeracion from "../../api/endpoints/moderacion";
 
@@ -11,33 +10,58 @@ interface Props {
 export const AccionesModeracion: React.FC<Props> = ({ reporte, onChange }) => {
   const [loading, setLoading] = useState(false);
 
-  const procesar = async (accion: "eliminado" | "dejado", motivo?: string) => {
+  const procesar = async (accion: "eliminado" | "dejado", motivo: string) => {
+    await apiModeracion.revisarReporte({
+      idReporte: reporte.id!,
+      accion,
+      motivo,
+    });
+  };
+
+  const handleEliminar = async () => {
+    const motivo = prompt("Motivo de eliminación (obligatorio):");
+
+    if (!motivo || motivo.trim() === "") {
+      alert("El motivo es obligatorio");
+      return;
+    }
+
+    if (!confirm("¿Seguro que querés eliminar esta publicación?")) return;
+
     setLoading(true);
+
     try {
-      await apiModeracion.revisarReporte({
-        idReporte: reporte.id!,
-        accion,
-        motivo,
-      });
+      await apiModeracion.eliminarPublicacion(reporte.idContenido!, motivo);
+      await procesar("eliminado", motivo);
 
-      alert(`Reporte marcado como ${accion}`);
+      alert("Publicación eliminada");
+      onChange?.();
 
-      onChange?.(); 
     } catch (error) {
-      alert("Error procesando acción");
       console.error(error);
+      alert("Error eliminando publicación");
+
     } finally {
       setLoading(false);
     }
   };
 
-  const handleEliminar = () => {
-    const motivo = prompt("Motivo de eliminación (opcional):") || undefined;
-    procesar("eliminado", motivo);
-  };
+  const handleIgnorar = async () => {
+    if (!confirm("¿Ignorar este reporte?")) return;
 
-  const handleIgnorar = () => {
-    procesar("dejado");
+    setLoading(true);
+
+    try {
+      await procesar("dejado", "Ignorado por moderador");
+      alert("Reporte ignorado");
+      onChange?.();
+
+    } catch (error) {
+      console.error(error);
+      alert("Error ignorando reporte");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -55,7 +79,7 @@ export const AccionesModeracion: React.FC<Props> = ({ reporte, onChange }) => {
             disabled={loading}
             onClick={handleEliminar}
           >
-            🗑️ Eliminar contenido
+            🗑️ Eliminar Publicacion
           </button>
 
           <button
@@ -63,7 +87,7 @@ export const AccionesModeracion: React.FC<Props> = ({ reporte, onChange }) => {
             disabled={loading}
             onClick={handleIgnorar}
           >
-            ✖️ Ignorar
+            ✖️ Ignorar Reporte
           </button>
 
         </div>

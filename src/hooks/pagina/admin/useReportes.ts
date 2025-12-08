@@ -1,24 +1,23 @@
-
 import { useState, useEffect, useCallback } from "react";
 import { MiniReporte } from "../../../modelos/Reporte";
 import apiModeracion from "../../../api/endpoints/moderacion";
 import { Navegar } from "../../../navigation/navigationService";
 
-
 export const useReportes = () => {
   const [reportes, setReportes] = useState<MiniReporte[]>([]);
   const [cargando, setCargando] = useState(true);
-  const [error, setError] = useState<string>("");
-
+  const [error, setError] = useState("");
 
   const cargarReportes = useCallback(async () => {
     try {
       setCargando(true);
       setError("");
+
       const data = await apiModeracion.listarReportes();
       setReportes(data);
+
     } catch (err: any) {
-      console.error("Error cargando reportes:", err);
+      console.error(err);
       setError(err.message || "Error al cargar los reportes");
     } finally {
       setCargando(false);
@@ -29,106 +28,94 @@ export const useReportes = () => {
     cargarReportes();
   }, [cargarReportes]);
 
-
   const handleVer = useCallback((id: string) => {
-
     const reporte = reportes.find(r => r.id === id);
-    if (reporte) {
-      console.log("Ver reporte:", reporte);
-      Navegar.verReporte(reporte.id);
-    }
-  }, []);
+    if (!reporte) return;
 
-  // Eliminar contenido reportado
+    Navegar.verReporte(reporte.id!);
+  }, [reportes]);
+
   const handleEliminar = useCallback(async (id: string) => {
     const reporte = reportes.find(r => r.id === id);
     if (!reporte) return;
 
-    const confirmado = window.confirm(
-      `¿Estás seguro de eliminar este contenido?\n\nTipo: ${reporte.tipo}\nMotivo: ${reporte.motivo}`
-    );
+    if (!window.confirm(`¿Eliminar este contenido?\n\nTipo: ${reporte.tipo}\nMotivo: ${reporte.motivo}?`))
+      return;
 
-    if (!confirmado) return;
+    const motivo = window.prompt("Motivo de la eliminación (obligatorio):");
 
-    const motivo = window.prompt("Motivo de la eliminación (opcional):");
+    if (!motivo || motivo.trim() === "") {
+      alert("El motivo es obligatorio para eliminar");
+      return;
+    }
 
     try {
       setCargando(true);
       setError("");
 
-      // Primero eliminar el contenido según el tipo
       if (reporte.tipo === "publicacion") {
-        await apiModeracion.eliminarPublicacion(id, motivo || undefined);
-      } else if (reporte.tipo === "mensaje") {
-        await apiModeracion.eliminarMensaje(id, motivo || undefined);
+        await apiModeracion.eliminarPublicacion(reporte.idContenido, motivo);
+      } else {
+        await apiModeracion.eliminarMensaje(reporte.idContenido, motivo);
       }
 
-      // Luego marcar el reporte como revisado con acción "eliminado"
       await apiModeracion.revisarReporte({
         idReporte: id,
         accion: "eliminado",
-        motivo: motivo || undefined
+        motivo
       });
 
-      // Actualizar la lista local
-      setReportes(prevReportes => 
-        prevReportes.map(r => 
+      setReportes(prev =>
+        prev.map(r =>
           r.id === id ? { ...r, revisado: true } : r
         )
       );
 
       alert("Contenido eliminado exitosamente");
+
     } catch (err: any) {
-      console.error("Error eliminando contenido:", err);
-      setError(err.message || "Error al eliminar el contenido");
-      alert(`Error: ${err.message || "No se pudo eliminar el contenido"}`);
+      console.error(err);
+      setError(err.message || "Error al eliminar");
+      alert("Error eliminando");
     } finally {
       setCargando(false);
     }
+
   }, [reportes]);
 
-  // Ignorar reporte
   const handleIgnorar = useCallback(async (id: string) => {
-    const reporte = reportes.find(r => r.id === id);
-    if (!reporte) return;
-
-    const confirmado = window.confirm(
-      `¿Marcar este reporte como ignorado?\n\nTipo: ${reporte.tipo}\nMotivo: ${reporte.motivo}`
-    );
-
+    const confirmado = window.confirm("¿Marcar este reporte como ignorado?");
     if (!confirmado) return;
 
     try {
       setCargando(true);
       setError("");
 
-      // Marcar como revisado con acción "dejado"
       await apiModeracion.revisarReporte({
         idReporte: id,
-        accion: "dejado"
+        accion: "dejado",
+        motivo: "Ignorado por moderador" 
       });
 
-      // Actualizar la lista local
-      setReportes(prevReportes => 
-        prevReportes.map(r => 
+      setReportes(prev =>
+        prev.map(r =>
           r.id === id ? { ...r, revisado: true } : r
         )
       );
 
-      alert("Reporte marcado como ignorado");
+      alert("Reporte ignorado");
+
     } catch (err: any) {
-      console.error("Error ignorando reporte:", err);
-      setError(err.message || "Error al ignorar el reporte");
-      alert(`Error: ${err.message || "No se pudo ignorar el reporte"}`);
+      console.error(err);
+      setError(err.message || "Error al ignorar");
+      alert("Error ignorando");
     } finally {
       setCargando(false);
     }
+
   }, [reportes]);
 
-  // Refrescar reportes
-  const refrescar = useCallback(() => {
-    cargarReportes();
-  }, [cargarReportes]);
+  const refrescar = useCallback(cargarReportes, [cargarReportes]);
 
   return {
     reportes,

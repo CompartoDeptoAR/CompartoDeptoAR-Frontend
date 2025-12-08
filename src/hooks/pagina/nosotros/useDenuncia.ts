@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
-import { Timestamp } from "firebase/firestore";
+
 import apiDenuncia from "../../../api/endpoints/denuncia";
 import { TokenService } from "../../../services/auth/tokenService";
 import { Reporte } from "../../../modelos/Reporte";
+import { Timestamp } from "firebase/firestore";
 
 interface DatosDenuncia {
   tipo: "publicacion" | "mensaje";

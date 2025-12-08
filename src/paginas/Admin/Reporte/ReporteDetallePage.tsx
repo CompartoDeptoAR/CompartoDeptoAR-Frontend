@@ -6,12 +6,13 @@ import { Reporte } from "../../../modelos/Reporte";
 import apiDenuncia from "../../../api/endpoints/denuncia";
 import { ContenidoReportado } from "../../../componentes/Reporte/ContenidoReportado";
 import { AccionesModeracion } from "../../../componentes/Reporte/AccionesModeracion";
+import { useLoading } from "../../../contexts/LoadingContext";
 
 export default function ReporteDetallePage() {
   const { id } = useParams();
   const [reporte, setReporte] = useState<Reporte>();
   const [loading, setLoading] = useState(true);
-
+  const { showLoader, hideLoader } = useLoading();   
   useEffect(() => {
     const cargar = async () => {
       try {
@@ -26,8 +27,13 @@ export default function ReporteDetallePage() {
 
     cargar();
   }, [id]);
+ 
+  
+  useEffect(() => {
+    if (loading) showLoader();
+    else hideLoader();
+  }, [loading]);
 
-  if (loading) return <div>Cargando...</div>;
   if (!reporte) return <div>Reporte no encontrado</div>;
 
   return (
