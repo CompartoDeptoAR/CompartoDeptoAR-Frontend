@@ -31,7 +31,7 @@ export const useDenuncia = () => {
   const resetError = () => setError("");
 
   const manejarEnvio = async (datos: DatosDenuncia) => {
-    // Validaciones
+
     if (!email) {
       setError("Por favor ingresá tu correo electrónico");
       return;
@@ -73,7 +73,7 @@ export const useDenuncia = () => {
 
       setTimeout(() => {
         setEnviado(false);
-      }, 3000);
+      }, 1300);
       
     } catch (err: any) {
       console.error("Error al enviar denuncia:", err);

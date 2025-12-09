@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Container, Form, Button, Alert, Card } from "react-bootstrap";
+import { Navegar } from "../../navigation/navigationService";
 
 
 interface FormularioDenunciaProps {
@@ -65,6 +66,10 @@ const FormularioDenuncia: React.FC<FormularioDenunciaProps> = ({
     await manejarEnvio({ tipo, id:idContenido, motivo, descripcion });
         setMotivo("");
         setDescripcion("");
+        setTimeout(() => {
+        Navegar.volverAtras();
+      }, 1300);
+      
     };
 
   return (

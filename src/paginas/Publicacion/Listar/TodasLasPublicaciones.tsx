@@ -32,7 +32,7 @@ const TodasLasPublicaciones: React.FC = () => {
     else hideLoader();
   }, [loading]);
 
-  // cargar publicaciones al inicio
+ 
   useEffect(() => {
     cargarPublicaciones();
   }, []);

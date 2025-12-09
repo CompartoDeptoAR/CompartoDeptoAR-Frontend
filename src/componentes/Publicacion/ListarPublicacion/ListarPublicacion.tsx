@@ -62,13 +62,7 @@ const ListarPublicaciones: React.FC<ListarPublicacionesProps> = ({
     onEstado(id, nuevoEstado);
   };
 
-  if (loading) {
-    return (
-      <div className="container mt-5 d-flex justify-content-center">
-        <Spinner animation="border" variant="primary" />
-      </div>
-    );
-  }
+  if (loading) return <></>;
 
   if (error) {
     return (
