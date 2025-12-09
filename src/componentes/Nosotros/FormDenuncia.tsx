@@ -67,8 +67,8 @@ const FormularioDenuncia: React.FC<FormularioDenunciaProps> = ({
         setMotivo("");
         setDescripcion("");
         setTimeout(() => {
-        Navegar.volverAtras();
-      }, 1300);
+          Navegar.volverAtras();
+        }, 1300);
       
     };
 
