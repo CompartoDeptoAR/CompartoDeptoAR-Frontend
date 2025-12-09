@@ -30,8 +30,10 @@ const apiAdmin = {
       const adminId = TokenService.getUserId();
       if (!adminId) throw new Error("Usuario no autenticado");
 
-      const res = await axiosApi.post(
-        `${urlApi}/asignar-rol`);
+      const res = await axiosApi.post(`${urlUsuarios}/asignar-rol`, {
+        usuarioId,
+        rol
+      });
 
       return res.data;
     } catch (error: any) {
@@ -45,8 +47,10 @@ const apiAdmin = {
       const adminId = TokenService.getUserId();
       if (!adminId) throw new Error("Usuario no autenticado");
 
-      const res = await axiosApi.post(
-        `${urlApi}/sacar-rol`);
+      const res = await axiosApi.post(`${urlUsuarios}/sacar-rol`, {
+        usuarioId,
+        rol
+      });
 
       return res.data;
     } catch (error: any) {
@@ -54,7 +58,6 @@ const apiAdmin = {
       throw error;
     }
   },
-
    eliminarUsuario: async (usuarioId: string): Promise<any> => {
     try {
       const adminId = TokenService.getUserId();
