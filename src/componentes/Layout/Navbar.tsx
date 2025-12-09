@@ -71,7 +71,7 @@ const NavbarApp: React.FC = () => {
 
     const texto = textoBusqueda.trim();
     if (!texto) {
-      setErrorBusqueda("Ingresá texto para buscar(solo busca en el titulo por ahora).");
+      setErrorBusqueda("Ingresá texto para buscar.");
       setResultados([]);
       setMostrarResultados(true);
       return;
@@ -165,7 +165,7 @@ const NavbarApp: React.FC = () => {
                 </span>
                 <FormControl
                   type="search"
-                  placeholder="Buscar publicaciones..."
+                  placeholder="Buscar publicaciones (solo busca en el titulo por ahora)..."
                   className="border-start-0"
                   value={textoBusqueda}
                   onChange={(e) => {
