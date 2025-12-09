@@ -23,8 +23,8 @@ export const useUsuariosRoles = () => {
       setCargando(true);
       setError("");
       
-      //const data = await apiAdmin.listarUsuarios();
-      //setUsuarios(data);
+      const data = await apiAdmin.listarUsuarios();
+      setUsuarios(data);
     } catch (err: any) {
       console.error("Error cargando usuarios:", err);
       setError(err.message || "Error al cargar usuarios");
