@@ -12,14 +12,19 @@ const apiAdmin = {
       const adminId = TokenService.getUserId();
       if (!adminId) throw new Error("Usuario no autenticado");
 
-      const res = await axiosApi.get<Usuario[]>(`${urlUsuarios}/usuarios`);
-      return res.data;
+      interface RespuestaUsuarios {
+        total: number;
+        usuarios: Usuario[];
+      }
+
+      const res = await axiosApi.get<RespuestaUsuarios>(`${urlUsuarios}/usuarios`);
+      return res.data.usuarios;
     } catch (error: any) {
       console.error("Error listando usuarios:", error);
       throw new Error(error.response?.data?.error || "Error al listar usuarios");
     }
   },
-  
+
   asignarRol: async (usuarioId: string, rol: string): Promise<any> => {
     try {
       const adminId = TokenService.getUserId();
