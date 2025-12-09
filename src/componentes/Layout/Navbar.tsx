@@ -71,7 +71,7 @@ const NavbarApp: React.FC = () => {
 
     const texto = textoBusqueda.trim();
     if (!texto) {
-      setErrorBusqueda("Ingresá texto para buscar.");
+      setErrorBusqueda("Ingresá texto para buscar(solo busca en el titulo por ahora).");
       setResultados([]);
       setMostrarResultados(true);
       return;
