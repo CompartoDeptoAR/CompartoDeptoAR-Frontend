@@ -2,7 +2,7 @@ import axiosApi from "../config/axios.config";
 import { TokenService } from "../../services/auth/tokenService";
 import { Usuario } from "../../modelos/Usuario";
 
-const urlApi = import.meta.env.VITE_URL_ADMIN;
+//const urlApi = import.meta.env.VITE_URL_ADMIN;
 const urlUsuarios= import.meta.env.VITE_URL_USER;
 
 const apiAdmin = {

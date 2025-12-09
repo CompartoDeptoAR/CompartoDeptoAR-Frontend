@@ -1,9 +1,7 @@
-
 import { useState, useCallback } from "react";
 import { Usuario } from "../../../modelos/Usuario";
 import apiAdmin from "../../../api/endpoints/admin";
 import { Rol } from "../../../modelos/Roles";
-
 
 export const useUsuariosRoles = () => {
   const [usuarios, setUsuarios] = useState<Usuario[]>([]);
@@ -11,11 +9,30 @@ export const useUsuariosRoles = () => {
   const [cargando, setCargando] = useState(false);
   const [error, setError] = useState<string>("");
 
+  // Normalizar roles a array de objetos con rolId
+  const normalizarRoles = (rol: any): any[] => {
+    if (Array.isArray(rol)) return rol;
+    if (rol) return [rol];
+    return [];
+  };
+
+  // Extraer rolId de un objeto rol
+  const getRolId = (rol: any): string => {
+    if (typeof rol === 'string') return rol;
+    if (rol?.rolId) return rol.rolId;
+    return '';
+  };
+
   // Filtrar usuarios por búsqueda
   const usuariosFiltrados = usuarios.filter(u => 
     u.perfil?.nombreCompleto?.toLowerCase().includes(busqueda.toLowerCase()) ||
     u.correo.toLowerCase().includes(busqueda.toLowerCase())
   );
+
+  const tieneRol = (usuario: Usuario, rol: Rol): boolean => {
+    const roles = normalizarRoles(usuario.rol);
+    return roles.some(r => getRolId(r) === rol);
+  };
 
   // Cargar usuarios
   const cargarUsuarios = useCallback(async () => {
@@ -24,7 +41,14 @@ export const useUsuariosRoles = () => {
       setError("");
       
       const data = await apiAdmin.listarUsuarios();
-      setUsuarios(data);
+      
+      // Normalizar roles al cargar
+      const usuariosNormalizados = data.map(u => ({
+        ...u,
+        rol: normalizarRoles(u.rol)
+      }));
+      
+      setUsuarios(usuariosNormalizados);
     } catch (err: any) {
       console.error("Error cargando usuarios:", err);
       setError(err.message || "Error al cargar usuarios");
@@ -33,23 +57,32 @@ export const useUsuariosRoles = () => {
     }
   }, []);
 
-  // Verificar si el usuario tiene un rol específico
-  const tieneRol = (usuario: Usuario, rol: Rol): boolean => {
-    return usuario.rol.includes(rol);
+  // Obtener texto de todos los roles (para mostrar en la UI)
+  const obtenerRolesTexto = (usuario: Usuario): string => {
+    const roles = normalizarRoles(usuario.rol);
+    if (roles.length === 0) return "Sin rol";
+    
+    // Deduplicar y mapear rolIds
+    const roleIds = Array.from(new Set(roles.map(r => getRolId(r))));
+    
+    return roleIds.map(rolId => 
+      rolId === Rol.ADMIN ? "Administrador" : "Usuario"
+    ).join(", ");
   };
 
-  // Obtener texto del rol principal (para mostrar en la UI)
+  // Obtener texto del rol principal (para compatibilidad)
   const obtenerRolPrincipal = (usuario: Usuario): string => {
-    if (tieneRol(usuario, Rol.ADMIN)) return "Administrador";
-    return "Usuario";
+    return tieneRol(usuario, Rol.ADMIN)
+      ? "Administrador"
+      : "Usuario";
   };
 
   // Asignar rol a usuario
   const asignarRol = useCallback(async (usuarioId: string, rol: Rol) => {
     const usuario = usuarios.find(u => u.id === usuarioId);
+    
     if (!usuario) return;
 
-    // Si ya tiene el rol, no hacer nada
     if (tieneRol(usuario, rol)) {
       alert("El usuario ya tiene este rol");
       return;
@@ -68,14 +101,13 @@ export const useUsuariosRoles = () => {
 
       await apiAdmin.asignarRol(usuarioId, rol);
 
-      // Actualizar la lista local
-      setUsuarios(prevUsuarios => 
-        prevUsuarios.map(u => 
-          u.id === usuarioId 
-            ? { ...u, rol: [...u.rol, rol] } 
-            : u
-        )
-      );
+      // Recargar usuarios para asegurar sincronización con BD
+      const data = await apiAdmin.listarUsuarios();
+      const usuariosNormalizados = data.map(u => ({
+        ...u,
+        rol: normalizarRoles(u.rol)
+      }));
+      setUsuarios(usuariosNormalizados);
 
       alert(`Rol de "${rolTexto}" asignado exitosamente`);
     } catch (err: any) {
@@ -92,7 +124,6 @@ export const useUsuariosRoles = () => {
     const usuario = usuarios.find(u => u.id === usuarioId);
     if (!usuario) return;
 
-    // Si no tiene el rol, no hacer nada
     if (!tieneRol(usuario, rol)) {
       alert("El usuario no tiene este rol");
       return;
@@ -111,14 +142,13 @@ export const useUsuariosRoles = () => {
 
       await apiAdmin.sacarRol(usuarioId, rol);
 
-      // Actualizar la lista local
-      setUsuarios(prevUsuarios => 
-        prevUsuarios.map(u => 
-          u.id === usuarioId 
-            ? { ...u, rol: u.rol.filter(r => r !== rol) } 
-            : u
-        )
-      );
+      // Recargar usuarios para asegurar sincronización con BD
+      const data = await apiAdmin.listarUsuarios();
+      const usuariosNormalizados = data.map(u => ({
+        ...u,
+        rol: normalizarRoles(u.rol)
+      }));
+      setUsuarios(usuariosNormalizados);
 
       alert(`Rol de "${rolTexto}" quitado exitosamente`);
     } catch (err: any) {
@@ -130,7 +160,7 @@ export const useUsuariosRoles = () => {
     }
   }, [usuarios]);
 
-  // Toggle rol (asignar si no tiene, quitar si tiene)
+  // Toggle rol
   const toggleRol = useCallback(async (usuarioId: string, rol: Rol) => {
     const usuario = usuarios.find(u => u.id === usuarioId);
     if (!usuario) return;
@@ -153,6 +183,7 @@ export const useUsuariosRoles = () => {
     quitarRol,
     toggleRol,
     tieneRol,
-    obtenerRolPrincipal
+    obtenerRolPrincipal,
+    obtenerRolesTexto
   };
 };

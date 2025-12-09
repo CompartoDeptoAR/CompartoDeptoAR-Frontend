@@ -13,12 +13,13 @@ const UsuariosRolesPage = () => {
     error,
     cargarUsuarios,
     toggleRol,
-    tieneRol
+    tieneRol,
+    obtenerRolesTexto
   } = useUsuariosRoles();
 
   useEffect(() => {
     cargarUsuarios();
-  }, []);
+  }, [cargarUsuarios]);
 
   return (
     <div className="container">
@@ -65,9 +66,9 @@ const UsuariosRolesPage = () => {
                   <td>{usuario.perfil?.nombreCompleto || "Sin nombre"}</td>
                   <td>{usuario.correo}</td>
                   <td>
-                    {tieneRol(usuario, Rol.ADMIN)
-                      ? "Administrador"
-                      : "Usuario"}
+                    <span className="badge bg-info">
+                      {obtenerRolesTexto(usuario)}
+                    </span>
                   </td>
 
                   {/* BOTONES */}
