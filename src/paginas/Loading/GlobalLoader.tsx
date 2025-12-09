@@ -1,6 +1,6 @@
 import React from "react";
 import { useGlobalLoader } from "../../hooks/sistema/useGlobalLoader";
-import emblema from "../../assets/emblema.png";
+import emblema from "../../assets/digimon.svg";
 
 const GlobalLoader: React.FC = () => {
   const { loading } = useGlobalLoader();
@@ -31,7 +31,6 @@ const GlobalLoader: React.FC = () => {
         style={{
           width: "200px",
           height: "auto",
-          objectFit: "contain",
           animation: "rotate 1.5s linear infinite",
         }}
       />

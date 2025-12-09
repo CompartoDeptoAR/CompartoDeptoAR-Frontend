@@ -23,7 +23,7 @@ const FormularioLogin: React.FC<FormLoginProps> = ({
   onSwitch,
   onGoogleLogin,
 }) => (
-  <form onSubmit={onSubmit} className="form-container">
+  <form onSubmit={onSubmit} className="form-container form-VIOLETA">
     <h2 className="form-title">Iniciar sesión</h2>
 
     <div className="form-group">

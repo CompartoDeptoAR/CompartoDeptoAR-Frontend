@@ -3,7 +3,7 @@
 .auth-page {
   margin: 0;
   font-family: var(--fuente-principal);
-  background: url("/ciudad.jpg") no-repeat center center fixed;
+  background: url("/ciudad.svg") no-repeat center center fixed;
   background-size: cover;
   display: flex;
   justify-content: center;
@@ -83,10 +83,17 @@
   margin: 0 auto;
   overflow-y: auto;
   max-height: 90vh;
-  /* BORDE VIOLETA AÑADIDO */
-  border: 3px solid var(--violeta-secundario);
+
   box-sizing: border-box;
 }
+.auth-page .form-VIOLETA{
+  border: 3px solid var(--violeta-secundario);
+}
+
+.auth-page .form-AZUL{
+  border: 3px solid rgb(9, 125, 248);
+}
+
 .auth-page .form-container-mas-ancho {
   width: 700px !important; 
 }

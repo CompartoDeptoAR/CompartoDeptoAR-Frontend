@@ -28,7 +28,7 @@ const PrimerFormRegistro: React.FC<PrimerFormRegistroProps> = ({
 }) => {
   return (
     <div className="login-page">
-      <form onSubmit={handleSubmit} className="form-container">
+      <form onSubmit={handleSubmit} className="form-container form-AZUL">
         <h2 style={{ marginBottom: "1rem", color: "#333" }}>Crear cuenta</h2>
         <p style={{ marginBottom: "2rem", color: "#666" }}>
           Comienza tu viaje con nosotros

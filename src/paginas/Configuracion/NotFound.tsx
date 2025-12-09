@@ -1,5 +1,5 @@
 import React from "react";
-import imagen404 from "../../assets/404.png"; 
+import imagen404 from "../../assets/404.svg"; 
 
 const NotFoundPage: React.FC = () => {
   return (
