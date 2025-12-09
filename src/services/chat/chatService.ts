@@ -39,7 +39,6 @@ class ChatService {
       participantes,
     };
 
-
     const docRef = await addDoc(
       collection(db, this.mensajesCollection),
       nuevoMensaje
@@ -82,45 +81,56 @@ class ChatService {
     );
   }
 
-  // ==================== OBTENER CONVERSACIONES (MEJORADO) ====================
+  // ==================== OBTENER CONVERSACIONES (CORREGIDO) ====================
   async obtenerConversaciones(idUsuario: string): Promise<Conversacion[]> {
     try {
-      // Query para obtener todos los mensajes del usuario
+      console.log("📋 Obteniendo conversaciones para usuario:", idUsuario);
+
+      // Query para obtener todos los mensajes donde el usuario es participante
       const q = query(
         collection(db, this.mensajesCollection),
-        where("participantes", "array-contains", idUsuario)
+        where("participantes", "array-contains", idUsuario),
+        orderBy("fechaEnvio", "desc") // 🔥 Ordenar por fecha para optimizar
       );
 
       const snapshot = await getDocs(q);
-      const conversacionesMap = new Map<string, Conversacion>();
+      console.log("📨 Total de mensajes encontrados:", snapshot.size);
 
-      // Agrupar por conversación y encontrar último mensaje
-      const mensajesPorConversacion = new Map<string, Mensaje[]>();
+      // Agrupar mensajes por publicación
+      const mensajesPorPublicacion = new Map<string, Mensaje[]>();
 
       snapshot.docs.forEach((docSnap) => {
         const mensaje = { id: docSnap.id, ...docSnap.data() } as Mensaje;
         const key = mensaje.idPublicacion;
 
-        if (!mensajesPorConversacion.has(key)) {
-          mensajesPorConversacion.set(key, []);
+        if (!mensajesPorPublicacion.has(key)) {
+          mensajesPorPublicacion.set(key, []);
         }
-        mensajesPorConversacion.get(key)!.push(mensaje);
+        mensajesPorPublicacion.get(key)!.push(mensaje);
       });
 
+      console.log("💬 Conversaciones agrupadas:", mensajesPorPublicacion.size);
+
       // Procesar cada conversación
-      for (const [idPublicacion, mensajes] of mensajesPorConversacion.entries()) {
+      const conversaciones: Conversacion[] = [];
+
+      for (const [idPublicacion, mensajes] of mensajesPorPublicacion.entries()) {
         // Ordenar mensajes por fecha (más reciente primero)
         const mensajesOrdenados = mensajes.sort(
           (a, b) => b.fechaEnvio.toMillis() - a.fechaEnvio.toMillis()
         );
 
         const ultimoMensaje = mensajesOrdenados[0];
+
+        // 🔥 CORREGIDO: Determinar el ID de la otra persona correctamente
         const idOtraPersona =
           ultimoMensaje.idRemitente === idUsuario
             ? ultimoMensaje.idDestinatario
             : ultimoMensaje.idRemitente;
 
-        // Contar mensajes no leídos
+        console.log("👤 Otra persona en conversación:", idOtraPersona);
+
+        // Contar mensajes no leídos (solo los dirigidos al usuario actual)
         const noLeidos = mensajes.filter(
           (m) => !m.leido && m.idDestinatario === idUsuario
         ).length;
@@ -131,7 +141,7 @@ class ChatService {
           this.obtenerUsuario(idOtraPersona),
         ]);
 
-        conversacionesMap.set(idPublicacion, {
+        conversaciones.push({
           idPublicacion,
           tituloPublicacion: publicacion?.titulo || "Publicación eliminada",
           idOtraPersona,
@@ -145,11 +155,15 @@ class ChatService {
       }
 
       // Ordenar por fecha del último mensaje (más reciente primero)
-      return Array.from(conversacionesMap.values()).sort(
+      const conversacionesOrdenadas = conversaciones.sort(
         (a, b) => b.fechaUltimoMensaje.getTime() - a.fechaUltimoMensaje.getTime()
       );
+
+      console.log("✅ Conversaciones procesadas:", conversacionesOrdenadas.length);
+      return conversacionesOrdenadas;
+
     } catch (error) {
-      console.error("Error obteniendo conversaciones:", error);
+      console.error("❌ Error obteniendo conversaciones:", error);
       return [];
     }
   }
@@ -167,6 +181,7 @@ class ChatService {
     return onSnapshot(
       q,
       async () => {
+        console.log("🔄 Conversaciones actualizadas en tiempo real");
         const conversaciones = await this.obtenerConversaciones(idUsuario);
         callback(conversaciones);
       },
@@ -186,6 +201,7 @@ class ChatService {
         updateDoc(doc(db, this.mensajesCollection, id), { leido: true })
       );
       await Promise.all(promises);
+      console.log("✅ Mensajes marcados como leídos:", idsMensajes.length);
     } catch (error) {
       console.error("Error marcando mensajes como leídos:", error);
     }
@@ -272,19 +288,14 @@ class ChatService {
     id: string
   ): Promise<{ titulo: string } | null> {
     try {
-      console.log("🔍 Buscando publicación con ID:", id);
-      
-      // Las publicaciones probablemente SÍ usan el ID del documento
       const docRef = doc(db, this.publicacionesCollection, id);
       const docSnap = await getDoc(docRef);
       
       if (docSnap.exists()) {
         const data = docSnap.data();
-        console.log("✅ Publicación encontrada:", data.titulo);
         return { titulo: data.titulo };
       }
       
-      console.warn("⚠️ Publicación NO encontrada con ID:", id);
       return null;
     } catch (error) {
       console.error("❌ Error obteniendo publicación:", error);
@@ -292,13 +303,10 @@ class ChatService {
     }
   }
 
-
   private async obtenerUsuario(
     firebaseUid: string
   ): Promise<{ nombre: string; fotoPerfil?: string } | null> {
     try {
-      console.log("🔍 Buscando usuario con UID:", firebaseUid);
-
       const q = query(
         collection(db, this.usuariosCollection),
         where("firebaseUid", "==", firebaseUid)
@@ -314,17 +322,12 @@ class ChatService {
       const doc = querySnap.docs[0];
       const data = doc.data();
 
-      console.log("📄 DOCUMENTO COMPLETO DEL USUARIO:", JSON.stringify(data, null, 2));
-      console.log("📝 Campos disponibles:", Object.keys(data));
-
       const nombre =
         data.perfil?.nombreCompleto ||
         data.nombre ||
         data.displayName ||
         data.email?.split('@')[0] ||
         "Usuario";
-
-      console.log("✅ Nombre extraído:", nombre);
 
       return {
         nombre,
@@ -336,7 +339,6 @@ class ChatService {
       return null;
     }
   }
-
 }
 
 export default new ChatService();
