@@ -17,7 +17,6 @@ interface FormularioPublicacionProps {
   onFotosChange: (fotos: string[]) => void;
   onPreferenciasChange?: (preferencias: PreferenciasUsuario) => void;
   onHabitosChange?: (habitos: HabitosUsuario) => void;
-
   handleSubmit: (e: React.FormEvent) => void;
   modo: "crear" | "editar";
   loading?: boolean;
@@ -51,15 +50,15 @@ const FormularioPublicacion: React.FC<FormularioPublicacionProps> = ({
       (publicacion.preferencias as PreferenciasUsuario) ??
       ({} as PreferenciasUsuario),
     cargarDesdePerfil: true,
+    guardarEnPerfil: false, 
   });
 
   useEffect(() => {
-    if (cargandoPerfil) return;
-    if (!habitos || !preferencias) return;
-
-    onHabitosChange?.(habitos);
-    onPreferenciasChange?.(preferencias);
-  }, [habitos, preferencias, cargandoPerfil]);
+    if (!cargandoPerfil) {
+      onHabitosChange?.(habitos);
+      onPreferenciasChange?.(preferencias);
+    }
+  }, [habitos, preferencias, cargandoPerfil]); 
 
   return (
     <div className="container py-4">
@@ -155,13 +154,6 @@ const FormularioPublicacion: React.FC<FormularioPublicacionProps> = ({
                   seleccionarlos ahora.
                 </div>
               )}
-
-            {errorPerfil && (
-              <div className="alert alert-danger mb-3">
-                ❌ No se pudieron cargar tus hábitos desde el perfil.
-              </div>
-            )}
-
 
             {!cargandoPerfil && (
               <SelectorHabitosPreferencias

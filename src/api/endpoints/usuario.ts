@@ -80,32 +80,33 @@ const apiUsuario = {
     },
 
     eliminarMiCuenta: async (): Promise<{ mensaje: string; success: boolean }> => {
-  try {
- 
-    const token = LocalStorageService.get(STORAGE_KEYS.FTOKEN);
-    console.log("🔍 Token en localStorage:", token ? "✅ Existe" : "❌ No existe");
-    console.log("🔍 Key buscada:", STORAGE_KEYS.FTOKEN);
-    console.log("🔍 Todas las keys en localStorage:", Object.keys(localStorage));
+      try {
     
-    const result = await axiosApi.delete<{ mensaje: string; success: boolean }>(
-      `${import.meta.env.VITE_URL_USER}/cuenta/eliminar`
-    );
-    return result.data;
-  } catch (error: any) {
-    console.error("❌ Error completo:", error);
-    console.error("❌ Response:", error.response);
-    console.error("❌ Status:", error.response?.status);
-    console.error("❌ Data:", error.response?.data);
-    
-    if (error.response) {
-      throw new Error(
-        error.response.data.error || "Error al eliminar cuenta"
-      );
-    }
-    throw new Error("Error de conexión");
+        const token = LocalStorageService.get(STORAGE_KEYS.FTOKEN);
+        console.log("🔍 Token en localStorage:", token ? "✅ Existe" : "❌ No existe");
+        console.log("🔍 Key buscada:", STORAGE_KEYS.FTOKEN);
+        console.log("🔍 Todas las keys en localStorage:", Object.keys(localStorage));
+        
+        const result = await axiosApi.delete<{ mensaje: string; success: boolean }>(
+          `${import.meta.env.VITE_URL_USER}/cuenta/eliminar`
+        );
+        return result.data;
+      } catch (error: any) {
+        console.error("❌ Error completo:", error);
+        console.error("❌ Response:", error.response);
+        console.error("❌ Status:", error.response?.status);
+        console.error("❌ Data:", error.response?.data);
+        
+        if (error.response) {
+          throw new Error(
+            error.response.data.error || "Error al eliminar cuenta"
+          );
+        }
+        throw new Error("Error de conexión");
+      }
+    },
+
   }
-}
-}
 }
 
 

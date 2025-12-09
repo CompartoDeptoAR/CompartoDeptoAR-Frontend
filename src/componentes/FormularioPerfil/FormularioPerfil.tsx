@@ -185,7 +185,7 @@ const FormularioPerfil: React.FC<FormularioPerfilProps> = ({ perfil, modo, onSub
             <button 
               type="button"
               className="btn-volver-atras-perfil"
-              onClick={() => Navegar.home()}
+              onClick={() => Navegar.volverAtras()}
             >
               Volver
             </button>

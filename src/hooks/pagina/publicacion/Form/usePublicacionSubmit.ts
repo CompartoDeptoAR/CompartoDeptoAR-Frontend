@@ -2,20 +2,21 @@ import { useState } from "react";
 import type { Publicacion, PublicacionResponce } from "../../../../modelos/Publicacion";
 import { useToast } from "../../../useToast";
 import apiPublicacion from "../../../../api/endpoints/publicaciones";
+import apiUsuario from "../../../../api/endpoints/usuario";
 import { Navegar } from "../../../../navigation/navigationService";
 
-export const usePublicacionSubmit = (formData: Publicacion, resetForm:()=>void) => {
+export const usePublicacionSubmit = (formData: Publicacion, resetForm: () => void) => {
   const [loading, setLoading] = useState(false);
   const { showSuccess, showError, showWarning } = useToast();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Validaciones
+    // Validacion
     if (!formData.titulo?.trim()) return showWarning("El título es obligatorio");
     if (!formData.provincia) return showWarning("Selecciona una provincia");
     if (!formData.localidad) return showWarning("Selecciona una localidad");
-    if (!formData.calle) return showWarning("Falta la calle ");
+    if (!formData.calle) return showWarning("Falta la calle");
     if (!formData.numeral) return showWarning("Falta el numeral");
     if (!formData.precio || formData.precio <= 0) return showWarning("El precio debe ser mayor a 0");
     if (!formData.descripcion?.trim()) return showWarning("La descripción es obligatoria");
@@ -24,8 +25,7 @@ export const usePublicacionSubmit = (formData: Publicacion, resetForm:()=>void) 
     setLoading(true);
 
     try {
-      const ubicacion = `${formData.calle} ${formData.numeral}, ${formData.localidad}, ${formData.provincia}`
- 
+      const ubicacion = `${formData.calle} ${formData.numeral}, ${formData.localidad}, ${formData.provincia}`;
 
       const reglasArray = formData.reglasTexto
         ?.split("\n")
@@ -50,10 +50,22 @@ export const usePublicacionSubmit = (formData: Publicacion, resetForm:()=>void) 
 
       console.log("📤 Enviando publicación:", publicacionParaEnviar);
 
+      // 🔥 GUARDAR HÁBITOS Y PREFERENCIAS EN EL PERFIL
+      try {
+        await apiUsuario.usuario.editarPerfil({
+          habitos: formData.habitos ?? {},
+          preferencias: formData.preferencias ?? {},
+        });
+        console.log("✅ Hábitos y preferencias guardados en el perfil");
+      } catch (perfilError) {
+        console.warn("⚠️ No se pudieron guardar hábitos en el perfil:", perfilError);
+        // Continuamos aunque falle el guardado del perfil
+      }
+
+      // 🔥 CREAR LA PUBLICACIÓN
       const response = await apiPublicacion.publicacion.crearPublicacion(publicacionParaEnviar);
 
       console.log("✅ Publicación creada:", response);
-
 
       showSuccess(response.mensaje || "¡Publicación creada exitosamente!");
       resetForm();

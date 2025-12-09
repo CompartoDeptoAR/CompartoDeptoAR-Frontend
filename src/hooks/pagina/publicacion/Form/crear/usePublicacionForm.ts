@@ -1,9 +1,7 @@
 import { useCallback, useState } from "react";
 import type { EstadoPublicacion, Publicacion } from "../../../../../modelos/Publicacion";
 import { PreferenciasUsuario, HabitosUsuario } from "../../../../../modelos/Usuario";
-
-export const usePublicacionForm = () => {
-  const [formData, setFormData] = useState<Publicacion>({
+const PublicacionNull:Publicacion={
     titulo: "",
     descripcion: "",
     precio: 0,
@@ -17,7 +15,9 @@ export const usePublicacionForm = () => {
     preferencias: {} as PreferenciasUsuario,
     habitos: {} as HabitosUsuario,
     estado: "activa" as EstadoPublicacion,
-  });
+}
+export const usePublicacionForm = () => {
+  const [formData, setFormData] = useState<Publicacion>(PublicacionNull);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -59,21 +59,7 @@ export const usePublicacionForm = () => {
     setFormData((prev) => ({ ...prev, foto: fotos }));
   };
   const resetForm = () => {
-  setFormData({
-    titulo: "",
-    descripcion: "",
-    precio: 0,
-    provincia: "",
-    localidad: "",
-    calle: "",
-    numeral:"",
-    foto: [],
-    reglas: [],      
-    reglasTexto: "",   
-    preferencias: {},
-    habitos: {},
-    estado: "activa",
-  });
+  setFormData(PublicacionNull);
 };
 
   return {

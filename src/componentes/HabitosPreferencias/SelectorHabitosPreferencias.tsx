@@ -41,6 +41,7 @@ export const SelectorHabitosPreferencias: React.FC<SelectorHabitosPreferenciasPr
   const habitosNorm = normalizar(habitos, OPCIONES_HABITOS);
   const prefsNorm = normalizar(preferencias, OPCIONES_PREFERENCIAS);
 
+
   return (
     <>
       {/* HÁBITOS */}
