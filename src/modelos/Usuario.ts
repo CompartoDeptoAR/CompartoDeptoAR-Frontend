@@ -11,8 +11,8 @@ export interface Usuario{
 }
 
 export interface UsuarioPerfil {
-  nombreCompleto: string;
-  edad: number;
+  nombreCompleto?: string;
+  edad?: number;
   genero?: Genero;
   descripcion?: string;
   habitos?: HabitosUsuario;

@@ -50,7 +50,7 @@ export const usePublicacionSubmit = (formData: Publicacion, resetForm: () => voi
 
       console.log("📤 Enviando publicación:", publicacionParaEnviar);
 
-      // 🔥 GUARDAR HÁBITOS Y PREFERENCIAS EN EL PERFIL
+     
       try {
         await apiUsuario.usuario.editarPerfil({
           habitos: formData.habitos ?? {},
@@ -59,10 +59,8 @@ export const usePublicacionSubmit = (formData: Publicacion, resetForm: () => voi
         console.log("✅ Hábitos y preferencias guardados en el perfil");
       } catch (perfilError) {
         console.warn("⚠️ No se pudieron guardar hábitos en el perfil:", perfilError);
-        // Continuamos aunque falle el guardado del perfil
-      }
 
-      // 🔥 CREAR LA PUBLICACIÓN
+      }
       const response = await apiPublicacion.publicacion.crearPublicacion(publicacionParaEnviar);
 
       console.log("✅ Publicación creada:", response);
