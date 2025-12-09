@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Navbar, Nav, Form, FormControl, Button, NavDropdown, Container, Row, Col, Card, Spinner, Alert } from "react-bootstrap";
+import { Navbar, Nav, Form, FormControl, Button, NavDropdown, Spinner, Alert } from "react-bootstrap";
 import { Bell, MessageCircle, Search, X, Filter, Home } from "lucide-react"; 
 
 import { TokenService } from "../../services/auth/tokenService";
@@ -48,7 +48,6 @@ const NavbarApp: React.FC = () => {
     Navegar.home();
   }
 
-  // Cerrar resultados cuando haces clic afuera
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
@@ -295,7 +294,7 @@ const NavbarApp: React.FC = () => {
 
                 <Nav.Link className="position-relative" onClick={() => Navegar.chatCompleto()}>
                   <MessageCircle size={20} />
-                  <NotificacionesBadge idUsuario={TokenService.getUserId()} />
+                  <NotificacionesBadge idUsuario={TokenService.getUid()} />
                 </Nav.Link>
               </>
             )}

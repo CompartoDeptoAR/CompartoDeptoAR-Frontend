@@ -4,6 +4,7 @@ import { useToast } from "../../../useToast";
 import apiPublicacion from "../../../../api/endpoints/publicaciones";
 import apiUsuario from "../../../../api/endpoints/usuario";
 import { Navegar } from "../../../../navigation/navigationService";
+import { TokenService } from "../../../../services/auth/tokenService";
 
 export const usePublicacionSubmit = (formData: Publicacion, resetForm: () => void) => {
   const [loading, setLoading] = useState(false);
@@ -46,6 +47,7 @@ export const usePublicacionSubmit = (formData: Publicacion, resetForm: () => voi
         habitos: formData.habitos ?? {},
         estado: "activa",
         ubicacion,
+        usuarioFirebaseUid:TokenService.getUid()!,
       };
 
       console.log("📤 Enviando publicación:", publicacionParaEnviar);

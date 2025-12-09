@@ -13,6 +13,7 @@ export interface PublicacionResponce {
   preferencias?: PreferenciasUsuario;
   habitos?: HabitosUsuario;
   usuarioId: Usuario["id"];
+  usuarioFirebaseUid: Usuario["firebaseUid"]
   usuarioNombre?: string; 
   estado: EstadoPublicacion;
   createdAt: string;

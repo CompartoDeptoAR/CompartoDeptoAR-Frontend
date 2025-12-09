@@ -136,7 +136,7 @@ const PublicacionDetalleView: React.FC<PublicacionDetalleViewProps> = ({
           visible={mostrarChat}
           onClose={() => setMostrarChat(false)}
           idPublicacion={publicacion.id || ""}
-          idDestinatario={publicacion.usuarioId || ""}
+          idDestinatario={publicacion.usuarioFirebaseUid || ""}
           idUsuarioActual={TokenService.getUid()!}
           nombreDestinatario={usuarioNombre}
         />
