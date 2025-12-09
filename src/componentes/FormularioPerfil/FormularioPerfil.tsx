@@ -119,7 +119,7 @@ const FormularioPerfil: React.FC<FormularioPerfilProps> = ({ perfil, modo, onSub
           <CampoTexto
             label="Nombre"
             name="nombreCompleto"
-            value={formData.nombreCompleto}
+            value={formData.nombreCompleto || "Usuario"}
             esSoloVista={esSoloVista}
             onChange={handleChange}
             required
@@ -130,7 +130,7 @@ const FormularioPerfil: React.FC<FormularioPerfilProps> = ({ perfil, modo, onSub
               <CampoTexto
                 label="Edad"
                 name="edad"
-                value={formData.edad}
+                value={formData.edad || "No se pudo obtener la edad"}
                 type="number"
                 esSoloVista={esSoloVista}
                 onChange={handleChange}
