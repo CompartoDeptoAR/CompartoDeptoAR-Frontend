@@ -1,6 +1,7 @@
 import { useState } from "react";
 import ReportesPage from "./Reporte/ReportePage";
 import UsuariosRolesPage from "./Usuario/UsuariosRolesPage";
+import PublicacionesAdminPage from "./PublicacionesAdminPage";
 
 const AdminPage = () => {
   const [tab, setTab] = useState("reportes");
@@ -31,11 +32,20 @@ const AdminPage = () => {
             👥 Usuarios / Roles
           </button>
         </li>
+        <li className="nav-item">
+          <button 
+            className={`nav-link ${tab === "publicaciones" ? "active" : ""}`}
+            onClick={() => setTab("publicaciones")}
+          >
+            🪧 Publicaciones
+          </button>
+        </li>
       </ul>
 
       <div className="content">
         {tab === "reportes" && <ReportesPage />}
         {tab === "usuarios" && <UsuariosRolesPage />}
+        {tab === "publicaciones" && <PublicacionesAdminPage />}
       </div>
     </div>
   );
