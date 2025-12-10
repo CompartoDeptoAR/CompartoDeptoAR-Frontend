@@ -3,7 +3,7 @@ export type Genero = "Masculino" | "Femenino" | "Prefiero no decir";
 
 export interface Usuario{
   id?: string;
-  firebaseUid?: string;
+  firebaseUid: string;
   correo: string;
   contraseña: string;
   rol: Rol[];

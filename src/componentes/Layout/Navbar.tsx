@@ -11,6 +11,9 @@ import { hasRole, isLoggedIn } from "../../helpers/funcion";
 import { FiltrosBusqueda } from "../Buscador/FiltrosBusqueda";
 import apiBuscador from "../../api/endpoints/buscador";
 import "../../styles/NavbarApp.css";
+import { ConversacionesDropdown } from "../Chat/ConversacionesDropdown";
+import { MiniChat } from "../Chat/MiniChat";
+import { useConversaciones } from "../../hooks/chat/useConversaciones";
 
 const NavbarApp: React.FC = () => {
   const [showFiltros, setShowFiltros] = useState(false);
@@ -20,6 +23,13 @@ const NavbarApp: React.FC = () => {
   const [errorBusqueda, setErrorBusqueda] = useState<string | null>(null);
   const [mostrarResultados, setMostrarResultados] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
+  const [showChats, setShowChats] = useState(false);
+  const [chatActual, setChatActual] = useState<any | null>(null);
+  const { loading: loadingConversaciones } = useConversaciones(TokenService.getUid());
+
+  const abrirMiniChat = (conv: any) => {
+    setChatActual(conv);
+  };
 
   const [estaLogueado, setEstaLogueado] = useState(isLoggedIn());
 
@@ -292,10 +302,36 @@ const NavbarApp: React.FC = () => {
                   <Bell size={20} />
                 </Nav.Link>
 
-                <Nav.Link className="position-relative" onClick={() => Navegar.chatCompleto()}>
-                  <MessageCircle size={20} />
+                <Nav.Link className="position-relative">
+                  {loadingConversaciones ? (
+                      <div
+                        className="spinner-border text-success"
+                        style={{ width: "20px", height: "20px" }}
+                        role="status"
+                      />
+                    ) : (
+                      <MessageCircle
+                        size={20}
+                        style={{ cursor: "pointer" }}
+                        onClick={() => setShowChats((prev) => !prev)}
+                      />
+                    )}
+
+
+
                   <NotificacionesBadge idUsuario={TokenService.getUid()} />
+
+                  {showChats && (
+                    <ConversacionesDropdown
+                      idUsuario={TokenService.getUid()!}
+                      onSeleccionar={(conv) => {
+                        setShowChats(false);
+                        abrirMiniChat(conv);
+                      }}
+                    />
+                  )}
                 </Nav.Link>
+
               </>
             )}
 
@@ -332,6 +368,17 @@ const NavbarApp: React.FC = () => {
         onClose={() => setShowFiltros(false)}
         onApply={aplicarFiltros}
       />
+      {chatActual && (
+        <MiniChat
+          visible={true}
+          onClose={() => setChatActual(null)}
+          idPublicacion={chatActual.idPublicacion}
+          idDestinatario={chatActual.idOtraPersona}
+          idUsuarioActual={TokenService.getUid()!}
+          nombreDestinatario={chatActual.nombreOtraPersona}
+        />
+      )}
+
     </>
   );
 };

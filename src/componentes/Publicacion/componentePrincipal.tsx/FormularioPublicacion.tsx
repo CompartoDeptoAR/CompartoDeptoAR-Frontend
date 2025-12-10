@@ -50,15 +50,16 @@ const FormularioPublicacion: React.FC<FormularioPublicacionProps> = ({
       (publicacion.preferencias as PreferenciasUsuario) ??
       ({} as PreferenciasUsuario),
     cargarDesdePerfil: true,
-    guardarEnPerfil: false, 
+    guardarEnPerfil: false,
   });
 
+  // 🔥 CORREGIDO: Agregar las callbacks a las dependencias
   useEffect(() => {
     if (!cargandoPerfil) {
       onHabitosChange?.(habitos);
       onPreferenciasChange?.(preferencias);
     }
-  }, [habitos, preferencias, cargandoPerfil]); 
+  }, [habitos, preferencias, cargandoPerfil, onHabitosChange, onPreferenciasChange]);
 
   return (
     <div className="container py-4">

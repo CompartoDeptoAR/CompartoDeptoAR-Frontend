@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { 
   LABELS_HABITOS, 
   LABELS_PREFERENCIAS, 
@@ -37,10 +37,16 @@ export const SelectorHabitosPreferencias: React.FC<SelectorHabitosPreferenciasPr
   compact = false,
 }) => {
 
+  // 🔥 Memoizar para evitar recalcular en cada render
+  const habitosNorm = useMemo(
+    () => normalizar(habitos, OPCIONES_HABITOS),
+    [habitos]
+  );
 
-  const habitosNorm = normalizar(habitos, OPCIONES_HABITOS);
-  const prefsNorm = normalizar(preferencias, OPCIONES_PREFERENCIAS);
-
+  const prefsNorm = useMemo(
+    () => normalizar(preferencias, OPCIONES_PREFERENCIAS),
+    [preferencias]
+  );
 
   return (
     <>

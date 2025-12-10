@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import type { HabitosUsuario, PreferenciasUsuario } from "../modelos/Usuario";
 import apiUsuario from "../api/endpoints/usuario";
 
@@ -6,14 +6,14 @@ interface UseHabitosPreferenciasProps {
   habitosIniciales?: HabitosUsuario;
   preferenciasIniciales?: PreferenciasUsuario;
   cargarDesdePerfil?: boolean;
-  guardarEnPerfil?: boolean; // 🔥 
+  guardarEnPerfil?: boolean;
 }
 
 export const useHabitosPreferencias = ({
   habitosIniciales,
   preferenciasIniciales,
   cargarDesdePerfil = false,
-  guardarEnPerfil = false, // 🔥 
+  guardarEnPerfil = false,
 }: UseHabitosPreferenciasProps = {}) => {
 
   const [habitos, setHabitos] = useState<HabitosUsuario>(habitosIniciales || {});
@@ -21,9 +21,16 @@ export const useHabitosPreferencias = ({
   const [cargando, setCargando] = useState(cargarDesdePerfil);
   const [error, setError] = useState<string | null>(null);
 
+  // 🔥 Ref para evitar guardar durante la carga inicial
+  const yaCargoInicial = useRef(false);
+
   useEffect(() => {
-    if (cargarDesdePerfil) cargarDatosPerfil();
-  }, []);
+    if (cargarDesdePerfil) {
+      cargarDatosPerfil();
+    } else {
+      yaCargoInicial.current = true;
+    }
+  }, [cargarDesdePerfil]);
 
   const cargarDatosPerfil = async () => {
     try {
@@ -35,21 +42,21 @@ export const useHabitosPreferencias = ({
       if (data.habitos) setHabitos(data.habitos);
       if (data.preferencias) setPreferencias(data.preferencias);
 
+      yaCargoInicial.current = true;
     } catch (err: any) {
       console.error("Error cargando perfil:", err);
       setError(err.message || "Error desconocido");
+      yaCargoInicial.current = true;
     } finally {
       setCargando(false);
     }
   };
 
-  // ---------------------------------------------------------
   // 🔥 GUARDADO AUTOMÁTICO EN PERFIL (con debounce)
-  // ---------------------------------------------------------
-
   useEffect(() => {
     if (!guardarEnPerfil) return;
-    if (cargando) return; // No guardamos mientras carga del backend
+    if (cargando) return;
+    if (!yaCargoInicial.current) return; // 🔥 No guardar antes de cargar
 
     const timeout = setTimeout(() => {
       apiUsuario.usuario
@@ -64,7 +71,6 @@ export const useHabitosPreferencias = ({
 
     return () => clearTimeout(timeout);
   }, [habitos, preferencias, guardarEnPerfil, cargando]);
-  // ---------------------------------------------------------
 
   const toggleHabito = (key: keyof HabitosUsuario) => {
     setHabitos((prev) => ({
@@ -80,10 +86,16 @@ export const useHabitosPreferencias = ({
     }));
   };
 
-  const setHabitosCompletos = (nuevosHabitos: HabitosUsuario) => setHabitos(nuevosHabitos);
-  const setPreferenciasCompletas = (nuevasPreferencias: PreferenciasUsuario) => setPreferencias(nuevasPreferencias);
+  const setHabitosCompletos = (nuevosHabitos: HabitosUsuario) => {
+    setHabitos({ ...nuevosHabitos });
+  };
+
+  const setPreferenciasCompletas = (nuevasPreferencias: PreferenciasUsuario) => {
+    setPreferencias({ ...nuevasPreferencias });
+  };
 
   const resetear = () => {
+    console.log("🔄 Reseteando hábitos y preferencias");
     setHabitos({});
     setPreferencias({});
   };

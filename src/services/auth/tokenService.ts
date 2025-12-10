@@ -5,7 +5,7 @@ export interface AuthData {
   ID: string;
   rol: Rol[] | String[];
   mail?: string;
-  uid: string;
+  uid: string;// es el firebaseUid del usuario
 }
 
 export class TokenService {
