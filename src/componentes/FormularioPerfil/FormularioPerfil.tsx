@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import type { UsuarioPerfil, HabitosUsuario, PreferenciasUsuario } from "../../modelos/Usuario";
+import type { UsuarioPerfil, HabitosUsuario, PreferenciasUsuario, Genero } from "../../modelos/Usuario";
 import "../../styles/FormularioPerfil.css";
 import { habitosConfig, opcionesGenero, preferenciasConfig } from "./helpers/config";
 import CampoTexto from "./helpers/CampoTexto";
@@ -9,27 +9,38 @@ import BotonesFormulario from "./helpers/BotonesFormulario";
 import SeccionCheckboxes from "./helpers/SeccionCheckboxes";
 import { Navegar } from "../../navigation/navigationService";
 
-
 interface FormularioPerfilProps {
-  perfil: UsuarioPerfil;
+  perfil?: UsuarioPerfil; 
   modo: "view" | "editar" | "verOtro";
   onSubmit?: (usuario: UsuarioPerfil) => void;
 }
 
-interface SubirFotoResponse {
-  mensaje: string;
-  url: string;
-}
-
 const FormularioPerfil: React.FC<FormularioPerfilProps> = ({ perfil, modo, onSubmit }) => {
-  const [formData, setFormData] = useState<UsuarioPerfil>(perfil);
-  const [preview, setPreview] = useState<string>(perfil.fotoPerfil || "");
+  const [formData, setFormData] = useState<UsuarioPerfil>({
+    nombreCompleto: perfil?.nombreCompleto ?? "",
+    edad: perfil?.edad ?? 18,
+    genero: perfil?.genero,
+    descripcion: perfil?.descripcion ?? "",
+    fotoPerfil: perfil?.fotoPerfil ?? "",
+    habitos: perfil?.habitos ?? {},
+    preferencias: perfil?.preferencias ?? {},
+  });
+
+  const [preview, setPreview] = useState<string>(perfil?.fotoPerfil ?? "");
   const [subiendo, setSubiendo] = useState(false);
 
   useEffect(() => {
     if (perfil) {
-      setFormData(perfil);
-      setPreview(perfil.fotoPerfil || "");
+      setFormData({
+        nombreCompleto: perfil.nombreCompleto ?? "",
+        edad: perfil.edad ?? 18,
+        genero: perfil.genero,
+        descripcion: perfil.descripcion ?? "",
+        fotoPerfil: perfil.fotoPerfil ?? "",
+        habitos: perfil.habitos ?? {},
+        preferencias: perfil.preferencias ?? {},
+      });
+      setPreview(perfil.fotoPerfil ?? "");
     }
   }, [perfil]);
 
@@ -39,7 +50,7 @@ const FormularioPerfil: React.FC<FormularioPerfilProps> = ({ perfil, modo, onSub
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: name === "edad" ? parseInt(value) : value,
+      [name]: name === "edad" ? parseInt(value) || 0 : value,
     }));
   };
 
@@ -87,7 +98,6 @@ const FormularioPerfil: React.FC<FormularioPerfilProps> = ({ perfil, modo, onSub
       <div className="perfil-header">Mi Perfil 🤘🏻</div>
 
       <div className="perfil-card">
-
         {/* FOTO DE PERFIL */}
         <div className="perfil-foto-area">
           <div className="perfil-foto-wrapper">
@@ -119,11 +129,7 @@ const FormularioPerfil: React.FC<FormularioPerfilProps> = ({ perfil, modo, onSub
           <CampoTexto
             label="Nombre"
             name="nombreCompleto"
-<<<<<<< HEAD
             value={formData.nombreCompleto ?? ""}
-=======
-            value={formData.nombreCompleto || ""}
->>>>>>> bbbe1e5dd6b116f9461ebc9fb8ff114127a9d94d
             esSoloVista={esSoloVista}
             onChange={handleChange}
             required
@@ -134,11 +140,7 @@ const FormularioPerfil: React.FC<FormularioPerfilProps> = ({ perfil, modo, onSub
               <CampoTexto
                 label="Edad"
                 name="edad"
-<<<<<<< HEAD
                 value={formData.edad ?? 0}
-=======
-                value={formData.edad || "No se pudo obtener la edad"}
->>>>>>> bbbe1e5dd6b116f9461ebc9fb8ff114127a9d94d
                 type="number"
                 esSoloVista={esSoloVista}
                 onChange={handleChange}
@@ -151,7 +153,7 @@ const FormularioPerfil: React.FC<FormularioPerfilProps> = ({ perfil, modo, onSub
               <CampoSelect
                 label="Género"
                 name="genero"
-                value={formData.genero}
+                value={formData.genero ?? undefined}
                 opciones={opcionesGenero}
                 esSoloVista={esSoloVista}
                 onChange={handleChange}
@@ -163,7 +165,7 @@ const FormularioPerfil: React.FC<FormularioPerfilProps> = ({ perfil, modo, onSub
           <CampoTextArea
             label="Descripción"
             name="descripcion"
-            value={formData.descripcion || ""}
+            value={formData.descripcion ?? ""} // nunca undefined
             esSoloVista={esSoloVista}
             onChange={handleChange}
             placeholder="Cuéntanos sobre ti..."
@@ -172,7 +174,7 @@ const FormularioPerfil: React.FC<FormularioPerfilProps> = ({ perfil, modo, onSub
           <SeccionCheckboxes<HabitosUsuario>
             titulo="Hábitos"
             config={habitosConfig}
-            datos={formData.habitos}
+            datos={formData.habitos ?? {}}
             esSoloVista={esSoloVista}
             onToggle={toggleHabito}
             textoVacio="Sin hábitos especificados"
@@ -181,7 +183,7 @@ const FormularioPerfil: React.FC<FormularioPerfilProps> = ({ perfil, modo, onSub
           <SeccionCheckboxes<PreferenciasUsuario>
             titulo="Preferencias"
             config={preferenciasConfig}
-            datos={formData.preferencias}
+            datos={formData.preferencias ?? {}}
             esSoloVista={esSoloVista}
             onToggle={togglePreferencia}
             textoVacio="Sin preferencias especificadas"
@@ -190,7 +192,7 @@ const FormularioPerfil: React.FC<FormularioPerfilProps> = ({ perfil, modo, onSub
           <BotonesFormulario modo={modo} />
 
           {modo === "view" && (
-            <button 
+            <button
               type="button"
               className="btn-volver-atras-perfil"
               onClick={() => Navegar.volverAtras()}
