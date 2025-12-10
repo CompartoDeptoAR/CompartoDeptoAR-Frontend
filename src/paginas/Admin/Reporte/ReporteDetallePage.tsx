@@ -1,8 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-
 import { Reporte } from "../../../modelos/Reporte";
-
 import apiDenuncia from "../../../api/endpoints/denuncia";
 import { ContenidoReportado } from "../../../componentes/Reporte/ContenidoReportado";
 import { AccionesModeracion } from "../../../componentes/Reporte/AccionesModeracion";

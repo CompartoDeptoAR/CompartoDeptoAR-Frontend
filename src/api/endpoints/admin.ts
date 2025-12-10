@@ -42,16 +42,13 @@ const apiAdmin = {
     }
   },
 
+  
   sacarRol: async (usuarioId: string, rol: string): Promise<any> => {
     try {
-      const adminId = TokenService.getUserId();
-      if (!adminId) throw new Error("Usuario no autenticado");
-
-      const res = await axiosApi.post(`${urlUsuarios}/sacar-rol`, {
-        usuarioId,
-        rol
+      const res = await axiosApi.post(`${urlUsuarios}/sacar-rol`, { 
+        usuarioId, 
+        rol 
       });
-
       return res.data;
     } catch (error: any) {
       console.error("Error quitando rol:", error);

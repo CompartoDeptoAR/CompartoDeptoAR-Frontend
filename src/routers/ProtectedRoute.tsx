@@ -11,7 +11,6 @@ import MisFavoritos from "../paginas/Publicacion/Listar/MisFavoritos";
 import Configuracion from "../paginas/Configuracion/Configuracion";
 import { ADMIN_ROUTES, GENERAL, USER_ROUTES, ROUTE } from "./Routes";
 import NotFoundPage from "../paginas/Configuracion/NotFound";
-
 import { Navegar } from "../navigation/navigationService";
 import { ChatCompleto } from "../paginas/Chat/ChatCompleto";
 import DenunciaPage from "../paginas/Nosotros/DenunciaPage";

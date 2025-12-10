@@ -7,7 +7,6 @@ import ContactanosPage from "../paginas/Nosotros/ContactanosPage";
 import NosotrosPage from "../paginas/Nosotros/NosotosPage";
 import TodasLasPublicaciones from "../paginas/Publicacion/Listar/TodasLasPublicaciones";
 import {  PUBLIC_ROUTES, GENERAL, } from "./Routes";
-
 import { TokenService } from "../services/auth/tokenService";
 import VerPublicacion from "../paginas/Publicacion/Funcionalidades/VerPublicacion";
 import RestrictedAccess from "../paginas/Auth/RestrictedAccess";
@@ -37,6 +36,7 @@ const Router: React.FC = () => {
       
         <Route path={GENERAL.RESTRICTED} element={<RestrictedAccess />} />
         <Route path={GENERAL.NOT_FOUND} element={<Navigate to={PUBLIC_ROUTES.HOME} replace />} />
+        {/*<Route path={GENERAL.109} element={}/>*/}
       </Route>
     </Routes>
   );
