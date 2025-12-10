@@ -1,0 +1,202 @@
+.sticky-top {
+  position: sticky;
+  top: 20px;
+  z-index: 10;
+}
+
+.text-justify {
+  text-align: justify;
+}
+
+.star-interactive {
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.star-interactive:hover {
+  transform: scale(1.2);
+}
+
+
+.card {
+  border: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card-body {
+  padding: 1.5rem;
+}
+
+
+@media (max-width: 991px) {
+  .sticky-top {
+    position: relative;
+    top: 0;
+  }
+}
+
+img {
+  image-orientation: from-image;
+}
+.img-fluid {
+  transition: transform 0.3s ease;
+}
+
+.img-fluid:hover {
+  transform: scale(1.02);
+}
+
+/* Info badges */
+.alert-info {
+  background-color: #e7f3ff;
+  border-color: #b3d9ff;
+  color: #004085;
+}
+
+
+
+/*.....................*/
+
+/* PC */
+.fotos-ml-container {
+  display: flex;
+  gap: 10px;
+}
+
+.fotos-thumbs {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.thumb-img {
+  width: 70px;
+  height: 70px;
+  object-fit: cover;
+  border-radius: 6px;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: 0.2s;
+  border: 2px solid transparent;
+}
+
+.thumb-img.thumb-active {
+  opacity: 1;
+  border: 2px solid #0d6efd;
+}
+
+.fotos-principal {
+  flex: 1;
+}
+
+.foto-grande {
+  width: 100%;
+  max-height: 500px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+/* Mobile */
+.contador-fotos {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(0,0,0,0.6);
+  color: white;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 14px;
+}
+
+.btn-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0,0,0,0.5);
+  border: none;
+  color: white;
+  font-size: 30px;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+}
+
+.btn-nav.left {
+  left: 10px;
+}
+
+.btn-nav.right {
+  right: 10px;
+}
+
+@media (min-width: 992px) {
+  /* Ocultar mobile en escritorio */
+  .contador-fotos,
+  .btn-nav {
+    display: none;
+  }
+}
+
+/* Ocultar miniaturas en mobile — no ocultar toda la zona de fotos */
+@media (max-width: 991px) {
+  .fotos-thumbs {
+    display: none;
+  }
+}
+
+/* Asegurar que la imagen principal SI se muestre en mobile */
+@media (max-width: 991px) {
+  .fotos-principal,
+  .foto-grande {
+    display: block !important;
+  }
+}
+
+.btn-skip-container {
+  width: 100%;               
+  display: flex;
+  justify-content: flex-end; 
+  margin: 20px 0;            
+  padding: 0 20px;          
+}
+
+.btn-skip {
+  background-color: #0d6efd;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: 0.2s ease;
+  font-size: 1rem;
+}
+
+.btn-skip:hover {
+  transform: scale(1.05);
+  background-color: #6ab8f5;
+}
+
+/*  Respon para pantallas tiquitas */
+@media (max-width: 600px) {
+  .btn-skip {
+    padding: 12px 18px;  
+    font-size: 0.95rem;
+  }
+
+  .btn-skip-container {
+    justify-content: center; 
+    padding: 0 10px;
+  }
+}
+
+
+.boton-denuncia-link {
+  color: #007bff;        /* azul */
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.boton-denuncia-link:hover {
+  color: #0056b3;        /* azul más oscuro al pasar el mouse */
+}

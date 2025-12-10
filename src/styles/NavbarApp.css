@@ -1,0 +1,65 @@
+/* Estilos para el buscador y resultados */
+.search-container {
+  position: relative;
+}
+
+.search-results-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border-radius: 0 0 8px 8px;
+  border: 1px solid #dee2e6;
+  border-top: none;
+  margin-top: -1px;
+  z-index: 1050;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.search-result-item {
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.search-result-item:hover {
+  background-color: #f8f9fa;
+}
+
+.hover-effect:hover {
+  background-color: #e9ecef;
+  border-radius: 4px;
+}
+
+/* Animación para el dropdown */
+.search-results-dropdown {
+  animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Estilos para móviles */
+@media (max-width: 768px) {
+  .search-results-dropdown {
+    position: fixed;
+    top: 56px; /* Altura del navbar */
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 0;
+    margin-top: 0;
+  }
+  
+  .search-results-body {
+    max-height: calc(100vh - 120px) !important;
+  }
+}

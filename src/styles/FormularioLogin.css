@@ -1,0 +1,44 @@
+/* === LOGIN PAGE, NO SE MEZCLA CON NADA === */
+.login-page .form-container {
+  max-width: 600px;
+  margin: 2rem auto;
+  background: #fff;
+  padding: 2rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+.login-page .form-container label {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.login-page .form-container input,
+.login-page .form-container select,
+.login-page .form-container textarea {
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.login-page .password-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.login-page .toggle-password {
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: none;
+  background: #007bff;
+  color: #fff;
+  cursor: pointer;
+}
+
+.login-page button {
+  margin-right: 0.5rem;
+}

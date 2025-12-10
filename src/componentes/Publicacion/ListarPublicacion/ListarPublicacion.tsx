@@ -1,0 +1,145 @@
+import React from "react";
+import { Spinner, Button } from "react-bootstrap";
+import { ChevronDown } from "lucide-react";
+import "../../../styles/ListarPublicacion.css";
+import type { PublicacionResumida } from "../../../modelos/Publicacion";
+import { useListarPublicaciones } from "../../../hooks/componente/publicacion/useListarPublicaciones";
+import CartaPublicacion from "../componenteSecundario/CartaPublicacion";
+
+interface ListarPublicacionesProps {
+  publicaciones: PublicacionResumida[];
+  loading?: boolean;
+  loadingMore?: boolean;
+  error?: string;
+  emptyMessage?: string;
+  showActions?: boolean;
+  hasMore?: boolean;
+  onEdit?: (id: string) => void;
+  onDelete?: (id: string) => void;
+  onEstado?: (id: string, nuevoEstado: "activa" | "pausada") => void;
+  onToggleFavorite?: (id: string) => void;
+  onCargarMas?: () => void;
+  favoriteIds?: string[];
+}
+
+const ListarPublicaciones: React.FC<ListarPublicacionesProps> = ({
+  publicaciones = [],
+  loading = false,
+  loadingMore = false,
+  error,
+  emptyMessage = "No hay publicaciones disponibles",
+  showActions = false,
+  hasMore = false,
+  onEdit,
+  onDelete,
+  onEstado,
+  onToggleFavorite,
+  onCargarMas,
+  favoriteIds = [],
+}) => {
+
+  const {
+    handleVerDetalle,
+    handleEdit,
+    handleDelete,
+    handleToggleFavorite,
+    isFavorite,
+  } = useListarPublicaciones({
+    onEdit,
+    onDelete,
+    onToggleFavorite,
+    favoriteIds,
+  });
+
+ 
+  const handleEstadoClick = (id: string) => {
+    if (!onEstado) return;
+    
+    const publicacion = publicaciones.find(p => p.id === id);
+    if (!publicacion) return;
+    
+    const nuevoEstado = publicacion.estado === "activa" ? "pausada" : "activa";
+    onEstado(id, nuevoEstado);
+  };
+
+  if (loading) return <></>;
+
+  if (error) {
+    return (
+      <div className="container mt-5">
+        <div className="alert alert-danger text-center">
+          <h4>❌ Error</h4>
+          <p>{error}</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!publicaciones || publicaciones.length === 0) {
+    return (
+      <div className="container mt-5">
+        <div className="alert alert-info text-center">
+          <h4>📭 {emptyMessage}</h4>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="container mt-4">
+      <div className="row g-4">
+        {publicaciones.map((pub) => (
+          <div key={pub.id} className="col-12 col-md-6 col-lg-4">
+            <CartaPublicacion
+              publicacion={pub}
+              showActions={showActions}
+              isFavorite={isFavorite(pub.id)}
+              onEdit={() => handleEdit(pub.id)}
+              onDelete={() => handleDelete(pub.id)}
+              onEstado={() => handleEstadoClick(pub.id)} 
+              onToggleFavorite={() => handleToggleFavorite(pub.id)}
+              onVerDetalles={() => handleVerDetalle(pub.id)}
+            />
+          </div>
+        ))}
+      </div>
+
+      {/* Controles de paginación */}
+      {(hasMore || loadingMore) && (
+        <div className="row mt-5 mb-4">
+          <div className="col-12 d-flex justify-content-center">
+            {loadingMore ? (
+              <div className="d-flex flex-column align-items-center">
+                <Spinner animation="border" variant="primary" />
+                <small className="text-muted mt-2">Cargando más publicaciones...</small>
+              </div>
+            ) : hasMore ? (
+              <Button
+                variant="outline-primary"
+                onClick={onCargarMas}
+                className="px-4 py-2 d-flex align-items-center gap-2"
+              >
+                <span>Cargar más publicaciones</span>
+                <ChevronDown size={18} />
+              </Button>
+            ) : null}
+          </div>
+        </div>
+      )}
+
+      {/* Mensaje cuando no hay más */}
+      {!hasMore && !loadingMore && publicaciones.length > 0 && (
+        <div className="row mt-4 mb-4">
+          <div className="col-12">
+            <div className="text-center text-muted">
+              <hr className="my-4" />
+              <p className="mb-0">Ya todas las publicaciones disponibles</p>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default ListarPublicaciones;
