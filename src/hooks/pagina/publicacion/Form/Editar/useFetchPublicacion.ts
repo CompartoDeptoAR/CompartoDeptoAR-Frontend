@@ -22,7 +22,6 @@ export const useFetchPublicacion = (
       try {
         const data: PublicacionResponce = await apiPublicacion.publicacion.obtener(id);
 
-        // Parse ubicación
         const parts = data.ubicacion?.split(",").map((s) => s.trim()) ?? [];
 
         const provincia = parts[parts.length - 1] || "";

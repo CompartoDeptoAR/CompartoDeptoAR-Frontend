@@ -4,7 +4,7 @@ import axiosApi from "../config/axios.config";
 const urlApi = import.meta.env.VITE_URL_PUBLICACION;
 
 const apiBuscador = {
-  // texto solito
+
   buscar: async (texto: string): Promise<Publicacion[]> => {
     const textoLimpio = texto.trim();
     
@@ -61,9 +61,6 @@ const apiBuscador = {
       
       console.log("🧹 Filtros limpios enviados:", filtrosLimpios);
       
-      // 🔥 FIX: Usar la misma estructura que el método buscar()
-      // Si urlApi = "/api/publicaciones", entonces:
-      // ${urlApi}/buscarConFiltros = "/api/publicaciones/buscarConFiltros" ✅
       const url = `${urlApi}/buscarConFiltros`;
       console.log("📍 URL completa de filtros:", url);
       

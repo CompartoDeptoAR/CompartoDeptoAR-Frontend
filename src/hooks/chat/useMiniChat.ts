@@ -21,7 +21,7 @@ export const useMiniChat = ({
   const [enviando, setEnviando] = useState(false);
   const [error, setError] = useState("");
 
-  // Escuchar mensajes en tiempo real
+
   useEffect(() => {
     if (!visible || !idPublicacion || !idUsuarioActual) return;
 
@@ -31,7 +31,7 @@ export const useMiniChat = ({
       (nuevosMensajes) => {
         setMensajes(nuevosMensajes);
 
-        // Marcar como leídos los mensajes recibidos
+
         const noLeidos = nuevosMensajes
           .filter((m) => !m.leido && !m.esPropio)
           .map((m) => m.id);

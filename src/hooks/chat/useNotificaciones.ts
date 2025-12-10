@@ -10,7 +10,7 @@ export const useNotificaciones = (idUsuario: string | null) => {
       return;
     }
 
-    // Escuchar cambios en tiempo real
+
     const unsubscribe = chatService.escucharNoLeidos(idUsuario, (nuevoCount) => {
       setCount(nuevoCount);
     });

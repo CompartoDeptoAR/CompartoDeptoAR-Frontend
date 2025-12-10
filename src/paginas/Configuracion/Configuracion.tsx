@@ -25,7 +25,8 @@ const Configuracion: React.FC = () => {
   useEffect(() => {
     cargarDatos();
   }, []);
-
+  //🔥🔥🔥🔥
+  // Esto aun no lo usamos
   const cargarDatos = async () => {
     setLoading(true);
     try {
@@ -115,8 +116,7 @@ const Configuracion: React.FC = () => {
       localStorage.clear();
       
       showSuccess("Tu cuenta ha sido eliminada exitosamente");
-      
-      // Redirigir al home después de un breve delay
+    
       setTimeout(() => {
         Navegar.home();
         window.location.reload();

@@ -12,7 +12,7 @@ const RestrictedAccess: React.FC = () => (
       className="img-fluid mb-4"
       style={{
         width: "100%",
-        maxWidth: "450px",   // antes 800px → demasiado grande para móviles
+        maxWidth: "450px",   
         height: "auto",
         objectFit: "contain",
         padding: "0 1rem"

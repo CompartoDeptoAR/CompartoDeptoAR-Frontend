@@ -84,7 +84,7 @@ export const useMisPublicaciones = () => {
       showSuccess(`Estado cambiado a ${nuevoEstado}`);
     } catch (err: any) {
       showError(err.message || "Error al cambiar estado");
-      setPublicaciones(prev); // rollback
+      setPublicaciones(prev);
     }
   };
 

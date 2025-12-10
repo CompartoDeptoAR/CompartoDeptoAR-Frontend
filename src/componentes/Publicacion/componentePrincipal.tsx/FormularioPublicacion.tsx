@@ -53,7 +53,7 @@ const FormularioPublicacion: React.FC<FormularioPublicacionProps> = ({
     guardarEnPerfil: false,
   });
 
-  // 🔥 CORREGIDO: Agregar las callbacks a las dependencias
+
   useEffect(() => {
     if (!cargandoPerfil) {
       onHabitosChange?.(habitos);

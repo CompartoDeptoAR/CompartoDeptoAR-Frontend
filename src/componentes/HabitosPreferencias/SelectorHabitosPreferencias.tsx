@@ -37,7 +37,6 @@ export const SelectorHabitosPreferencias: React.FC<SelectorHabitosPreferenciasPr
   compact = false,
 }) => {
 
-  // 🔥 Memoizar para evitar recalcular en cada render
   const habitosNorm = useMemo(
     () => normalizar(habitos, OPCIONES_HABITOS),
     [habitos]

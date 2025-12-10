@@ -15,7 +15,7 @@ export const usePublicacionesPaginadas = () => {
   const [lastId, setLastId] = useState<string | undefined>();
   const [loadingMore, setLoadingMore] = useState(false);
 
-  /** Cargar publicaciones */
+
   const cargarPublicaciones = useCallback(
     async (startAfterId?: string) => {
       if (startAfterId) {
@@ -53,7 +53,7 @@ export const usePublicacionesPaginadas = () => {
     []
   );
 
-  /** Cargar más */
+
   const cargarMas = useCallback(() => {
     if (lastId && hasMore && !loadingMore) {
       cargarPublicaciones(lastId);

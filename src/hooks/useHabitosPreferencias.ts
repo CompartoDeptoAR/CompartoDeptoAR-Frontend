@@ -21,7 +21,7 @@ export const useHabitosPreferencias = ({
   const [cargando, setCargando] = useState(cargarDesdePerfil);
   const [error, setError] = useState<string | null>(null);
 
-  // 🔥 Ref para evitar guardar durante la carga inicial
+  // 🔥🔥🔥
   const yaCargoInicial = useRef(false);
 
   useEffect(() => {
@@ -52,11 +52,10 @@ export const useHabitosPreferencias = ({
     }
   };
 
-  // 🔥 GUARDADO AUTOMÁTICO EN PERFIL (con debounce)
   useEffect(() => {
     if (!guardarEnPerfil) return;
     if (cargando) return;
-    if (!yaCargoInicial.current) return; // 🔥 No guardar antes de cargar
+    if (!yaCargoInicial.current) return;
 
     const timeout = setTimeout(() => {
       apiUsuario.usuario

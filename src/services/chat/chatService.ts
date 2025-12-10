@@ -20,7 +20,7 @@ class ChatService {
   private publicacionesCollection = "publicaciones";
   private usuariosCollection = "usuarios";
 
-  // ==================== ENVIAR MENSAJE ====================
+  
   async enviarMensaje(
     contenido: string,
     idRemitente: string,
@@ -46,7 +46,7 @@ class ChatService {
     return docRef.id;
   }
 
-  // ==================== ESCUCHAR MENSAJES EN TIEMPO REAL ====================
+
   escucharMensajes(
     idPublicacion: string,
     idUsuarioActual: string,
@@ -81,22 +81,22 @@ class ChatService {
     );
   }
 
-  // ==================== OBTENER CONVERSACIONES (CORREGIDO) ====================
+  
   async obtenerConversaciones(idUsuario: string): Promise<Conversacion[]> {
     try {
       console.log("📋 Obteniendo conversaciones para usuario:", idUsuario);
 
-      // Query para obtener todos los mensajes donde el usuario es participante
+
       const q = query(
         collection(db, this.mensajesCollection),
         where("participantes", "array-contains", idUsuario),
-        orderBy("fechaEnvio", "desc") // 🔥 Ordenar por fecha para optimizar
+        orderBy("fechaEnvio", "desc") 
       );
 
       const snapshot = await getDocs(q);
       console.log("📨 Total de mensajes encontrados:", snapshot.size);
 
-      // Agrupar mensajes por publicación
+
       const mensajesPorPublicacion = new Map<string, Mensaje[]>();
 
       snapshot.docs.forEach((docSnap) => {
@@ -111,18 +111,17 @@ class ChatService {
 
       console.log("💬 Conversaciones agrupadas:", mensajesPorPublicacion.size);
 
-      // Procesar cada conversación
       const conversaciones: Conversacion[] = [];
 
       for (const [idPublicacion, mensajes] of mensajesPorPublicacion.entries()) {
-        // Ordenar mensajes por fecha (más reciente primero)
+ 
         const mensajesOrdenados = mensajes.sort(
           (a, b) => b.fechaEnvio.toMillis() - a.fechaEnvio.toMillis()
         );
 
         const ultimoMensaje = mensajesOrdenados[0];
 
-        // 🔥 CORREGIDO: Determinar el ID de la otra persona correctamente
+
         const idOtraPersona =
           ultimoMensaje.idRemitente === idUsuario
             ? ultimoMensaje.idDestinatario
@@ -130,12 +129,11 @@ class ChatService {
 
         console.log("👤 Otra persona en conversación:", idOtraPersona);
 
-        // Contar mensajes no leídos (solo los dirigidos al usuario actual)
         const noLeidos = mensajes.filter(
           (m) => !m.leido && m.idDestinatario === idUsuario
         ).length;
 
-        // Obtener info de publicación y usuario en paralelo
+ 
         const [publicacion, otraPersona] = await Promise.all([
           this.obtenerPublicacion(idPublicacion),
           this.obtenerUsuario(idOtraPersona),
@@ -154,7 +152,7 @@ class ChatService {
         });
       }
 
-      // Ordenar por fecha del último mensaje (más reciente primero)
+    
       const conversacionesOrdenadas = conversaciones.sort(
         (a, b) => b.fechaUltimoMensaje.getTime() - a.fechaUltimoMensaje.getTime()
       );
@@ -168,7 +166,6 @@ class ChatService {
     }
   }
 
-  // ==================== ESCUCHAR CONVERSACIONES EN TIEMPO REAL ====================
   escucharConversaciones(
     idUsuario: string,
     callback: (conversaciones: Conversacion[]) => void
@@ -192,7 +189,7 @@ class ChatService {
     );
   }
 
-  // ==================== MARCAR COMO LEÍDOS ====================
+
   async marcarComoLeidos(idsMensajes: string[]): Promise<void> {
     if (idsMensajes.length === 0) return;
 
@@ -207,7 +204,7 @@ class ChatService {
     }
   }
 
-  // ==================== CONTAR NO LEÍDOS ====================
+
   async contarNoLeidos(idUsuario: string): Promise<number> {
     try {
       const q = query(
@@ -224,7 +221,7 @@ class ChatService {
     }
   }
 
-  // ==================== ESCUCHAR CONTADOR NO LEÍDOS ====================
+
   escucharNoLeidos(
     idUsuario: string,
     callback: (count: number) => void
@@ -247,7 +244,6 @@ class ChatService {
     );
   }
 
-  // ==================== INICIAR CONVERSACIÓN ====================
   async iniciarConversacion(
     idRemitente: string,
     idDestinatario: string,
@@ -262,7 +258,7 @@ class ChatService {
     );
   }
 
-  // ==================== VERIFICAR SI EXISTE CONVERSACIÓN ====================
+  
   async existeConversacion(
     idUsuario: string,
     idPublicacion: string
@@ -283,7 +279,7 @@ class ChatService {
     }
   }
 
-  // ==================== HELPERS ====================
+
   private async obtenerPublicacion(
     id: string
   ): Promise<{ titulo: string } | null> {

@@ -2,7 +2,7 @@ import { useCallback, useState } from "react";
 import type { EstadoPublicacion, Publicacion } from "../../../../../modelos/Publicacion";
 import { PreferenciasUsuario, HabitosUsuario } from "../../../../../modelos/Usuario";
 
-// 🔥 Función que genera un objeto completamente nuevo cada vez
+// 🔥🔥🔥🔥🔥🔥🔥🔥🔥
 const crearPublicacionVacia = (): Publicacion => ({
   titulo: "",
   descripcion: "",

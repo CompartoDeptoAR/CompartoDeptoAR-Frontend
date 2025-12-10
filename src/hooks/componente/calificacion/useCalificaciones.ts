@@ -42,12 +42,11 @@ export const useCalificaciones = () => {
     try {
       const res = await apiCalificacion.calificacion.crear(data);
 
-      // Actualizo promedio
+    
       if (res && typeof res.promedio === "number") {
         setPromedio(res.promedio);
       }
 
-      // refresco calificaciones (usa el idCalificado)
       await fetchPorUsuario(data.idCalificado);
 
       return res;

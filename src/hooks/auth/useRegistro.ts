@@ -28,7 +28,7 @@ export function useRegistro(onSwitch: () => void) {
 
   const togglePassword = () => setMostrarPassword(p => !p);
 
-  // -------- VALIDACIÓN DE PASO 1 --------
+  // -------- VALIDACION DE PASO 1 --------
   const handlePaso1Submit = (e: React.FormEvent) => {
     e.preventDefault();
 

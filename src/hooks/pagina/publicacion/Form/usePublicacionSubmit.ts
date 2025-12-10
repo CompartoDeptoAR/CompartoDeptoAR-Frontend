@@ -18,7 +18,7 @@ export const usePublicacionSubmit = (
     e.preventDefault();
     console.log("📝 handleSubmit ejecutado");
 
-    // Validacion
+ 
     if (!formData.titulo?.trim()) return showWarning("El título es obligatorio");
     if (!formData.provincia) return showWarning("Selecciona una provincia");
     if (!formData.localidad) return showWarning("Selecciona una localidad");
@@ -71,7 +71,7 @@ export const usePublicacionSubmit = (
 
       console.log("📤 Enviando publicación:", publicacionParaEnviar);
 
-      // Guardar hábitos y preferencias en el perfil del usuario
+
       try {
         await apiUsuario.usuario.editarPerfil({
           habitos: formData.habitos ?? {},
@@ -82,7 +82,7 @@ export const usePublicacionSubmit = (
         console.warn("⚠️ No se pudieron guardar hábitos en el perfil:", perfilError);
       }
 
-      // Crear la publicación
+     
       const response = await apiPublicacion.publicacion.crearPublicacion(publicacionParaEnviar);
 
       console.log("✅ Publicación creada:", response);

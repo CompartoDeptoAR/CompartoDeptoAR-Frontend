@@ -4,7 +4,7 @@ interface GestorFotosProps {
   fotos: string[];
   onFotosChange: (fotos: string[]) => void;
   disabled?: boolean;
-  titulo?: string; // <- nuevo prop opcional para el título
+  titulo?: string; 
 }
 
 const GestorFotos: React.FC<GestorFotosProps> = ({ fotos, onFotosChange, disabled = false, titulo }) => {

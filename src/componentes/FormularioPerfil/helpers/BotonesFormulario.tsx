@@ -3,7 +3,6 @@ import { Modal, Button, Alert } from "react-bootstrap";
 import { Trash2, AlertTriangle } from "lucide-react";
 import { Navegar } from "../../../navigation/navigationService";
 import apiUsuario from "../../../api/endpoints/usuario";
-import { TokenService } from "../../../services/auth/tokenService";
 import { useToast } from "../../../hooks/useToast";
 
 interface BotonesFormularioProps {
@@ -43,7 +42,7 @@ const BotonesFormulario: React.FC<BotonesFormularioProps> = ({ modo }) => {
       
       showSuccess("Tu cuenta ha sido eliminada exitosamente");
       
-      // Redirigir al home después de un breve delay
+
       setTimeout(() => {
         Navegar.home();
         window.location.reload();

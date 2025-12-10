@@ -47,7 +47,7 @@ const FormContactanos: React.FC<FormContactanosProps> = ({
       )}
 
       <Form onSubmit={manejarEnvio} className="shadow p-4 rounded bg-light">
-        {/* 📧 Correo */}
+        {/* Correo */}
         <Form.Group className="mb-3">
           <Form.Label>Correo electrónico</Form.Label>
           <Form.Control
@@ -61,7 +61,7 @@ const FormContactanos: React.FC<FormContactanosProps> = ({
 
         </Form.Group>
 
-        {/* 📝 Mensaje */}
+        {/* Mensaje */}
         <Form.Group className="mb-3">
           <Form.Label>Mensaje</Form.Label>
           <Form.Control

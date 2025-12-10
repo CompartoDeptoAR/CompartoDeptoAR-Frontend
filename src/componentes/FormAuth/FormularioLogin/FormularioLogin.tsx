@@ -35,7 +35,7 @@ const FormularioLogin: React.FC<FormLoginProps> = ({
         placeholder="Email"
         required
         disabled={loading}
-        //pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}$" //sacar si no podemos entrar
+        //pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}$" 
       />
     </div>
 

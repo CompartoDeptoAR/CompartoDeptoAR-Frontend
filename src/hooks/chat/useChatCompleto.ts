@@ -13,7 +13,7 @@ export const useChatCompleto = (idUsuarioActual: string) => {
   const unsubscribeConversacionesRef = useRef<(() => void) | null>(null);
   const unsubscribeMensajesRef = useRef<(() => void) | null>(null);
 
-  // ==================== ESCUCHAR CONVERSACIONES ====================
+
   useEffect(() => {
     if (!idUsuarioActual) {
       setLoading(false);
@@ -56,9 +56,8 @@ export const useChatCompleto = (idUsuarioActual: string) => {
     }
   }, [idUsuarioActual]);
 
-  // ==================== ESCUCHAR MENSAJES ====================
   useEffect(() => {
-    // Limpiar mensajes de conversación anterior
+
     if (unsubscribeMensajesRef.current) {
       console.log("🔌 Limpiando suscripción anterior de mensajes");
       unsubscribeMensajesRef.current();
@@ -84,7 +83,6 @@ export const useChatCompleto = (idUsuarioActual: string) => {
           setMensajes(nuevosMensajes);
           setCargando(false);
 
-          // Marcar como leídos
           const noLeidos = nuevosMensajes
             .filter((m) => !m.leido && !m.esPropio)
             .map((m) => m.id);
@@ -114,14 +112,13 @@ export const useChatCompleto = (idUsuarioActual: string) => {
     }
   }, [conversacionActiva, idUsuarioActual]);
 
-  // ==================== SELECCIONAR CONVERSACIÓN ====================
   const seleccionarConversacion = useCallback((idPublicacion: string) => {
     console.log("✅ Conversación seleccionada:", idPublicacion);
     setConversacionActiva(idPublicacion);
     setError(null);
   }, []);
 
-  // ==================== CERRAR CONVERSACIÓN ====================
+
   const cerrarConversacion = useCallback(() => {
     console.log("❌ Cerrando conversación");
     setConversacionActiva(null);
@@ -129,7 +126,7 @@ export const useChatCompleto = (idUsuarioActual: string) => {
     setError(null);
   }, []);
 
-  // ==================== ENVIAR MENSAJE ====================
+  
   const enviarMensaje = useCallback(
     async (contenido: string) => {
       if (!conversacionActiva || !contenido.trim()) {

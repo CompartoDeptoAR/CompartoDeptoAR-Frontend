@@ -15,7 +15,7 @@ export const useEditarPublicacionSubmit = (
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Validaciones
+ 
     if (!formData.titulo.trim()) return showWarning("El título es obligatorio");
     if (!formData.provincia) return showWarning("Selecciona una provincia");
     if (!formData.localidad) return showWarning("Selecciona una localidad");

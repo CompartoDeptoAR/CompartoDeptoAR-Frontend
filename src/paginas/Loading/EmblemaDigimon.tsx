@@ -4,8 +4,8 @@ interface Props {
   size?: number;
   rotate?: boolean;
 }
-
-const EmblemaDigimon: React.FC<Props> = ({ size = 200, rotate = true }) => {
+// para mas adelante 🔥🔥🔥🔥
+const Loading: React.FC<Props> = ({ size = 200, rotate = true }) => {
   return (
     <svg
       width={size}
@@ -101,4 +101,4 @@ const EmblemaDigimon: React.FC<Props> = ({ size = 200, rotate = true }) => {
   );
 };
 
-export default EmblemaDigimon;
+export default Loading;
