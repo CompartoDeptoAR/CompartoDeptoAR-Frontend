@@ -1,17 +1,22 @@
 import { useState } from "react";
 import type { Publicacion, PublicacionResponce } from "../../../../modelos/Publicacion";
-import { useToast } from "../../../useToast";
 import apiPublicacion from "../../../../api/endpoints/publicaciones";
 import apiUsuario from "../../../../api/endpoints/usuario";
 import { Navegar } from "../../../../navigation/navigationService";
 import { TokenService } from "../../../../services/auth/tokenService";
 
-export const usePublicacionSubmit = (formData: Publicacion, resetForm: () => void) => {
+export const usePublicacionSubmit = (
+  formData: Publicacion,
+  resetForm: () => void,
+  showSuccess: (msg: string) => void,
+  showError: (msg: string) => void,
+  showWarning: (msg: string) => void
+) => {
   const [loading, setLoading] = useState(false);
-  const { showSuccess, showError, showWarning } = useToast();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log("📝 handleSubmit ejecutado");
 
     // Validacion
     if (!formData.titulo?.trim()) return showWarning("El título es obligatorio");
@@ -26,6 +31,19 @@ export const usePublicacionSubmit = (formData: Publicacion, resetForm: () => voi
     setLoading(true);
 
     try {
+      const usuarioId = TokenService.getUserId();
+      const usuarioUid = TokenService.getUid();
+
+      console.log("🔐 Usuario ID:", usuarioId);
+      console.log("🔐 Usuario UID:", usuarioUid);
+
+      if (!usuarioId || !usuarioUid) {
+        showError("No estás autenticado. Por favor inicia sesión.");
+        setTimeout(() => Navegar.auth(), 2000);
+        setLoading(false);
+        return;
+      }
+
       const ubicacion = `${formData.calle} ${formData.numeral}, ${formData.localidad}, ${formData.provincia}`;
 
       const reglasArray = formData.reglasTexto
@@ -47,12 +65,13 @@ export const usePublicacionSubmit = (formData: Publicacion, resetForm: () => voi
         habitos: formData.habitos ?? {},
         estado: "activa",
         ubicacion,
-        usuarioFirebaseUid:TokenService.getUid()!,
+        usuarioId,
+        usuarioFirebaseUid: usuarioUid,
       };
 
       console.log("📤 Enviando publicación:", publicacionParaEnviar);
 
-     
+      // Guardar hábitos y preferencias en el perfil del usuario
       try {
         await apiUsuario.usuario.editarPerfil({
           habitos: formData.habitos ?? {},
@@ -61,15 +80,16 @@ export const usePublicacionSubmit = (formData: Publicacion, resetForm: () => voi
         console.log("✅ Hábitos y preferencias guardados en el perfil");
       } catch (perfilError) {
         console.warn("⚠️ No se pudieron guardar hábitos en el perfil:", perfilError);
-
       }
+
+      // Crear la publicación
       const response = await apiPublicacion.publicacion.crearPublicacion(publicacionParaEnviar);
 
       console.log("✅ Publicación creada:", response);
 
       showSuccess(response.mensaje || "¡Publicación creada exitosamente!");
       resetForm();
-      setTimeout(() => Navegar.misPublicaciones(), 1000);
+      setTimeout(() => Navegar.misPublicaciones(), 1500);
 
     } catch (error: any) {
       console.error("❌ Error al crear publicación:", error);
