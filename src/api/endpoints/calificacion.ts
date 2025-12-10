@@ -49,27 +49,17 @@ const apiCalificacion = {
       }
     },
 
-    obtenerPorUsuario: async ( idUsuario: string ): Promise<CalificacionResponse> => {
+  
+    obtenerPorUsuario: async (idUsuario: string): Promise<CalificacionResponse> => {
       try {
         const res = await axiosApi.get<CalificacionResponse>(
           `${import.meta.env.VITE_URL_CALIFICACION}/${idUsuario}`
         );
-        if (res.status === 200) {
-          return res.data;
-        }
-        
-        handleApiError(
-          res.status,
-          "No se pudo obtener la calificacion",
-        );
-        
+        if (res.status === 200) return res.data;
 
+        handleApiError(res.status, "No se pudo obtener la calificacion");
       } catch (error: any) {
-        if (error.response) {
-          throw new Error(
-            error.response.data.error || "Error al obtener calificaciones"
-          );
-        }
+        if (error.response) throw new Error(error.response.data.error || "Error al obtener calificaciones");
         throw new Error("Error de conexión");
       }
     },
@@ -77,28 +67,18 @@ const apiCalificacion = {
     obtenerPromedio: async (idUsuario: string): Promise<PromedioResponse> => {
       try {
         const res = await axiosApi.get<PromedioResponse>(
-          `${import.meta.env.VITE_URL_CALIFICACION}/${idUsuario}`
+          `${import.meta.env.VITE_URL_CALIFICACION}/${idUsuario}/promedio` // <--- endpoint distinto
         );
-        
-        if (res.status === 200) {
-          return res.data;
-        }
-        
-        return handleApiError(
-          res.status,
-          "No se pudo obtener el promedio",
-        ) as never;
 
+        if (res.status === 200) return res.data;
+
+        handleApiError(res.status, "No se pudo obtener el promedio");
       } catch (error: any) {
-        if (error.response) {
-          throw new Error(
-            error.response.data.error || "Error al obtener promedio"
-          );
-        }
+        if (error.response) throw new Error(error.response.data.error || "Error al obtener promedio");
         throw new Error("Error de conexión");
       }
     },
   },
-};
+}
 
 export default apiCalificacion;

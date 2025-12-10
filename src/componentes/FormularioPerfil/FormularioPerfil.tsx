@@ -8,6 +8,7 @@ import CampoTextArea from "./helpers/CampoTextArea";
 import BotonesFormulario from "./helpers/BotonesFormulario";
 import SeccionCheckboxes from "./helpers/SeccionCheckboxes";
 import { Navegar } from "../../navigation/navigationService";
+import PerfilGrafico from "../Calificacion/PerfilGrafico"; // gráfico de promedio
 
 interface FormularioPerfilProps {
   perfil?: UsuarioPerfil; 
@@ -135,8 +136,9 @@ const FormularioPerfil: React.FC<FormularioPerfilProps> = ({ perfil, modo, onSub
             required
           />
 
-          <div className="campos-fila">
-            <div className="campo-grupo">
+          {/* FILA DE EDAD + GÉNERO */}
+          <div className="campos-fila" style={{ position: "relative", alignItems: "center" }}>
+            <div className="campo-grupo" style={{ flex: 1 }}>
               <CampoTexto
                 label="Edad"
                 name="edad"
@@ -149,7 +151,7 @@ const FormularioPerfil: React.FC<FormularioPerfilProps> = ({ perfil, modo, onSub
                 max={100}
               />
             </div>
-            <div className="campo-grupo">
+            <div className="campo-grupo" style={{ flex: 1 }}>
               <CampoSelect
                 label="Género"
                 name="genero"
@@ -160,12 +162,25 @@ const FormularioPerfil: React.FC<FormularioPerfilProps> = ({ perfil, modo, onSub
                 required
               />
             </div>
+
+            {/* Gráfico al lado derecho del género */}
+            {modo === "view" && perfil?.nombreCompleto && (
+              <div style={{
+                position: "absolute",
+                right: 0,
+                top: "50%",
+                transform: "translateY(-50%)",
+                width: "150px"
+              }}>
+                <PerfilGrafico idUsuario={perfil.nombreCompleto} /> {/* idUsuario real */}
+              </div>
+            )}
           </div>
 
           <CampoTextArea
             label="Descripción"
             name="descripcion"
-            value={formData.descripcion ?? ""} // nunca undefined
+            value={formData.descripcion ?? ""}
             esSoloVista={esSoloVista}
             onChange={handleChange}
             placeholder="Cuéntanos sobre ti..."
