@@ -45,10 +45,7 @@ export interface PublicacionResumida {
   estado:EstadoPublicacion;
 }
 
-export interface PublicacionResponce extends Publicacion {
-  usuarioNombre?: string;
-  calificacionPromedio?: number;
-}
+
 
 export interface ResultadoPaginado {
   publicaciones: Publicacion[];

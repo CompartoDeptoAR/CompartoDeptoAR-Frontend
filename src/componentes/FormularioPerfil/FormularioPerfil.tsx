@@ -119,7 +119,11 @@ const FormularioPerfil: React.FC<FormularioPerfilProps> = ({ perfil, modo, onSub
           <CampoTexto
             label="Nombre"
             name="nombreCompleto"
+<<<<<<< HEAD
             value={formData.nombreCompleto ?? ""}
+=======
+            value={formData.nombreCompleto || ""}
+>>>>>>> bbbe1e5dd6b116f9461ebc9fb8ff114127a9d94d
             esSoloVista={esSoloVista}
             onChange={handleChange}
             required
@@ -130,7 +134,11 @@ const FormularioPerfil: React.FC<FormularioPerfilProps> = ({ perfil, modo, onSub
               <CampoTexto
                 label="Edad"
                 name="edad"
+<<<<<<< HEAD
                 value={formData.edad ?? 0}
+=======
+                value={formData.edad || "No se pudo obtener la edad"}
+>>>>>>> bbbe1e5dd6b116f9461ebc9fb8ff114127a9d94d
                 type="number"
                 esSoloVista={esSoloVista}
                 onChange={handleChange}
