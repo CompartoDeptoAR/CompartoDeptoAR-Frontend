@@ -14,7 +14,7 @@ const rutaEndpoint = import.meta.env.VITE_URL_CONTACTO;
 
 const apiContactanos = {
   contacto: {
-    enviarMensaje: async (data: SolicitudContacto): Promise<RespuestaContacto> => {
+    enviarMensajeANosotros: async (data: SolicitudContacto): Promise<RespuestaContacto> => {
 
       if (!rutaEndpoint) {
           throw new Error("Error de Configuración: VITE_URL_CONTACTO no está definido. Revisa tu archivo .env y asegúrate de reiniciar el servidor de desarrollo.");

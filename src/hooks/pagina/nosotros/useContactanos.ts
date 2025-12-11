@@ -3,7 +3,7 @@ import { useFormularioContacto } from "./useFormularioContacto";
 
 export function useContactanos() {
   return useFormularioContacto({
-    enviarFn: apiContactanos.contacto.enviarMensaje,
+    enviarFn: apiContactanos.contacto.enviarMensajeANosotros,
     maxPalabras: 300,
   });
 }

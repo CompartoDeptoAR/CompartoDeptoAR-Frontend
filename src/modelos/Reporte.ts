@@ -15,13 +15,22 @@ export interface Reporte {
 }
 
 
-export interface MiniReporte{
-  descripcion: string;
+
+export interface AccionTomada {
+  tipo: "eliminado" | "ignorado" | "revertido";
+  moderador: string;
+  fecha: Timestamp;
+}
+
+export interface MiniReporte {
   id: string;
-  idContenido: string;
+  motivo: string;
+  descripcion: string;
   tipo: "publicacion" | "mensaje";
-  motivo:string;
+  revisado: boolean;
   fechaReporte: Timestamp;
-  revisado?: boolean;
+
+  // NUEVO 🔥
+  accionTomada?: AccionTomada;
 }
 
