@@ -6,6 +6,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import './api/config/interceptores.ts';  
 import { LoadingProvider } from './contexts/LoadingContext';
 
+
 createRoot(document.getElementById('root')!).render(
    <StrictMode>
     <BrowserRouter>

@@ -70,11 +70,12 @@ const apiPublicacion = {
 
     eliminarPublicacion: async (id: string): Promise<void> => {
       try {
-        await axiosApi.delete(`${urlApi}/eliminar/${id}`);
+        await axiosApi.post(`${urlApi}/eliminar/${id}`);
       } catch (error: any) {
         throw new Error(error.response?.data?.error || "Error al eliminar publicación");
       }
     },
+
 
     buscarConFiltros: async (filtros: FiltrosBusqueda): Promise<Publicacion[]> => {
       try {

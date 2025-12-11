@@ -18,7 +18,7 @@ export interface Reporte {
 
 export interface AccionTomada {
   tipo: "eliminado" | "ignorado" | "revertido";
-  moderador: string;
+  nombreModerador:string;
   fecha: Timestamp;
 }
 
@@ -29,8 +29,6 @@ export interface MiniReporte {
   tipo: "publicacion" | "mensaje";
   revisado: boolean;
   fechaReporte: Timestamp;
-
-  // NUEVO 🔥
   accionTomada?: AccionTomada;
 }
 

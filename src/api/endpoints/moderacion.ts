@@ -49,7 +49,7 @@ const apiModeracion = {
 
   eliminarPublicacion: async (idPublicacion: string, motivo: string): Promise<any> => {
     try {
-      const res = await axiosApi.delete(`${urlApi}/${idPublicacion}`, {
+      const res = await axiosApi.post(`${urlApi}/${idPublicacion}`, {
         data: { motivo }
       } as any);
 
@@ -60,7 +60,15 @@ const apiModeracion = {
     }
   },
 
-
+  eliminarPublicacionDeFormaPermanente: async (id:string, motivo: string):Promise<void>=>{
+    try {
+      await axiosApi.delete(`${urlApi}/eliminarPublicacionDeFormaPermanente/${id}/${motivo}`);
+      
+    } catch (error: any) {
+      throw new Error(error.response?.data?.error || "Error al eliminar publicación");
+    }
+  
+  },
   eliminarMensaje: async (
     idMensaje: string,
     motivo?: string

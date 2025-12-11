@@ -6,11 +6,9 @@ import ReporteItem from "./ReporteItem";
 interface ReporteListProps{
     reportes:MiniReporte[],
     onVer:(id:string)=>void;
-    onEliminar:(id:string)=>void;
-    onIgnorar:(id:string)=>void;
 }
 
-const ReportesList:React.FC<ReporteListProps> = ({ reportes, onVer, onEliminar, onIgnorar }) => {
+const ReportesList:React.FC<ReporteListProps> = ({ reportes, onVer}) => {
   const [filtro, setFiltro] = useState("todos");
   
   const reportesFiltrados = reportes.filter(r => {
@@ -71,8 +69,6 @@ const ReportesList:React.FC<ReporteListProps> = ({ reportes, onVer, onEliminar, 
             key={r.id} 
             reporte={r}
             onVer={onVer}
-            onEliminar={onEliminar}
-            onIgnorar={onIgnorar}
           />
         ))
       )}

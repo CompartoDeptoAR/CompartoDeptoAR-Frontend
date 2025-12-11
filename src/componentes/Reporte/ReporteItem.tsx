@@ -1,22 +1,16 @@
 import React, { useState } from "react";
 import { MiniReporte } from "../../modelos/Reporte";
-import { Timestamp } from "firebase/firestore";
+
 
 interface ReporteItemProps {
   reporte: MiniReporte;
   onVer: (id: string) => void;
-  onEliminar: (id: string) => void;
-  onIgnorar: (id: string) => void;
-
-  // 🔥 Nuevo callback opcional
   onRevertir?: (id: string) => void;
 }
 
 export const ReporteItem: React.FC<ReporteItemProps> = ({
   reporte,
   onVer,
-  onEliminar,
-  onIgnorar,
   onRevertir
 }) => {
   const [expandido, setExpandido] = useState(false);
@@ -45,7 +39,7 @@ export const ReporteItem: React.FC<ReporteItemProps> = ({
     return texto.substring(0, maxLength) + "...";
   };
 
-
+   
   return (
     <div className={`card mb-3 ${reporte.revisado ? 'border-success' : 'border-warning'}`}>
       <div className="card-body">
@@ -62,33 +56,46 @@ export const ReporteItem: React.FC<ReporteItemProps> = ({
                     ? "📄 Publicación"
                     : "💬 Mensaje"}
                 </span>
-                {reporte.revisado && <span className="badge bg-success">✓ Revisado</span>}
+                {reporte.revisado && (<>
+                  <span className="badge bg-success">✓ Revisado </span>
+                  <strong>Acción tomada:</strong>{" "}
+                    <span className="badge bg-info text-dark">
+                      {reporte.accionTomada.tipo === "eliminado" && (
+                        <span className="badge bg-success">🗑️ Contenido eliminado</span>
+                      )}
+                      {reporte.accionTomada.tipo === "ignorado" && (
+                        <span className="badge bg-success">🚫 Reporte ignorado</span>
+                      )}
+                      {reporte.accionTomada.tipo === "revertido" && (
+                        <span className="badge bg-success">♻️ Acción revertida</span>
+                      )}
+                      </>
+                  )}
 
-                {reporte.revisado && reporte.accionTomada && (
+                {reporte.accionTomada && (
                   <div className="mb-3 p-2 rounded bg-light border">
                     <strong>Acción tomada:</strong>{" "}
                     <span className="badge bg-info text-dark">
-                      {reporte.accionTomada.tipo === "eliminado" && <span className="badge bg-success">🗑️ Contenido eliminado</span>}
-                      {reporte.accionTomada.tipo === "ignorado" && <span className="badge bg-success">🚫 Reporte ignorado</span>}
-                      {reporte.accionTomada.tipo === "revertido" && <span className="badge bg-success">♻️ Acción revertida</span>}
+                      {reporte.accionTomada.tipo === "eliminado" && (
+                        <span className="badge bg-success">🗑️ Contenido eliminado</span>
+                      )}
+                      {reporte.accionTomada.tipo === "ignorado" && (
+                        <span className="badge bg-success">🚫 Reporte ignorado</span>
+                      )}
+                      {reporte.accionTomada.tipo === "revertido" && (
+                        <span className="badge bg-success">♻️ Acción revertida</span>
+                      )}
+                      
                     </span>
 
-                    {reporte.accionTomada.moderador && (
-                      <div className="mt-1">
-                        <small className="text-muted">
-                          Moderador: {reporte.accionTomada.moderador}
-                        </small>
-                      </div>
-                    )}
-
-                    {reporte.accionTomada.fecha && (
-                      <div className="mt-1">
-                        <small className="text-muted">
-                          Fecha: {formatearFecha(reporte.accionTomada.fecha)}
-                        </small>
-                      </div>
-                    )}
+                    <div className="mt-1">
+                      <small className="text-muted">Moderador: {reporte.accionTomada.nombreModerador}</small>
+                    </div>
+                    <div className="mt-1">
+                      <small className="text-muted">Fecha: {formatearFecha(reporte.accionTomada.fecha)}</small>
+                    </div>
                   </div>
+                  
                 )}
 
               </h5>
@@ -122,7 +129,6 @@ export const ReporteItem: React.FC<ReporteItemProps> = ({
               </p>
             </div>
 
-            {/* 🔥 Botones dinámicos */}
             <div className="d-flex gap-2">
               <button
                 className="btn btn-sm btn-outline-primary"
@@ -131,30 +137,14 @@ export const ReporteItem: React.FC<ReporteItemProps> = ({
                 👁️ Ver detalles
               </button>
 
-              {!reporte.revisado ? (
-                <>
-                  <button
-                    className="btn btn-sm btn-outline-danger"
-                    onClick={() => onEliminar(reporte.id)}
-                  >
-                    🗑️ Eliminar contenido
-                  </button>
-
-                  <button
-                    className="btn btn-sm btn-outline-secondary"
-                    onClick={() => onIgnorar(reporte.id)}
-                  >
-                    ✖️ Ignorar
-                  </button>
-                </>
-              ) : (
+              {reporte.revisado ?  (
                 <button
                   className="btn btn-sm btn-outline-warning"
                   onClick={() => onRevertir?.(reporte.id)}
                 >
                   🔄 Deshacer acción
                 </button>
-              )}
+              ):(<></>)}
             </div>
           </div>
         </div>

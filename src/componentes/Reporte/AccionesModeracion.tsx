@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Reporte } from "../../modelos/Reporte";
 import apiModeracion from "../../api/endpoints/moderacion";
 import { Navegar } from "../../navigation/navigationService";
+import ModalEliminarPublicacion from "./ModalEliminarPublicacion";
 
 interface Props {
   reporte: Reporte;
@@ -10,7 +11,7 @@ interface Props {
 
 export const AccionesModeracion: React.FC<Props> = ({ reporte, onChange }) => {
   const [loading, setLoading] = useState(false);
-
+  const [showEliminar, setShowEliminar] = useState(false);
   const procesar = async (accion: "eliminado" | "dejado", motivo: string) => {
     await apiModeracion.revisarReporte({
       idReporte: reporte.id!,
@@ -45,7 +46,20 @@ export const AccionesModeracion: React.FC<Props> = ({ reporte, onChange }) => {
       setLoading(false);
     }
   };
-
+  const handleEliminarPublicacionDeFormaPermanente = async (motivo: string) => {
+    setLoading(true);
+    try {
+      await apiModeracion.eliminarPublicacionDeFormaPermanente(reporte.idContenido!, motivo);
+      await procesar("eliminado", motivo);
+      alert("Publicación eliminada permanentemente");
+      onChange?.();
+    } catch (err) {
+      console.error(err);
+      alert("Error eliminando");
+    } finally {
+      setLoading(false);
+    }
+  };
   const handleIgnorar = async () => {
     if (!confirm("¿Ignorar este reporte?")) return;
 
@@ -82,6 +96,12 @@ export const AccionesModeracion: React.FC<Props> = ({ reporte, onChange }) => {
             >
               🗑️ Eliminar Publicacion
             </button>
+            <button 
+              className="btn btn-danger" 
+              onClick={() => setShowEliminar(true)}
+              >
+              ⚠️ Eliminar permanente
+            </button>
 
             <button
               className="btn btn-secondary"
@@ -101,7 +121,11 @@ export const AccionesModeracion: React.FC<Props> = ({ reporte, onChange }) => {
           </button>
 
         </div>
-
+        <ModalEliminarPublicacion
+          show={showEliminar}
+          onClose={() => setShowEliminar(false)}
+          onConfirm={handleEliminarPublicacionDeFormaPermanente}
+        />
       </div>
     </div>
   );

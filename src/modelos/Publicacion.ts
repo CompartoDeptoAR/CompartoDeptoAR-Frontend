@@ -1,6 +1,6 @@
 import type { HabitosUsuario, PreferenciasUsuario, Usuario } from "./Usuario";
 
-export type EstadoPublicacion = "activa" | "pausada" | "inactiva";
+export type EstadoPublicacion = "activa" | "pausada" | "eliminada";
 
 export interface PublicacionResponce {
   id?: string;
@@ -16,6 +16,7 @@ export interface PublicacionResponce {
   usuarioFirebaseUid: Usuario["firebaseUid"]
   usuarioNombre?: string; 
   estado: EstadoPublicacion;
+  fecha_eliminado?: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -31,6 +32,7 @@ export interface Publicacion {
   foto: string[]; 
   reglas?: string[];
   reglasTexto: string;
+  fecha_eliminado?: string;
   preferencias?: PreferenciasUsuario;
   habitos?: HabitosUsuario;
   estado: EstadoPublicacion;

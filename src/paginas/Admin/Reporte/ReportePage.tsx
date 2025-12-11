@@ -10,8 +10,6 @@ const ReportesPage = () => {
     cargando,
     error,
     handleVer,
-    handleEliminar,
-    handleIgnorar,
     refrescar
   } = useReportes();
   const { showLoader, hideLoader } = useLoading();   
@@ -50,8 +48,6 @@ const ReportesPage = () => {
       <ReportesList 
         reportes={reportes}
         onVer={handleVer}
-        onEliminar={handleEliminar}
-        onIgnorar={handleIgnorar}
       />
     </div>
   );
