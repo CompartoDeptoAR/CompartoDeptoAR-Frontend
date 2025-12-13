@@ -43,7 +43,7 @@ const MisPublicaciones: React.FC = () => {
           publicaciones={publicaciones}
           loading={loading}
           error={error!}
-          emptyMessage="Aún no tienes publicaciones. ¡Crea tu primera publicación!"
+          emptyMessage="Aún no tenes publicaciones. ¡Crea tu primera publicación!"
           showActions={true}
           onEdit={handleEdit}
           onDelete={handleDelete}

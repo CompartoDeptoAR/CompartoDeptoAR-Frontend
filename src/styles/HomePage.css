@@ -6,13 +6,37 @@ html, body, #root {
 
 .home-fondo {
   min-height: 100vh;
-  background: #b1acacbe;
+  background-image: url('/src/assets/fondoHome.png');
+  background-attachment: fixed; 
+  background-position: bottom center;
+  background-repeat: no-repeat;
+  background-size: cover;
   padding: 20px;
+  padding-top: calc(80px + 20px);
+  position: relative;
+}
+
+.home-fondo::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(177, 158, 158, 0.6);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.home-fondo > * {
+  position: relative;
+  z-index: 2;
 }
 
 .titulo-home {
   color: black;
-  padding-top: 2rem;
+  padding-top: 0.5rem;
+  margin-top: -4rem;
 }
 
 @keyframes fadeInDown {
