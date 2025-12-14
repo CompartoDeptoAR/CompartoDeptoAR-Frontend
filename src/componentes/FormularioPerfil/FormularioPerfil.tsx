@@ -8,7 +8,8 @@ import CampoTextArea from "./helpers/CampoTextArea";
 import BotonesFormulario from "./helpers/BotonesFormulario";
 import SeccionCheckboxes from "./helpers/SeccionCheckboxes";
 import { Navegar } from "../../navigation/navigationService";
-import PerfilGrafico from "../Calificacion/PerfilGrafico"; // gráfico de promedio
+import PerfilGrafico from "../Calificacion/PerfilGrafico";
+import imageCompression from 'browser-image-compression';
 
 interface FormularioPerfilProps {
   perfil?: UsuarioPerfil; 
@@ -54,11 +55,18 @@ const FormularioPerfil: React.FC<FormularioPerfilProps> = ({ perfil, modo, onSub
       [name]: name === "edad" ? parseInt(value) || 0 : value,
     }));
   };
+// Le puse para comprimir imagen porq a veces bugeaba por eso y ni te avisaba
+ const handleFotoChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const file = e.target.files?.[0];
+  if (file) {
+    setSubiendo(true);
+    try {
+      const comprimida = await imageCompression(file, {
+        maxSizeMB: 0.5,
+        maxWidthOrHeight: 800,
+        useWebWorker: true
+      });
 
-  const handleFotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setSubiendo(true);
       const reader = new FileReader();
       reader.onloadend = () => {
         const result = reader.result as string;
@@ -69,9 +77,13 @@ const FormularioPerfil: React.FC<FormularioPerfilProps> = ({ perfil, modo, onSub
         }));
         setSubiendo(false);
       };
-      reader.readAsDataURL(file);
+      reader.readAsDataURL(comprimida);
+    } catch (error) {
+      console.error("Error comprimiendo imagen:", error);
+      setSubiendo(false);
     }
-  };
+  }
+};
 
   const toggleHabito = (key: keyof HabitosUsuario) => {
     setFormData(prev => ({
