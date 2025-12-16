@@ -63,3 +63,38 @@
     max-height: calc(100vh - 120px) !important;
   }
 }
+
+/* Estilos para los controles móviles del navbar */
+.navbar-mobile-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.navbar-mobile-controls .nav-link {
+  padding: 0.5rem;
+  color: white !important;
+}
+
+.navbar-mobile-controls .dropdown-toggle {
+  color: white !important;
+  font-size: 0.875rem;
+  padding: 0.375rem 0.75rem;
+}
+
+.navbar-mobile-controls .dropdown-toggle::after {
+  margin-left: 0.3rem;
+}
+
+/* Asegurar que el dropdown se vea correctamente */
+.navbar-mobile-controls .dropdown-menu {
+  right: 0;
+  left: auto;
+  margin-top: 0.5rem;
+}
+
+@media (min-width: 992px) {
+  .navbar-mobile-controls {
+    display: none !important;
+  }
+}

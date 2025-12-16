@@ -4,21 +4,25 @@ import { LocalStorageService, STORAGE_KEYS } from "../../../services/storage/loc
 import { useToast } from "../../useToast";
 import apiUsuario from "../../../api/endpoints/usuario";
 import { Navegar } from "../../../navigation/navigationService";
-
+import { TokenService } from "../../../services/auth/tokenService"; // ✅ AGREGAR IMPORT
 
 export const usePerfilEdit = () => {
   const [perfil, setPerfil] = useState<UsuarioPerfil>();
-
+  const [userId, setUserId] = useState<string | null>(null); // ✅ AGREGAR
   const [loading, setLoading] = useState(!perfil);
   const { toast, showSuccess, showError, hideToast } = useToast();
 
+  useEffect(() => {
+    const id = TokenService.getUserId(); // ✅ OBTENER userId
+    setUserId(id);
+  }, []);
 
   useEffect(() => {
     if (!perfil) {
       const token = LocalStorageService.get(STORAGE_KEYS.FTOKEN);
-      const userId = LocalStorageService.get(STORAGE_KEYS.USER_ID);
+      const storedUserId = LocalStorageService.get(STORAGE_KEYS.USER_ID);
 
-      if (!userId || !token) {
+      if (!storedUserId || !token) {
         showError("No se encontró la sesión del usuario");
         setLoading(false);
         return;
@@ -43,7 +47,6 @@ export const usePerfilEdit = () => {
     }
   }, [perfil, showError]);
 
-
   const handleSave = async (nuevoPerfil: UsuarioPerfil): Promise<void> => {
     try {
       const token = LocalStorageService.get(STORAGE_KEYS.FTOKEN);
@@ -66,6 +69,7 @@ export const usePerfilEdit = () => {
 
   return {
     perfil,
+    userId,
     loading,
     toast,
     hideToast,

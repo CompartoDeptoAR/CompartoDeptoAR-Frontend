@@ -8,16 +8,19 @@ import CampoTextArea from "./helpers/CampoTextArea";
 import BotonesFormulario from "./helpers/BotonesFormulario";
 import SeccionCheckboxes from "./helpers/SeccionCheckboxes";
 import { Navegar } from "../../navigation/navigationService";
-import PerfilGrafico from "../Calificacion/PerfilGrafico";
+//import PerfilGrafico from "../Calificacion/PerfilGrafico";
+import PerfilCalificaciones from "../Calificacion/PerfilCalificaciones";
 import imageCompression from 'browser-image-compression';
+import { TokenService } from "../../services/auth/tokenService";
 
 interface FormularioPerfilProps {
   perfil?: UsuarioPerfil; 
   modo: "view" | "editar" | "verOtro";
+  usuarioId?: string;
   onSubmit?: (usuario: UsuarioPerfil) => void;
 }
 
-const FormularioPerfil: React.FC<FormularioPerfilProps> = ({ perfil, modo, onSubmit }) => {
+const FormularioPerfil: React.FC<FormularioPerfilProps> = ({ perfil, modo, usuarioId, onSubmit }) => {
   const [formData, setFormData] = useState<UsuarioPerfil>({
     nombreCompleto: perfil?.nombreCompleto ?? "",
     edad: perfil?.edad ?? 18,
@@ -30,6 +33,12 @@ const FormularioPerfil: React.FC<FormularioPerfilProps> = ({ perfil, modo, onSub
 
   const [preview, setPreview] = useState<string>(perfil?.fotoPerfil ?? "");
   const [subiendo, setSubiendo] = useState(false);
+
+  const miUsuarioId = TokenService.getUserId();
+  const esMiPerfil = usuarioId === miUsuarioId;
+  const esSoloVista = modo === "view" || modo === "verOtro";
+
+  const nombreUsuario = formData.nombreCompleto || "Usuario";
 
   useEffect(() => {
     if (perfil) {
@@ -55,35 +64,35 @@ const FormularioPerfil: React.FC<FormularioPerfilProps> = ({ perfil, modo, onSub
       [name]: name === "edad" ? parseInt(value) || 0 : value,
     }));
   };
-// Le puse para comprimir imagen porq a veces bugeaba por eso y ni te avisaba
- const handleFotoChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-  const file = e.target.files?.[0];
-  if (file) {
-    setSubiendo(true);
-    try {
-      const comprimida = await imageCompression(file, {
-        maxSizeMB: 0.5,
-        maxWidthOrHeight: 800,
-        useWebWorker: true
-      });
 
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const result = reader.result as string;
-        setPreview(result);
-        setFormData(prev => ({
-          ...prev,
-          fotoPerfil: result,
-        }));
+  const handleFotoChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setSubiendo(true);
+      try {
+        const comprimida = await imageCompression(file, {
+          maxSizeMB: 0.5,
+          maxWidthOrHeight: 800,
+          useWebWorker: true
+        });
+
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          const result = reader.result as string;
+          setPreview(result);
+          setFormData(prev => ({
+            ...prev,
+            fotoPerfil: result,
+          }));
+          setSubiendo(false);
+        };
+        reader.readAsDataURL(comprimida);
+      } catch (error) {
+        console.error("Error comprimiendo imagen:", error);
         setSubiendo(false);
-      };
-      reader.readAsDataURL(comprimida);
-    } catch (error) {
-      console.error("Error comprimiendo imagen:", error);
-      setSubiendo(false);
+      }
     }
-  }
-};
+  };
 
   const toggleHabito = (key: keyof HabitosUsuario) => {
     setFormData(prev => ({
@@ -104,23 +113,39 @@ const FormularioPerfil: React.FC<FormularioPerfilProps> = ({ perfil, modo, onSub
     if (onSubmit) onSubmit(formData);
   };
 
-  const esSoloVista = modo === "view" || modo === "verOtro";
-
   return (
     <div className="perfil-wrapper">
-      <div className="perfil-header">Mi Perfil 🤘🏻</div>
+
+      <div className="perfil-header">
+        {modo === "verOtro" 
+          ? `Perfil de ${nombreUsuario} 🤘🏻`
+          : "Mi Perfil 🤘🏻"}
+      </div>
 
       <div className="perfil-card">
-        {/* FOTO DE PERFIL */}
+
         <div className="perfil-foto-area">
           <div className="perfil-foto-wrapper">
             <img
               src={preview || "/default-user.jpg"}
-              alt="foto usuario"
+              alt={`Foto de ${nombreUsuario}`}
               className="perfil-foto"
+              title={nombreUsuario}
             />
             {subiendo && <div className="subiendo-spinner"></div>}
           </div>
+
+          {modo === "verOtro" && (
+            <div style={{
+              marginTop: "10px",
+              textAlign: "center",
+              fontWeight: "600",
+              color: "#333",
+              fontSize: "16px"
+            }}>
+              {nombreUsuario}
+            </div>
+          )}
 
           {!esSoloVista && modo === "editar" && (
             <label htmlFor="fotoPerfil" className="btn-cambiar-foto">
@@ -138,65 +163,92 @@ const FormularioPerfil: React.FC<FormularioPerfilProps> = ({ perfil, modo, onSub
           {subiendo && <div className="subiendo-texto">Subiendo foto...</div>}
         </div>
 
-        <form className="perfil-form" onSubmit={handleSubmit}>
-          <CampoTexto
-            label="Nombre"
-            name="nombreCompleto"
-            value={formData.nombreCompleto ?? ""}
-            esSoloVista={esSoloVista}
-            onChange={handleChange}
-            required
-          />
+        <form className="perfil-form" onSubmit={handleSubmit} style={{ position: "relative" }}>
 
-          {/* FILA DE EDAD + GÉNERO */}
-          <div className="campos-fila" style={{ position: "relative", alignItems: "center" }}>
-            <div className="campo-grupo" style={{ flex: 1 }}>
-              <CampoTexto
-                label="Edad"
-                name="edad"
-                value={formData.edad ?? 0}
-                type="number"
-                esSoloVista={esSoloVista}
-                onChange={handleChange}
-                required
-                min={18}
-                max={100}
-              />
-            </div>
-            <div className="campo-grupo" style={{ flex: 1 }}>
-              <CampoSelect
-                label="Género"
-                name="genero"
-                value={formData.genero ?? undefined}
-                opciones={opcionesGenero}
-                esSoloVista={esSoloVista}
-                onChange={handleChange}
-                required
-              />
-            </div>
+          {modo === "editar" && (
+            <CampoTexto
+              label="Nombre"
+              name="nombreCompleto"
+              value={formData.nombreCompleto ?? ""}
+              esSoloVista={esSoloVista}
+              onChange={handleChange}
+              required
+            />
+          )}
 
-            {/* Gráfico al lado derecho del género */}
-            {modo === "view" && perfil?.nombreCompleto && (
-              <div style={{
-                position: "absolute",
-                right: 0,
-                top: "50%",
-                transform: "translateY(-50%)",
-                width: "150px"
+          <div style={{ 
+            display: "flex", 
+            gap: "20px",
+            marginBottom: "25px",
+            flexWrap: "nowrap",
+            alignItems: "flex-start"
+          }}>
+
+            <div style={{ 
+              flex: 1,
+              display: "flex",
+              flexDirection: "column",
+              gap: "15px"
+            }}>
+
+              <div style={{ 
+                display: "flex", 
+                gap: "15px",
+                alignItems: "flex-start"
               }}>
-                <PerfilGrafico idUsuario={perfil.nombreCompleto} /> {/* idUsuario real */}
-              </div>
-            )}
-          </div>
 
-          <CampoTextArea
-            label="Descripción"
-            name="descripcion"
-            value={formData.descripcion ?? ""}
-            esSoloVista={esSoloVista}
-            onChange={handleChange}
-            placeholder="Cuéntanos sobre ti..."
-          />
+                <div style={{ flex: 1 }}>
+                  <CampoTexto
+                    label="Edad"
+                    name="edad"
+                    value={formData.edad ?? 0}
+                    type="number"
+                    esSoloVista={esSoloVista}
+                    onChange={handleChange}
+                    required
+                    min={18}
+                    max={100}
+                  />
+                </div>
+                
+                <div style={{ flex: 1 }}>
+                  <CampoSelect
+                    label="Género"
+                    name="genero"
+                    value={formData.genero ?? undefined}
+                    opciones={opcionesGenero}
+                    esSoloVista={esSoloVista}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+              </div>
+
+              <div>
+                <CampoTextArea
+                  label="Descripción"
+                  name="descripcion"
+                  value={formData.descripcion ?? ""}
+                  esSoloVista={esSoloVista}
+                  onChange={handleChange}
+                  placeholder="Cuéntanos sobre ti..."
+                />
+              </div>
+            </div>
+
+          {(modo === "view" || modo === "verOtro") && usuarioId && (
+            <div style={{
+              width: "280px",
+              flexShrink: 0
+            }}>
+              <PerfilCalificaciones 
+                idUsuario={usuarioId} 
+                esMiPerfil={esMiPerfil && modo === "view"}
+                nombreUsuario={modo === "verOtro" ? nombreUsuario : undefined}
+              />
+            </div>
+          )}
+          </div>
 
           <SeccionCheckboxes<HabitosUsuario>
             titulo="Hábitos"
