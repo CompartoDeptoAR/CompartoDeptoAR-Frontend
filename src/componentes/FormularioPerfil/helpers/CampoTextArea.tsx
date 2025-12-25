@@ -8,6 +8,7 @@ interface CampoTextAreaProps {
   onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   placeholder?: string;
   textoVacio?: string;
+  rows?: number;
 }
 
 const CampoTextArea: React.FC<CampoTextAreaProps> = ({
@@ -18,6 +19,7 @@ const CampoTextArea: React.FC<CampoTextAreaProps> = ({
   onChange,
   placeholder = "",
   textoVacio = "Sin descripción",
+  rows = 3,
 }) => {
   return (
     <div className="mb-3">
@@ -31,6 +33,7 @@ const CampoTextArea: React.FC<CampoTextAreaProps> = ({
           value={value || ""}
           onChange={onChange}
           placeholder={placeholder}
+          rows={rows}
         />
       )}
     </div>

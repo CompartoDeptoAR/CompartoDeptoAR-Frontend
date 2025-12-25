@@ -8,10 +8,10 @@ import CampoTextArea from "./helpers/CampoTextArea";
 import BotonesFormulario from "./helpers/BotonesFormulario";
 import SeccionCheckboxes from "./helpers/SeccionCheckboxes";
 import { Navegar } from "../../navigation/navigationService";
-//import PerfilGrafico from "../Calificacion/PerfilGrafico";
 import PerfilCalificaciones from "../Calificacion/PerfilCalificaciones";
 import imageCompression from 'browser-image-compression';
 import { TokenService } from "../../services/auth/tokenService";
+import { useMediaQuery } from "../../hooks/useMediaQuery"
 
 interface FormularioPerfilProps {
   perfil?: UsuarioPerfil; 
@@ -39,6 +39,10 @@ const FormularioPerfil: React.FC<FormularioPerfilProps> = ({ perfil, modo, usuar
   const esSoloVista = modo === "view" || modo === "verOtro";
 
   const nombreUsuario = formData.nombreCompleto || "Usuario";
+
+  // Detectar tamaño de pantalla
+  const isMobile = useMediaQuery('(max-width: 768px)');
+  const isTablet = useMediaQuery('(max-width: 1024px)');
 
   useEffect(() => {
     if (perfil) {
@@ -114,44 +118,60 @@ const FormularioPerfil: React.FC<FormularioPerfilProps> = ({ perfil, modo, usuar
   };
 
   return (
-    <div className="perfil-wrapper">
+    <div className="perfil-wrapper" style={{ padding: isMobile ? "10px" : "20px" }}>
 
-      <div className="perfil-header">
+      <div className="perfil-header" style={{ 
+        fontSize: isMobile ? "18px" : "24px",
+        padding: isMobile ? "15px" : "20px"
+      }}>
         {modo === "verOtro" 
           ? `Perfil de ${nombreUsuario} 🤘🏻`
           : "Mi Perfil 🤘🏻"}
       </div>
 
-      <div className="perfil-card">
+      <div className="perfil-card" style={{ 
+        padding: isMobile ? "15px" : "25px",
+        margin: isMobile ? "10px 0" : "20px 0"
+      }}>
 
         <div className="perfil-foto-area">
-          <div className="perfil-foto-wrapper">
+          <div className="perfil-foto-wrapper" style={{ 
+            width: isMobile ? "120px" : "150px",
+            height: isMobile ? "120px" : "150px"
+          }}>
             <img
               src={preview || "/default-user.jpg"}
               alt={`Foto de ${nombreUsuario}`}
               className="perfil-foto"
               title={nombreUsuario}
+              style={{
+                width: isMobile ? "120px" : "150px",
+                height: isMobile ? "120px" : "150px"
+              }}
             />
             {subiendo && <div className="subiendo-spinner"></div>}
           </div>
 
           {modo === "verOtro" && (
             <div style={{
-              marginTop: "10px",
+              marginTop: isMobile ? "5px" : "5px",
               textAlign: "center",
               fontWeight: "600",
               color: "#333",
-              fontSize: "16px"
+              fontSize: isMobile ? "16px" : "18px"
             }}>
               {nombreUsuario}
             </div>
           )}
 
           {!esSoloVista && modo === "editar" && (
-            <label htmlFor="fotoPerfil" className="btn-cambiar-foto">
-              📷 Cambiar foto
-            </label>
+            <div style={{ marginTop: isMobile ? "10px" : "15px", width: "100%", maxWidth: "200px" }}>
+              <label htmlFor="fotoPerfil" className="btn-cambiar-foto">
+                📷 Cambiar foto
+              </label>
+            </div>
           )}
+          
           <input
             type="file"
             id="fotoPerfil"
@@ -160,11 +180,12 @@ const FormularioPerfil: React.FC<FormularioPerfilProps> = ({ perfil, modo, usuar
             onChange={handleFotoChange}
             disabled={subiendo}
           />
+          
           {subiendo && <div className="subiendo-texto">Subiendo foto...</div>}
         </div>
 
         <form className="perfil-form" onSubmit={handleSubmit} style={{ position: "relative" }}>
-
+          {/* Solo mostrar campo Nombre en modo edición */}
           {modo === "editar" && (
             <CampoTexto
               label="Nombre"
@@ -176,28 +197,28 @@ const FormularioPerfil: React.FC<FormularioPerfilProps> = ({ perfil, modo, usuar
             />
           )}
 
+          {/* CONTENEDOR PRINCIPAL - Responsive */}
           <div style={{ 
             display: "flex", 
-            gap: "20px",
-            marginBottom: "25px",
-            flexWrap: "nowrap",
-            alignItems: "flex-start"
+            flexDirection: isMobile ? "column" : "row",
+            gap: isMobile ? "20px" : "25px",
+            marginBottom: isMobile ? "20px" : "25px"
           }}>
-
+            {/* COLUMNA IZQUIERDA - Campos de formulario */}
             <div style={{ 
               flex: 1,
               display: "flex",
               flexDirection: "column",
-              gap: "15px"
+              gap: isMobile ? "12px" : "15px"
             }}>
-
+              {/* Fila Edad + Género */}
               <div style={{ 
                 display: "flex", 
-                gap: "15px",
-                alignItems: "flex-start"
+                flexDirection: isMobile ? "column" : "row",
+                gap: isMobile ? "12px" : "15px"
               }}>
-
-                <div style={{ flex: 1 }}>
+                {/* Edad */}
+                <div style={{ flex: 1, width: isMobile ? "100%" : "auto" }}>
                   <CampoTexto
                     label="Edad"
                     name="edad"
@@ -211,7 +232,8 @@ const FormularioPerfil: React.FC<FormularioPerfilProps> = ({ perfil, modo, usuar
                   />
                 </div>
                 
-                <div style={{ flex: 1 }}>
+                {/* Género */}
+                <div style={{ flex: 1, width: isMobile ? "100%" : "auto" }}>
                   <CampoSelect
                     label="Género"
                     name="genero"
@@ -224,6 +246,7 @@ const FormularioPerfil: React.FC<FormularioPerfilProps> = ({ perfil, modo, usuar
                 </div>
               </div>
 
+              {/* Descripción */}
               <div>
                 <CampoTextArea
                   label="Descripción"
@@ -232,24 +255,28 @@ const FormularioPerfil: React.FC<FormularioPerfilProps> = ({ perfil, modo, usuar
                   esSoloVista={esSoloVista}
                   onChange={handleChange}
                   placeholder="Cuéntanos sobre ti..."
+                  rows={isMobile ? 4 : 5}
                 />
               </div>
             </div>
 
-          {(modo === "view" || modo === "verOtro") && usuarioId && (
-            <div style={{
-              width: "280px",
-              flexShrink: 0
-            }}>
-              <PerfilCalificaciones 
-                idUsuario={usuarioId} 
-                esMiPerfil={esMiPerfil && modo === "view"}
-                nombreUsuario={modo === "verOtro" ? nombreUsuario : undefined}
-              />
-            </div>
-          )}
+            {/* COLUMNA DERECHA - Gráfico (solo para view/verOtro) */}
+            {(modo === "view" || modo === "verOtro") && usuarioId && (
+              <div style={{
+                width: isMobile ? "100%" : "280px",
+                flexShrink: 0
+              }}>
+                <PerfilCalificaciones 
+                  idUsuario={usuarioId} 
+                  esMiPerfil={esMiPerfil && modo === "view"}
+                  nombreUsuario={modo === "verOtro" ? nombreUsuario : undefined}
+                  isMobile={isMobile}
+                />
+              </div>
+            )}
           </div>
 
+          {/* Secciones de Hábitos y Preferencias */}
           <SeccionCheckboxes<HabitosUsuario>
             titulo="Hábitos"
             config={habitosConfig}
@@ -257,6 +284,7 @@ const FormularioPerfil: React.FC<FormularioPerfilProps> = ({ perfil, modo, usuar
             esSoloVista={esSoloVista}
             onToggle={toggleHabito}
             textoVacio="Sin hábitos especificados"
+            isMobile={isMobile}
           />
 
           <SeccionCheckboxes<PreferenciasUsuario>
@@ -266,15 +294,21 @@ const FormularioPerfil: React.FC<FormularioPerfilProps> = ({ perfil, modo, usuar
             esSoloVista={esSoloVista}
             onToggle={togglePreferencia}
             textoVacio="Sin preferencias especificadas"
+            isMobile={isMobile}
           />
 
-          <BotonesFormulario modo={modo} />
+          <BotonesFormulario modo={modo} isMobile={isMobile} />
 
           {modo === "view" && (
             <button
               type="button"
               className="btn-volver-atras-perfil"
               onClick={() => Navegar.volverAtras()}
+              style={{
+                padding: isMobile ? "10px 20px" : "12px 25px",
+                fontSize: isMobile ? "14px" : "16px",
+                marginTop: isMobile ? "15px" : "20px"
+              }}
             >
               Volver
             </button>

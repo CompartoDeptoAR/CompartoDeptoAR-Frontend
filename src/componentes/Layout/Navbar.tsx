@@ -173,9 +173,12 @@ const NavbarApp: React.FC = () => {
           onCerrarSesion={cerrarSesion}
         />
 
-        <Navbar.Toggle aria-controls="navbar-content" />
+        <Navbar.Toggle aria-controls="navbar-content">
+          <Search size={20} />
+        </Navbar.Toggle>
+
         <Navbar.Collapse id="navbar-content">
-          {/* BUSCADOR */}
+          {/* BUSCADOR (AUN BUSCA POR TITULO JEJE)*/}
           <div ref={searchRef} className="position-relative flex-grow-1 mx-lg-3 my-2 my-lg-0">
             <Form className="d-flex search-container" onSubmit={ejecutarBusqueda}>
               <div className="input-group w-100">
@@ -184,7 +187,7 @@ const NavbarApp: React.FC = () => {
                 </span>
                 <FormControl
                   type="search"
-                  placeholder="Buscar publicaciones..."
+                  placeholder="Buscar publicaciones por titulo..."
                   className="border-start-0"
                   value={textoBusqueda}
                   onChange={(e) => {
@@ -228,7 +231,7 @@ const NavbarApp: React.FC = () => {
                   )}
                 </Button>
 
-                {/* Botón buscar solo icono en móvil */}
+                {/* Botn icono en celu */}
                 <Button
                   variant="primary"
                   type="submit"
@@ -242,7 +245,7 @@ const NavbarApp: React.FC = () => {
                   )}
                 </Button>
                 
-                {/* Filtros mobile */}
+                {/* Filtros celu */}
                 <Button
                   variant="outline-light"
                   className="ms-1 d-flex d-md-none align-items-center justify-content-center"
@@ -252,7 +255,7 @@ const NavbarApp: React.FC = () => {
                   <Filter size={18} />
                 </Button>
 
-                {/* Filtros desktop */}
+                {/* Filtros pc */}
                 <Button
                   variant="outline-light"
                   className="ms-2 d-none d-md-flex align-items-center"
