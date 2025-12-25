@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Navbar, Nav, Form, FormControl, Button, NavDropdown, Spinner, Alert } from "react-bootstrap";
-import { Bell, MessageCircle, Search, X, Filter, Home } from "lucide-react"; 
+import { Bell, MessageCircle, Search, X, Filter, Home } from "lucide-react";
 
 import { TokenService } from "../../services/auth/tokenService";
 import apiAuth from "../../api/endpoints/auth";
@@ -14,6 +14,7 @@ import "../../styles/NavbarApp.css";
 import { ConversacionesDropdown } from "../Chat/ConversacionesDropdown";
 import { MiniChat } from "../Chat/MiniChat";
 import { useConversaciones } from "../../hooks/chat/useConversaciones";
+import { NavbarCelu } from "./NavbarCelu";
 
 const NavbarApp: React.FC = () => {
   const [showFiltros, setShowFiltros] = useState(false);
@@ -27,22 +28,17 @@ const NavbarApp: React.FC = () => {
   const [chatActual, setChatActual] = useState<any | null>(null);
   const { loading: loadingConversaciones } = useConversaciones(TokenService.getUid());
 
-  const abrirMiniChat = (conv: any) => {
-    setChatActual(conv);
-  };
-
   const [estaLogueado, setEstaLogueado] = useState(isLoggedIn());
 
   useEffect(() => {
-
     setEstaLogueado(isLoggedIn());
 
     const verificarLogin = () => {
       setEstaLogueado(isLoggedIn());
     };
+
     window.addEventListener('storage', verificarLogin);
     window.addEventListener('popstate', verificarLogin);
-
     const interval = setInterval(verificarLogin, 500);
 
     return () => {
@@ -104,6 +100,7 @@ const NavbarApp: React.FC = () => {
     setErrorBusqueda(null);
     try {
       setLoadingBusqueda(true);
+
       if (filtros.precioMin === "") delete filtros.precioMin;
       if (filtros.precioMax === "") delete filtros.precioMax;
       if (filtros.precioMin !== undefined) filtros.precioMin = Number(filtros.precioMin);
@@ -139,6 +136,10 @@ const NavbarApp: React.FC = () => {
     window.location.href = `/publicacion/${id}`;
   };
 
+  const abrirMiniChat = (conv: any) => {
+    setChatActual(conv);
+  };
+
   return (
     <>
       <Navbar bg="dark" variant="dark" expand="lg" className="px-4 shadow-sm position-relative">
@@ -150,31 +151,43 @@ const NavbarApp: React.FC = () => {
           className="fw-bold text-uppercase d-flex align-items-center"
           style={{ cursor: "pointer" }}
         >
-            <Home 
-                size={24}
-                className="d-inline-block align-top me-2 text-info"
-            />
-            <span 
-                className="d-none d-md-inline" 
-                style={{ fontSize: '1.4rem', letterSpacing: '1px' }}
-            >
-                <span className="text-info fw-bold">Comparto</span> 
-                <span className="text-light" style={{ fontWeight: 300 }}>DeptoAR</span>
-            </span>
-            <span className="d-inline d-md-none">CDAR</span>
+          <Home 
+            size={24}
+            className="d-inline-block align-top me-2 text-info"
+          />
+          <span 
+            className="d-none d-md-inline" 
+            style={{ fontSize: '1.4rem', letterSpacing: '1px' }}
+          >
+            <span className="text-info fw-bold">Comparto</span> 
+            <span className="text-light" style={{ fontWeight: 300 }}>DeptoAR</span>
+          </span>
+          <span className="d-inline d-md-none">CDAR</span>
         </Navbar.Brand>
 
-        <Navbar.Toggle aria-controls="navbar-content" />
+        <NavbarCelu
+          estaLogueado={estaLogueado}
+          loadingConversaciones={loadingConversaciones}
+          idUsuario={TokenService.getUid()}
+          onToggleChats={() => setShowChats((prev) => !prev)}
+          onCerrarSesion={cerrarSesion}
+        />
+
+        <Navbar.Toggle aria-controls="navbar-content">
+          <Search size={20} />
+        </Navbar.Toggle>
+
         <Navbar.Collapse id="navbar-content">
-          <div ref={searchRef} className="position-relative flex-grow-1 mx-lg-3">
+          {/* BUSCADOR (AUN BUSCA POR TITULO JEJE)*/}
+          <div ref={searchRef} className="position-relative flex-grow-1 mx-lg-3 my-2 my-lg-0">
             <Form className="d-flex search-container" onSubmit={ejecutarBusqueda}>
-              <div className="input-group">
+              <div className="input-group w-100">
                 <span className="input-group-text bg-light border-end-0">
                   <Search size={18} />
                 </span>
                 <FormControl
                   type="search"
-                  placeholder="Buscar publicaciones (solo busca en el titulo por ahora)..."
+                  placeholder="Buscar publicaciones por titulo..."
                   className="border-start-0"
                   value={textoBusqueda}
                   onChange={(e) => {
@@ -192,9 +205,15 @@ const NavbarApp: React.FC = () => {
                 {textoBusqueda && (
                   <Button
                     variant="link"
-                    className="border-0 text-secondary"
+                    className="border-0 text-secondary p-0"
                     onClick={limpiarBusqueda}
-                    style={{ position: "absolute", right: "60px", zIndex: 10 }}
+                    style={{ 
+                      position: "absolute", 
+                      right: "120px", 
+                      top: "50%",
+                      transform: "translateY(-50%)",
+                      zIndex: 10 
+                    }}
                   >
                     <X size={16} />
                   </Button>
@@ -203,7 +222,7 @@ const NavbarApp: React.FC = () => {
                   variant="primary"
                   type="submit"
                   disabled={loadingBusqueda}
-                  className="rounded-end"
+                  className="rounded-end d-none d-sm-block"
                 >
                   {loadingBusqueda ? (
                     <Spinner animation="border" size="sm" />
@@ -211,9 +230,35 @@ const NavbarApp: React.FC = () => {
                     "Buscar"
                   )}
                 </Button>
+
+                {/* Botn icono en celu */}
+                <Button
+                  variant="primary"
+                  type="submit"
+                  disabled={loadingBusqueda}
+                  className="rounded-end d-block d-sm-none"
+                >
+                  {loadingBusqueda ? (
+                    <Spinner animation="border" size="sm" />
+                  ) : (
+                    <Search size={18} />
+                  )}
+                </Button>
+                
+                {/* Filtros celu */}
                 <Button
                   variant="outline-light"
-                  className="ms-2 d-none d-md-flex"
+                  className="ms-1 d-flex d-md-none align-items-center justify-content-center"
+                  onClick={() => setShowFiltros(true)}
+                  style={{ minWidth: "40px" }}
+                >
+                  <Filter size={18} />
+                </Button>
+
+                {/* Filtros pc */}
+                <Button
+                  variant="outline-light"
+                  className="ms-2 d-none d-md-flex align-items-center"
                   onClick={() => setShowFiltros(true)}
                 >
                   <Filter size={18} className="me-1" />
@@ -295,55 +340,55 @@ const NavbarApp: React.FC = () => {
             )}
           </div>
 
-          <Nav className="ms-auto align-items-center">
+          {/* DERECHA */}
+          <Nav className="ms-auto align-items-center gap-2 mt-3 mt-lg-0 flex-row justify-content-center justify-content-lg-end d-none d-lg-flex">
             {estaLogueado && (
               <>
-                <Nav.Link className="position-relative" onClick={() => Navegar.notificaciones()}>
+                <Nav.Link className="position-relative p-2" onClick={() => Navegar.notificaciones()}>
                   <Bell size={20} />
                 </Nav.Link>
 
-                <Nav.Link className="position-relative">
+                <Nav.Link className="position-relative p-2">
                   {loadingConversaciones ? (
-                      <div
-                        className="spinner-border text-success"
-                        style={{ width: "20px", height: "20px" }}
-                        role="status"
-                      />
-                    ) : (
-                      <MessageCircle
-                        size={20}
-                        style={{ cursor: "pointer" }}
-                        onClick={() => setShowChats((prev) => !prev)}
-                      />
-                    )}
-
-
-
-                  <NotificacionesBadge idUsuario={TokenService.getUid()} />
-
-                  {showChats && (
-                    <ConversacionesDropdown
-                      idUsuario={TokenService.getUid()!}
-                      onSeleccionar={(conv) => {
-                        setShowChats(false);
-                        abrirMiniChat(conv);
-                      }}
+                    <div
+                      className="spinner-border text-success"
+                      style={{ width: "20px", height: "20px" }}
+                      role="status"
+                    />
+                  ) : (
+                    <MessageCircle
+                      size={20}
+                      style={{ cursor: "pointer" }}
+                      onClick={() => setShowChats((prev) => !prev)}
                     />
                   )}
-                </Nav.Link>
 
+                  <NotificacionesBadge idUsuario={TokenService.getUid()} />
+                </Nav.Link>
               </>
             )}
 
             {estaLogueado ? (
-              <NavDropdown title="Mi Cuenta" align="end" id="dropdown-usuario">
-                <NavDropdown.Item onClick={() => Navegar.miPerfil()}>Perfil</NavDropdown.Item>
-                <NavDropdown.Item onClick={() => Navegar.contactos()}>Contactos</NavDropdown.Item>
-                <NavDropdown.Item onClick={() => Navegar.misPublicaciones()}>Mis publicaciones</NavDropdown.Item>
-                <NavDropdown.Item onClick={() => Navegar.misFavoritos()}>Mis Favoritos</NavDropdown.Item>
-                <NavDropdown.Divider />
+              <NavDropdown title="Mi Cuenta" align="end" id="dropdown-usuario-desktop">
+                <NavDropdown.Item onClick={() => Navegar.miPerfil()}>
+                  Perfil
+                </NavDropdown.Item>
+                <NavDropdown.Item onClick={() => Navegar.contactos()}>
+                  Contactos
+                </NavDropdown.Item>
+                <NavDropdown.Item onClick={() => Navegar.misPublicaciones()}>
+                  Mis publicaciones
+                </NavDropdown.Item>
+                <NavDropdown.Item onClick={() => Navegar.misFavoritos()}>
+                  Mis Favoritos
+                </NavDropdown.Item>
                 {hasRole(Rol.ADMIN) && (
-                  <NavDropdown.Item onClick={() => Navegar.admin()}>Panel Admin</NavDropdown.Item>
+                  <>
+                    <NavDropdown.Divider />
+                    <NavDropdown.Item onClick={() => Navegar.admin()}>
+                      Panel Admin
+                    </NavDropdown.Item>
+                  </>
                 )}
                 <NavDropdown.Divider />
                 <NavDropdown.Item onClick={cerrarSesion} className="text-danger fw-semibold">
@@ -353,7 +398,8 @@ const NavbarApp: React.FC = () => {
             ) : (
               <Button 
                 variant="outline-light" 
-                className="ms-3"
+                className="ms-2"
+                size="sm"
                 onClick={() => Navegar.auth()}
               >
                 Iniciar Sesión
@@ -363,11 +409,23 @@ const NavbarApp: React.FC = () => {
         </Navbar.Collapse>
       </Navbar>
 
+      {/* ConversacionesDropdown fuera del navbar */}
+      {showChats && (
+        <ConversacionesDropdown
+          idUsuario={TokenService.getUid()!}
+          onSeleccionar={(conv) => {
+            setShowChats(false);
+            abrirMiniChat(conv);
+          }}
+        />
+      )}
+
       <FiltrosBusqueda
         show={showFiltros}
         onClose={() => setShowFiltros(false)}
         onApply={aplicarFiltros}
       />
+
       {chatActual && (
         <MiniChat
           visible={true}
@@ -378,7 +436,6 @@ const NavbarApp: React.FC = () => {
           nombreDestinatario={chatActual.nombreOtraPersona}
         />
       )}
-
     </>
   );
 };

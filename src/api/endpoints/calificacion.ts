@@ -26,21 +26,16 @@ export interface PromedioResponse {
 
 const apiCalificacion = {
   calificacion: {
-    crear: async ( data: CalificacionCrear ): Promise<CrearCalificacionResponse> => {
+    crear: async (data: CalificacionCrear): Promise<CrearCalificacionResponse> => {
       try {
         const res = await axiosApi.post<CrearCalificacionResponse>(
-          import.meta.env.VITE_URL_CALIFICACION,
+          "/api/calificaciones",
           data
         );
         if (res.status === 201) {
           return res.data;
         }
-        
-        handleApiError(
-          res.status,
-          "No se pudo registrar el guargar la calificacion",
-        );
-
+        handleApiError(res.status, "No se pudo registrar la calificación");
       } catch (error: any) {
         if (error.response) {
           throw new Error(error.response.data.error || "Error al calificar");
@@ -49,17 +44,17 @@ const apiCalificacion = {
       }
     },
 
-  
     obtenerPorUsuario: async (idUsuario: string): Promise<CalificacionResponse> => {
       try {
         const res = await axiosApi.get<CalificacionResponse>(
-          `${import.meta.env.VITE_URL_CALIFICACION}/${idUsuario}`
+          `/api/calificaciones/${idUsuario}`
         );
         if (res.status === 200) return res.data;
-
-        handleApiError(res.status, "No se pudo obtener la calificacion");
+        handleApiError(res.status, "No se pudo obtener las calificaciones");
       } catch (error: any) {
-        if (error.response) throw new Error(error.response.data.error || "Error al obtener calificaciones");
+        if (error.response) {
+          throw new Error(error.response.data.error || "Error al obtener calificaciones");
+        }
         throw new Error("Error de conexión");
       }
     },
@@ -67,18 +62,18 @@ const apiCalificacion = {
     obtenerPromedio: async (idUsuario: string): Promise<PromedioResponse> => {
       try {
         const res = await axiosApi.get<PromedioResponse>(
-          `${import.meta.env.VITE_URL_CALIFICACION}/${idUsuario}/promedio` // <--- endpoint distinto
+          `/api/calificaciones/${idUsuario}/promedio`
         );
-
         if (res.status === 200) return res.data;
-
         handleApiError(res.status, "No se pudo obtener el promedio");
       } catch (error: any) {
-        if (error.response) throw new Error(error.response.data.error || "Error al obtener promedio");
+        if (error.response) {
+          throw new Error(error.response.data.error || "Error al obtener promedio");
+        }
         throw new Error("Error de conexión");
       }
     },
   },
-}
+};
 
 export default apiCalificacion;

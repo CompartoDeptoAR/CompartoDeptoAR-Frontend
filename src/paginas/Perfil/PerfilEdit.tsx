@@ -4,10 +4,8 @@ import ToastNotification from "../../componentes/ToastNotification/ToastNotifica
 import { usePerfilEdit } from "../../hooks/pagina/usuario/usePerfilEdit";
 import { useLoading } from "../../contexts/LoadingContext";
 
-
-
 const PerfilEdit: React.FC = () => {
-  const { perfil, loading, toast, hideToast, handleSave } = usePerfilEdit();
+  const { perfil, loading, toast, hideToast, handleSave, userId } = usePerfilEdit(); //
   const { showLoader, hideLoader } = useLoading();
 
   useEffect(() => {
@@ -18,13 +16,12 @@ const PerfilEdit: React.FC = () => {
   if (loading) return null;
   if (!perfil) return <div>No se encontró el perfil del usuario.</div>;
 
-
-  
   return (
     <>
       <FormularioPerfil
         perfil={perfil}
         modo="editar"
+        usuarioId={userId!}
         onSubmit={handleSave}
       />
       

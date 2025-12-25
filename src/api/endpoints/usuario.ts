@@ -22,17 +22,28 @@ const apiUsuario = {
       return undefined as unknown as UsuarioPerfil;
     },
 
-    editarPerfil: async (data: Partial<UsuarioPerfil>): Promise<UsuarioPerfil> => {
-      try {
+   editarPerfil: async (data: Partial<UsuarioPerfil>): Promise<UsuarioPerfil> => {
+    try {
+        const datosLimpios: Record<string, any> = {};
+        Object.keys(data).forEach((key) => {
+          const valor = data[key as keyof UsuarioPerfil];
+          
+          if (valor !== undefined && valor !== null) {
+            datosLimpios[key] = valor;
+          }
+        });
+        console.log("📤 Datos enviados al backend:", datosLimpios);
+
         const result = await axiosApi.patch<UsuarioPerfil>(
           import.meta.env.VITE_URL_USER_PERFIL,
-          data
+          datosLimpios
         );
         return result.data;
       } catch (error: any) {
         if (error.response) {
+          console.error("❌ Error del servidor:", error.response.data);
           throw new Error(
-            error.response.data.message || "Error al editar perfil"
+            error.response.data.error || error.response.data.message || "Error al editar perfil"
           );
         }
         throw new Error("Error de conexión");

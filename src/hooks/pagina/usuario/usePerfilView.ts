@@ -29,5 +29,5 @@ export const usePerfilView = () => {
     fetchPerfil();
   }, [userId]);
 
-  return { perfil };
+  return { perfil, userId }; 
 };

@@ -86,10 +86,10 @@ const ListarPublicaciones: React.FC<ListarPublicacionesProps> = ({
   }
 
   return (
-    <div className="container mt-4">
-      <div className="row g-4">
+    <div className="publicaciones-container">
+      <div className="publicaciones-grid">
         {publicaciones.map((pub) => (
-          <div key={pub.id} className="col-12 col-md-6 col-lg-4">
+          <div key={pub.id} className="publicacion-card-wrapper">
             <CartaPublicacion
               publicacion={pub}
               showActions={showActions}
@@ -106,36 +106,28 @@ const ListarPublicaciones: React.FC<ListarPublicacionesProps> = ({
 
       {/* Controles de paginación */}
       {(hasMore || loadingMore) && (
-        <div className="row mt-5 mb-4">
-          <div className="col-12 d-flex justify-content-center">
-            {loadingMore ? (
-              <div className="d-flex flex-column align-items-center">
-                <Spinner animation="border" variant="primary" />
-                <small className="text-muted mt-2">Cargando más publicaciones...</small>
-              </div>
-            ) : hasMore ? (
-              <Button
-                variant="outline-primary"
-                onClick={onCargarMas}
-                className="px-4 py-2 d-flex align-items-center gap-2"
-              >
-                <span>Cargar más publicaciones</span>
-                <ChevronDown size={18} />
-              </Button>
-            ) : null}
-          </div>
+        <div className="paginacion-container">
+          {loadingMore ? (
+            <div className="loading-state">
+              <Spinner animation="border" variant="primary" />
+              <small className="text-muted mt-2">Cargando más publicaciones...</small>
+            </div>
+          ) : hasMore ? (
+            <Button
+              onClick={onCargarMas}
+              className="btn-cargar-mas"
+            >
+              <span>Cargar más publicaciones</span>
+              <ChevronDown size={18} />
+            </Button>
+          ) : null}
         </div>
       )}
 
-      {/* Mensaje cuando no hay más */}
       {!hasMore && !loadingMore && publicaciones.length > 0 && (
-        <div className="row mt-4 mb-4">
-          <div className="col-12">
-            <div className="text-center text-muted">
-              <hr className="my-4" />
-              <p className="mb-0">Ya todas las publicaciones disponibles</p>
-            </div>
-          </div>
+        <div className="paginacion-footer">
+          <hr className="my-4" />
+          <p className="mb-0">Ya viste todas las publicaciones disponibles</p>
         </div>
       )}
     </div>

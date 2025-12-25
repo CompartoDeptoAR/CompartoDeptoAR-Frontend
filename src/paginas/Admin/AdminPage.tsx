@@ -4,6 +4,7 @@ import UsuariosRolesPage from "./Usuario/UsuariosRolesPage";
 import PublicacionesAdminPage from "./PublicacionesAdminPage";
 
 const AdminPage = () => {
+
   const [tab, setTab] = useState("reportes");
   
   return (
