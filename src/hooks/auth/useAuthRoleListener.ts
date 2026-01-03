@@ -4,11 +4,20 @@ import { doc, onSnapshot } from 'firebase/firestore';
 import { db } from '../../firebase/config';
 import { TokenService } from '../../services/auth/tokenService';
 import { Rol } from '../../modelos/Roles';
+import { ADMIN_ROUTES } from '../../routers/Routes';
 
-const RUTAS_ADMIN = [
-  '/admin',
-  '/admin/reportes',
+// Este listener "escuch(je) " cambios de rol del usuario en tiempo real.
+// Sirve para reaccionar si se agregan o sacan permisos sin recargar la app.
+// Si perdes el rol admin y estas en una ruta protegida, puuuum,te saca.
+// Si te ponen el rol admin, se fuerza salida de la vista para q te des cuenta...
+// Todito sincronizado...
+
+const RUTAS_ADMIN: string[] = [
+  ADMIN_ROUTES.PANEL,
+  ADMIN_ROUTES.REPORTE_DETALLE(),
 ];
+
+
 
 function esRutaDeAdmin(pathname: string): boolean {
   return RUTAS_ADMIN.some(ruta => pathname.startsWith(ruta));
@@ -27,24 +36,19 @@ export function useAuthRoleListener() {
       console.warn('No hay usuario autenticado');
       return;
     }
-    //console.log('Escuchando cambios de rol para usuario:', usuarioId);
+
     const docRef = doc(db, 'usuarios', usuarioId);
 
     const unsubscribe = onSnapshot(
       docRef,
       (docSnap) => {
         if (!docSnap.exists()) {
-          //console.log('Usuario eliminado de Firestore');
           handleLogout('Tu cuenta fue eliminada');
           return;
         }
+
         const userData = docSnap.data();
         const rolesActuales = userData?.roles || userData?.rol || [];
-
-        //console.log('Roles actuales:', rolesActuales);
-        //console.log('Tipo de roles:', typeof rolesActuales, Array.isArray(rolesActuales));
-       //console.log('Primer elemento:', rolesActuales[0]);
-        //console.log('Ruta actual:', location.pathname);
 
         const esAdminAhora =
           Array.isArray(rolesActuales) &&
@@ -80,14 +84,11 @@ export function useAuthRoleListener() {
             return false;
           });
 
-        //console.log('Es admin ahora?', esAdminAhora);
         if (!inicializado.current) {
           eraAdminAntes.current = esAdminAhora;
           inicializado.current = true;
-          //console.log('Estado inicial guardado. Es admin:', esAdminAhora);
 
           if (!esAdminAhora && esRutaDeAdmin(location.pathname)) {
-            //console.log('No es admin pero esta en una ruta para admin. Cerrando sesion.');
             handleLogout('No tenes permisos para entrar a esta seccion');
           }
 
@@ -95,25 +96,24 @@ export function useAuthRoleListener() {
         }
 
         if (eraAdminAntes.current === true && esAdminAhora === false) {
-         // console.log('Usuario perdió rol de admin');
-
           if (esRutaDeAdmin(location.pathname)) {
-            //console.log('Está en ruta admin, cerrando sesión...');
             handleLogout('Tus permisos d administrador fueron sacados');
           } else {
-           //console.log('ℹNo está en ruta admin, solo alerta');
             alert('Tus permisos de administrador fueron sacados');
           }
         }
+
+        if (eraAdminAntes.current === false && esAdminAhora === true) {
+          alert('Se actualizaron tus permisos. Volve a Entrar😎.');
+          navigate('/', { replace: true });
+        }
+
         eraAdminAntes.current = esAdminAhora;
       },
-      (error) => {
-       // console.error('Error escuchando cambios de rol:', error);
-      }
+      () => {}
     );
 
     return () => {
-      //console.log('Parando el listener de rol');
       unsubscribe();
       inicializado.current = false;
       eraAdminAntes.current = null;
@@ -121,7 +121,6 @@ export function useAuthRoleListener() {
   }, [navigate, location.pathname]);
 
   function handleLogout(mensaje: string) {
-    //console.log('Cerrando sesiin completa:', mensaje);
     TokenService.clearAuthData();
     sessionStorage.clear();
     alert(mensaje);
