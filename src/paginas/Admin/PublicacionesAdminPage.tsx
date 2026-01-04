@@ -18,7 +18,7 @@ const PublicacionesAdminPage = () => {
     try {
       setLoading(true);
       setError(null);
-      const resultado = await apiPublicacion.publicacion.traerPaginadas(100);
+      const resultado = await apiPublicacion.publicacion.traerTodasAdmin();
       setPublicaciones(resultado.publicaciones);
     } catch (err: any) {
       setError(err.message || "Error al cargar publicaciones");

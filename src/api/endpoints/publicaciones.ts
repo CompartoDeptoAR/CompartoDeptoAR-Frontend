@@ -60,6 +60,16 @@ const apiPublicacion = {
       }
     },
 
+    traerTodasAdmin: async (): Promise<ResultadoPaginado> => {
+      try {
+        const res = await axiosApi.get<ResultadoPaginado>(`${urlApi}/admin/todas`);
+        console.log("Publicaciones para admin:", res.data);
+        return res.data;
+      } catch (error: any) {
+        throw new Error(error.response?.data?.error || "Error al obtener publicaciones para admin");
+      }
+    },
+
     actualizarPublicacion: async (idPublicacion: string, data: Partial<Publicacion>): Promise<void> => {
       try {
         await axiosApi.put(`${urlApi}/actualizar/${idPublicacion}`, data);
