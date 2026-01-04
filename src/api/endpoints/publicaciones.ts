@@ -67,10 +67,10 @@ const apiPublicacion = {
         throw new Error(error.response?.data?.error || "Error al actualizar la publicación");
       }
     },
-
+//este viene siendo el soft
     eliminarPublicacion: async (id: string): Promise<void> => {
       try {
-        await axiosApi.delete(`${urlApi}/eliminar/${id}`);
+        await axiosApi.delete(`${urlApi}/eliminarSoft/${id}`);
       } catch (error: any) {
         throw new Error(error.response?.data?.error || "Error al eliminar publicación");
       }
