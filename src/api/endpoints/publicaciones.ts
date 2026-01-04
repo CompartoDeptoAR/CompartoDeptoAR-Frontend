@@ -67,12 +67,21 @@ const apiPublicacion = {
         throw new Error(error.response?.data?.error || "Error al actualizar la publicación");
       }
     },
-//este viene siendo el soft
+  //este viene siendo el soft
     eliminarPublicacion: async (id: string): Promise<void> => {
       try {
         await axiosApi.delete(`${urlApi}/eliminarSoft/${id}`);
       } catch (error: any) {
         throw new Error(error.response?.data?.error || "Error al eliminar publicación");
+      }
+    },
+
+  //este es el del admin
+    eliminarPublicacionHard: async (id: string): Promise<void> => {
+      try {
+        await axiosApi.delete(`${urlApi}/eliminar-hard/${id}`);
+      } catch (error: any) {
+        throw new Error(error.response?.data?.error || "Error al eliminar definitivamente la publicacion");
       }
     },
 
