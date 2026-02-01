@@ -1,6 +1,6 @@
 import { useState, useCallback } from "react";
 import { Usuario } from "../../../modelos/Usuario";
-import apiAdmin from "../../../api/endpoints/admin";
+import apiAdmin from "../../../services/api/endpoints/admin";
 import { Rol } from "../../../modelos/Roles";
 
 export const useUsuariosRoles = () => {

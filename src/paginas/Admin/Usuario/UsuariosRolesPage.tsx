@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useUsuariosRoles } from "../../../hooks/pagina/admin/useUsuariosRoles";
 import { Rol } from "../../../modelos/Roles";
-import apiAdmin from "../../../api/endpoints/admin";
+import apiAdmin from "../../../services/api/endpoints/admin";
 import { Navegar } from "../../../navigation/navigationService";
 
 const UsuariosRolesPage = () => {

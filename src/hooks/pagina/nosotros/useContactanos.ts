@@ -1,4 +1,4 @@
-import apiContactanos from "../../../api/endpoints/contacto";
+import apiContactanos from "../../../services/api/endpoints/contacto";
 import { useFormularioContacto } from "./useFormularioContacto";
 
 export function useContactanos() {

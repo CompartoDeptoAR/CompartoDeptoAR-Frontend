@@ -1,6 +1,6 @@
-import type { PublicacionResumida } from "../../modelos/Publicacion";
+import type { PublicacionResumida } from "../../../modelos/Publicacion";
 import axiosApi from "../config/axios.config";
-import { TokenService } from "../../services/auth/tokenService";
+import { TokenService } from "../../auth/tokenService";
 
 interface ListaFavoritoRes {
     mensaje: string,

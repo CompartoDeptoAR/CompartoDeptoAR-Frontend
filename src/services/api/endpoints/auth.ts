@@ -1,6 +1,6 @@
-import { handleApiError } from "../../helpers/handleApiError";
-import { limpiarSesionFirebase } from "../../services/auth/firebaseUtils";
-import { TokenService } from "../../services/auth/tokenService";
+import { handleApiError } from "../../../helpers/handleApiError";
+import { limpiarSesionFirebase } from "../../auth/firebaseUtils";
+import { TokenService } from "../../auth/tokenService";
 import axiosApi from "../config/axios.config";
 import type { LoginRequest, LoginResponse, RegisterRequest, RegisterResponse } from "../types/auth.types";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";

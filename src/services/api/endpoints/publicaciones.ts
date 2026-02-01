@@ -1,4 +1,4 @@
-import type { Publicacion, PublicacionResponce, PublicacionResumida } from "../../modelos/Publicacion";
+import type { Publicacion, PublicacionResponce, PublicacionResumida } from "../../../modelos/Publicacion";
 import axiosApi from "../config/axios.config";
 
 interface ResultadoPaginado {

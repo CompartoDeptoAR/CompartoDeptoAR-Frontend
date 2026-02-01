@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Modal, Button, Alert } from "react-bootstrap";
 import { Trash2, AlertTriangle } from "lucide-react";
 import { Navegar } from "../../../navigation/navigationService";
-import apiUsuario from "../../../api/endpoints/usuario";
+import apiUsuario from "../../../services/api/endpoints/usuario";
 import { TokenService } from "../../../services/auth/tokenService";
 import { useToast } from "../../../hooks/useToast";
 

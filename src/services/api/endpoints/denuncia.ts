@@ -1,5 +1,5 @@
-import { handleApiError } from "../../helpers/handleApiError";
-import { Reporte } from "../../modelos/Reporte";
+import { handleApiError } from "../../../helpers/handleApiError";
+import { Reporte } from "../../../modelos/Reporte";
 import axiosApi from "../config/axios.config";
 
 

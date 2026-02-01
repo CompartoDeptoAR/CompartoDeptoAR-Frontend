@@ -3,13 +3,13 @@ import { Navbar, Nav, Form, FormControl, Button, NavDropdown, Spinner, Alert } f
 import { Bell, MessageCircle, Search, X, Filter, Home } from "lucide-react";
 
 import { TokenService } from "../../services/auth/tokenService";
-import apiAuth from "../../api/endpoints/auth";
+import apiAuth from "../../services/api/endpoints/auth";
 import { Navegar } from "../../navigation/navigationService";
 import { NotificacionesBadge } from "../Chat/NotificacionesBadge";
 import { Rol } from "../../modelos/Roles";
 import { hasRole, isLoggedIn } from "../../helpers/funcion";
 import { FiltrosBusqueda } from "../Buscador/FiltrosBusqueda";
-import apiBuscador from "../../api/endpoints/buscador";
+import apiBuscador from "../../services/api/endpoints/buscador";
 import "../../styles/NavbarApp.css";
 import { ConversacionesDropdown } from "../Chat/ConversacionesDropdown";
 import { MiniChat } from "../Chat/MiniChat";

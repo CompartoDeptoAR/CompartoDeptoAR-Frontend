@@ -1,5 +1,5 @@
-import { handleApiError } from "../../helpers/handleApiError";
-import { Calificacion } from "../../modelos/Calificacion";
+import { handleApiError } from "../../../helpers/handleApiError";
+import { Calificacion } from "../../../modelos/Calificacion";
 import axiosApi from "../config/axios.config";
 
 export interface CalificacionCrear {

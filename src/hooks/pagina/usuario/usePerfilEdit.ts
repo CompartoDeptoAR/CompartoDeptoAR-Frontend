@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import type { UsuarioPerfil } from "../../../modelos/Usuario";
 import { LocalStorageService, STORAGE_KEYS } from "../../../services/storage/localStorage.service";
 import { useToast } from "../../useToast";
-import apiUsuario from "../../../api/endpoints/usuario";
+import apiUsuario from "../../../services/api/endpoints/usuario";
 import { Navegar } from "../../../navigation/navigationService";
 import { TokenService } from "../../../services/auth/tokenService"; // ✅ AGREGAR IMPORT
 

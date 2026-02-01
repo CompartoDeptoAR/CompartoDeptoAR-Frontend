@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-import apiDenuncia from "../../../api/endpoints/denuncia";
+import apiDenuncia from "../../../services/api/endpoints/denuncia";
 import { TokenService } from "../../../services/auth/tokenService";
 import { Reporte } from "../../../modelos/Reporte";
 import { Timestamp } from "firebase/firestore";

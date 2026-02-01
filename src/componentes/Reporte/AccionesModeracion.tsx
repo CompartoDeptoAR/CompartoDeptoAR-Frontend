@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Reporte } from "../../modelos/Reporte";
-import apiModeracion from "../../api/endpoints/moderacion";
+import apiModeracion from "../../services/api/endpoints/moderacion";
 import { Navegar } from "../../navigation/navigationService";
 
 interface Props {

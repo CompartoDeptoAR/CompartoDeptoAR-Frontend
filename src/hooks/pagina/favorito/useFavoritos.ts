@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import type { PublicacionResumida } from "../../../modelos/Publicacion";
 import { useToast } from "../../useToast";
-import apiFavorito from "../../../api/endpoints/favoritos";
+import apiFavorito from "../../../services/api/endpoints/favoritos";
 import { TokenService } from "../../../services/auth/tokenService";
 
 export const useFavoritos = () => {

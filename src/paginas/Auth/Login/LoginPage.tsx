@@ -2,7 +2,7 @@ import FormularioLogin from "../../../componentes/FormAuth/FormularioLogin/Formu
 import ToastNotification from "../../../componentes/ToastNotification/ToastNotification";
 import { useLogin } from "../../../hooks/auth/useLogin";
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-import apiAuth from "../../../api/endpoints/auth";
+import apiAuth from "../../../services/api/endpoints/auth";
 import { TokenService } from "../../../services/auth/tokenService";
 import { Navegar } from "../../../navigation/navigationService";
 import { useLoading } from "../../../contexts/LoadingContext";

@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { doc, onSnapshot } from 'firebase/firestore';
-import { db } from '../../firebase/config';
+import { db } from '../../services/api/firebase/config';
 import { TokenService } from '../../services/auth/tokenService';
 import { Rol } from '../../modelos/Roles';
 import { ADMIN_ROUTES } from '../../routers/Routes';

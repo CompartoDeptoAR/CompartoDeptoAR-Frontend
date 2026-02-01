@@ -1,0 +1,9 @@
+.error-500 {
+  --bg-primary: #ffe3e3;
+  --bg-secondary: #e9ecef;
+
+  --accent-start: #dc3545;
+  --accent-end: #ff8787;
+
+  --image-size: 260px;
+}

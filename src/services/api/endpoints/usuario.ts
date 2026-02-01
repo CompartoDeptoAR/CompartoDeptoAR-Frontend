@@ -1,7 +1,7 @@
-import type { HabitosUsuario, PreferenciasUsuario, UsuarioPerfil } from "../../modelos/Usuario";
+import type { HabitosUsuario, PreferenciasUsuario, UsuarioPerfil } from "../../../modelos/Usuario";
 import axiosApi from "../config/axios.config";
-import { handleApiError } from "../../helpers/handleApiError";
-import { LocalStorageService, STORAGE_KEYS } from "../../services/storage/localStorage.service";
+import { handleApiError } from "../../../helpers/handleApiError";
+import { LocalStorageService, STORAGE_KEYS } from "../../storage/localStorage.service";
 
 interface PerfilHabitosPreferenciasResponse {
   habitos: HabitosUsuario;

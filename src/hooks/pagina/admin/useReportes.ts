@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { MiniReporte } from "../../../modelos/Reporte";
-import apiModeracion from "../../../api/endpoints/moderacion";
+import apiModeracion from "../../../services/api/endpoints/moderacion";
 import { Navegar } from "../../../navigation/navigationService";
 
 export const useReportes = () => {

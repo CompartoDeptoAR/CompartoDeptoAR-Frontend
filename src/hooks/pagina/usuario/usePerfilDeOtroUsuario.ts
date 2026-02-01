@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import type { UsuarioPerfil } from "../../../modelos/Usuario";
-import apiUsuario from "../../../api/endpoints/usuario";
+import apiUsuario from "../../../services/api/endpoints/usuario";
 import { useGlobalLoader } from "../../sistema/useGlobalLoader";
 
 export const usePerfilDeOtroUsuario = () => {

@@ -2,7 +2,7 @@ import { useState } from "react";
 import type { Genero, HabitoKey, PreferenciaKey } from "../../modelos/Usuario";
 import { useToast } from "../useToast";
 import { arrayToHabitos, arrayToPreferencias } from "../../helpers/convertersHabitosPreferncias";
-import apiAuth from "../../api/endpoints/auth";
+import apiAuth from "../../services/api/endpoints/auth";
 
 
 

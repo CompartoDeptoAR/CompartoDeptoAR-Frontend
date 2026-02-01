@@ -13,7 +13,7 @@ import {
   limit,
 } from "firebase/firestore";
 import { Conversacion, Mensaje, MensajeUI } from "./types";
-import { db } from "../../firebase/config";
+import { db } from "../api/firebase/config";
 
 class ChatService {
   private mensajesCollection = "mensajes";

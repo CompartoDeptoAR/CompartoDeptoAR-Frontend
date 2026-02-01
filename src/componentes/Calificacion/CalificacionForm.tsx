@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { CalificacionCrear, CrearCalificacionResponse } from "../../api/endpoints/calificacion";
+import { CalificacionCrear, CrearCalificacionResponse } from "../../services/api/endpoints/calificacion";
 import { TokenService } from "../../services/auth/tokenService";
 
 

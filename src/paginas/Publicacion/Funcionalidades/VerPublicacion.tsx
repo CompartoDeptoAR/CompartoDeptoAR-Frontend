@@ -1,8 +1,9 @@
+import { BotonInicio } from "@/componentes/common/buttons";
 import PublicacionDetalleView from "../../../componentes/Publicacion/componentePrincipal.tsx/PublicacionDetalleView";
 import ToastNotification from "../../../componentes/ToastNotification/ToastNotification";
 import { usePublicacionDetalle } from "../../../hooks/pagina/publicacion/Ver/usePublicacionDetalle";
 import { useToast } from "../../../hooks/useToast";
-import { Navegar } from "../../../navigation/navigationService";
+
 
 
 const VerPublicacion = () => {
@@ -16,9 +17,7 @@ const VerPublicacion = () => {
         <div className="alert alert-danger text-center">
           <h4>Publicación no encontrada</h4>
           <p>La publicación que buscas no existe o ha sido eliminada.</p>
-          <button className="btn btn-primary" onClick={() => Navegar.home()}>
-            Volver al inicio
-          </button>
+          <BotonInicio/>
         </div>
       </div>
     );

@@ -1,0 +1,96 @@
+/* ===== Layout ===== */
+.page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+
+  background: radial-gradient(
+    circle at top,
+    var(--bg-primary),
+    var(--bg-secondary)
+  );
+}
+
+/* ===== Card ===== */
+.page-card {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 2.5rem 2rem;
+  max-width: 480px;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+  animation: fadeUp 0.4s ease-out;
+}
+
+/* Barra superior */
+.page-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 5px;
+  width: 100%;
+  background: linear-gradient(
+    90deg,
+    var(--accent-start),
+    var(--accent-end)
+  );
+}
+
+/* ===== Imagen ===== */
+.page-image {
+  width: 100%;
+  max-width: var(--image-size, 260px);
+  margin-bottom: 1.5rem;
+  animation: float 3s ease-in-out infinite;
+}
+
+/* ===== Texto ===== */
+.page-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+}
+
+.page-text {
+  font-size: 1rem;
+  color: #6c757d;
+  margin-bottom: 0.5rem;
+}
+
+.page-subtext {
+  font-size: 0.95rem;
+  color: #6c757d;
+  margin-bottom: 2rem;
+}
+
+/* ===== Acciones ===== */
+.page-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* ===== Animaciones ===== */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes float {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+  100% { transform: translateY(0); }
+}

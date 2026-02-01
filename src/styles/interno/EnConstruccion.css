@@ -1,0 +1,11 @@
+
+.construccion {
+  --bg-primary: #dde7a3;
+  --bg-secondary: #e9ecef;
+
+  --accent-start: #ffc107;
+  --accent-end: #ffda6a;
+
+  --image-size: 240px;
+}
+

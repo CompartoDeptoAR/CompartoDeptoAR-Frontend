@@ -1,7 +1,7 @@
 import { useState } from "react";
 import type { Publicacion, PublicacionResponce } from "../../../../modelos/Publicacion";
-import apiPublicacion from "../../../../api/endpoints/publicaciones";
-import apiUsuario from "../../../../api/endpoints/usuario";
+import apiPublicacion from "../../../../services/api/endpoints/publicaciones";
+import apiUsuario from "../../../../services/api/endpoints/usuario";
 import { Navegar } from "../../../../navigation/navigationService";
 import { TokenService } from "../../../../services/auth/tokenService";
 

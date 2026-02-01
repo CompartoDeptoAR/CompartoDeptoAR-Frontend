@@ -1,0 +1,9 @@
+.not-found {
+  --bg-primary: #f3e8ff;
+  --bg-secondary: #e9ecef;
+
+  --accent-start: #6f42c1;
+  --accent-end: #b197fc;
+
+  --image-size: 320px;
+}

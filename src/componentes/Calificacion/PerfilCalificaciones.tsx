@@ -8,7 +8,7 @@ import {
   ChartOptions,
   Plugin
 } from "chart.js";
-import apiCalificacion from "../../api/endpoints/calificacion";
+import apiCalificacion from "../../services/api/endpoints/calificacion";
 import type { Calificacion } from "../../modelos/Calificacion";
 
 ChartJS.register(ArcElement, Tooltip, Legend);

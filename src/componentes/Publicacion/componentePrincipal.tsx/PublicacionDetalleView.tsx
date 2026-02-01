@@ -11,10 +11,13 @@ import { SeccionLecturaCheckboxes } from "../componenteSecundario/View/SeccionLe
 
 import { Navegar } from "../../../navigation/navigationService";
 import { MiniChat } from "../../Chat/MiniChat";
-import { BotonDenunciaConId } from "../../../helpers/Botones";
+
 import { MapaPublicacion } from "../componenteSecundario/View/MapaPublicacion";
 import { isLoggedIn } from "../../../helpers/funcion";
 import { TokenService } from "../../../services/auth/tokenService";
+import { BotonDenuncia, BotonFavorito, BotonVolver } from "@/componentes/common/buttons";
+import { useFavoritos } from "@/hooks/pagina/favorito/useFavoritos"; 
+import { ModalAccesoRestringido } from "@/componentes/ToastNotification/ModalAccesoRestringido";
 
 interface PublicacionDetalleViewProps {
   publicacion: PublicacionResponce;
@@ -26,6 +29,7 @@ const PublicacionDetalleView: React.FC<PublicacionDetalleViewProps> = ({
   publicacion,
   usuarioNombre,
   usuarioId,
+
 }) => {
   const [mostrarChat, setMostrarChat] = useState(false);
   const [estaLogueado, setEstaLogueado] = useState(isLoggedIn());
@@ -33,6 +37,15 @@ const PublicacionDetalleView: React.FC<PublicacionDetalleViewProps> = ({
   const habitos = publicacion.habitos || {};
   const preferencias = publicacion.preferencias || {};
   const [coords, setCoords] = useState<{ lat: number; lng: number } | null>(null);
+  const [esFavorito, setEsFavorito] = useState(false);
+  const [mostrarModal, setMostrarModal] = useState(false);
+  const {
+    toggleFavorito,
+    verificarEsFavorito,
+  } = useFavoritos();
+
+
+  
 
   useEffect(() => {
     setEstaLogueado(isLoggedIn());
@@ -58,6 +71,27 @@ const PublicacionDetalleView: React.FC<PublicacionDetalleViewProps> = ({
     });
 
   }, [publicacion.ubicacion]);
+
+  useEffect(() => {
+  const verificar = async () => {
+      if (publicacion.id) {
+        const favorito = await verificarEsFavorito(publicacion.id);
+        setEsFavorito(favorito);
+      }
+    };
+
+    verificar();
+  }, [publicacion.id, verificarEsFavorito]);
+
+  const handleToggleFavorite = () => {
+    if (!isLoggedIn()) {
+      setMostrarModal(true);
+      return;
+    }
+
+    toggleFavorito(publicacion.id!);
+  };
+
 
   async function obtenerCoordenadas(direccion: string) {
     const token = import.meta.env.VITE_MAPBOX_TOKEN;
@@ -87,7 +121,17 @@ const PublicacionDetalleView: React.FC<PublicacionDetalleViewProps> = ({
           <div className="col-lg-8">
             <div className="card mb-3">
               <div className="card-body">
-                <GaleriaPublicacion fotos={publicacion.foto || []} />
+           
+                <div className="galeria-wrapper">
+                  <BotonFavorito
+                    esFavorito={esFavorito}
+                    onToggle={handleToggleFavorite}
+                    className="galeria-favorito"
+                  />
+
+                  <GaleriaPublicacion fotos={publicacion.foto || []} />
+                </div>
+
                 <InfoBasicaPublicacion publicacion={publicacion} />
 
                 <SeccionLecturaCheckboxes
@@ -120,14 +164,12 @@ const PublicacionDetalleView: React.FC<PublicacionDetalleViewProps> = ({
       </div>
 
       <div className="btn-skip-container">
-        <button className="btn-skip" onClick={() => Navegar.volverAtras()}>
-          Volver
-        </button>
+        <BotonVolver />
       </div>
 
       <div className="btn-skip-container" style={{ bottom: '20px', left: '20px', right: 'auto' }}>
         <button className="btn-skip" style={{ backgroundColor: '#dc3545' }}>
-          <BotonDenunciaConId texto="⚠️ Reportar usuario" idContenido={publicacion.id!} />
+          <BotonDenuncia texto="⚠️ Reportar usuario" idContenido={publicacion.id!} />
         </button>
       </div>
 
@@ -141,6 +183,12 @@ const PublicacionDetalleView: React.FC<PublicacionDetalleViewProps> = ({
           nombreDestinatario={usuarioNombre}
         />
       )}
+      <ModalAccesoRestringido
+        visible={mostrarModal}
+        onLogin={() => Navegar.auth()}
+        onClose={() => setMostrarModal(false)}
+      />
+
     </>
   );
 };

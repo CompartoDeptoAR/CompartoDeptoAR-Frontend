@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import type { Publicacion, PublicacionResponce } from "../../../../../modelos/Publicacion";
 import { useToast } from "../../../../useToast";
 import { Navegar } from "../../../../../navigation/navigationService";
-import apiPublicacion from "../../../../../api/endpoints/publicaciones";
+import apiPublicacion from "../../../../../services/api/endpoints/publicaciones";
 
 export const useFetchPublicacion = (
   id: string | undefined,

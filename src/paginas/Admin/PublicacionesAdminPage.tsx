@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import apiPublicacion from "./../../api/endpoints/publicaciones";
-import apiModeracion from "../../api/endpoints/moderacion";
+import apiPublicacion from "../../services/api/endpoints/publicaciones";
+import apiModeracion from "../../services/api/endpoints/moderacion";
 import { Navegar } from "../../navigation/navigationService";
 import type { PublicacionResumida } from "../../modelos/Publicacion";
 

@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import apiPublicacion from "../../../../api/endpoints/publicaciones";
+import apiPublicacion from "../../../../services/api/endpoints/publicaciones";
 import { useToast } from "../../../../hooks/useToast";
 import { TokenService } from "../../../../services/auth/tokenService";
 import { Navegar } from "../../../../navigation/navigationService";

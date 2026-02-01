@@ -1,5 +1,5 @@
-import { TokenService } from "../../services/auth/tokenService";
-import { LocalStorageService, STORAGE_KEYS } from "../../services/storage/localStorage.service";
+import { TokenService } from "../../auth/tokenService";
+import { LocalStorageService, STORAGE_KEYS } from "../../storage/localStorage.service";
 import axiosApi from "./axios.config";
 import isPublicRoute from "./constants";
 
@@ -9,9 +9,7 @@ export const setGlobalToastError = (fn: (message: string) => void) => {
   globalToastError = fn;
 };
 
-/* ------------------------------
-   INTERCEPTOR DE REQUEST
--------------------------------- */
+/* REQUEST*/
 axiosApi.interceptors.request.use(
   (config) => {
     const FToken = LocalStorageService.get(STORAGE_KEYS.FTOKEN);
@@ -28,9 +26,7 @@ axiosApi.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-/* ------------------------------
-   INTERCEPTOR DE RESPONSE
--------------------------------- */
+/* RESPONSE */
 axiosApi.interceptors.response.use(
   (response) => response,
 

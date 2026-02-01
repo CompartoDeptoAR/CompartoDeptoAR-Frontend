@@ -1,5 +1,5 @@
 import axiosApi from "../config/axios.config";
-import { handleApiError } from "../../helpers/handleApiError"; 
+import { handleApiError } from "../../../helpers/handleApiError"; 
 
 interface SolicitudContacto {
   mail: string;

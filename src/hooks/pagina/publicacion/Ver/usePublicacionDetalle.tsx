@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import apiPublicacion from "../../../../api/endpoints/publicaciones";
-import apiCalificacion from "../../../../api/endpoints/calificacion";
+import apiPublicacion from "../../../../services/api/endpoints/publicaciones";
+import apiCalificacion from "../../../../services/api/endpoints/calificacion";
 import type { PublicacionResponce } from "../../../../modelos/Publicacion";
 import { Navegar } from "../../../../navigation/navigationService";
 import { useToast } from "../../../useToast";
 import { useParams } from "react-router-dom";
-import apiUsuario from "../../../../api/endpoints/usuario";
+import apiUsuario from "../../../../services/api/endpoints/usuario";
 import { useLoading } from "../../../../contexts/LoadingContext";
 
 export const usePublicacionDetalle = () => {

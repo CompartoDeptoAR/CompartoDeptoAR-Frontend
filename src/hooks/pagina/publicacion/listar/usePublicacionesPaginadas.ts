@@ -1,7 +1,7 @@
 import { useState, useCallback } from "react";
 import { useToast } from "../../../useToast";
 import type { PublicacionResumida } from "../../../../modelos/Publicacion";
-import apiPublicacion from "../../../../api/endpoints/publicaciones";
+import apiPublicacion from "../../../../services/api/endpoints/publicaciones";
 
 const ITEMS_PER_PAGE = 12;
 

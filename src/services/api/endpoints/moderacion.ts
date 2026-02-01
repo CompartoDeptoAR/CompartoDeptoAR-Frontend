@@ -1,6 +1,6 @@
 import axiosApi from "../config/axios.config";
-import { TokenService } from "../../services/auth/tokenService";
-import { MiniReporte } from "../../modelos/Reporte";
+import { TokenService } from "../../auth/tokenService";
+import { MiniReporte } from "../../../modelos/Reporte";
 
 const urlApi = import.meta.env.VITE_URL_MODERACION;
 

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import type { PublicacionResumida } from "../../modelos/Publicacion";
 import { useToast } from "../../hooks/useToast";
-import apiPublicacion from "../../api/endpoints/publicaciones";
-import apiUsuario from "../../api/endpoints/usuario";
+import apiPublicacion from "../../services/api/endpoints/publicaciones";
+import apiUsuario from "../../services/api/endpoints/usuario";
 import { TokenService } from "../../services/auth/tokenService";
 import { Navegar } from "../../navigation/navigationService";
 import MiniListarPublicaciones from "../../componentes/Publicacion/ListarPublicacion/MiniListarPublicaciones";

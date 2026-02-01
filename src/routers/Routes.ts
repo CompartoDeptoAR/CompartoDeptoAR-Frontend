@@ -27,6 +27,7 @@ export const GENERAL = {
   CONFIGURACION:"/configuracion",
   NOT_FOUND: "*",
   RESTRICTED: "/restricted",
+  EN_CONSTRUCCION: "/en-construccion"
 };
 
 export const ROUTE = {

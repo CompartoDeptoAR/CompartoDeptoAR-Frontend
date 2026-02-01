@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useToast } from "../useToast";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../../firebase/config";
-import apiAuth from "../../api/endpoints/auth";
+import { auth } from "../../services/api/firebase/config";
+import apiAuth from "../../services/api/endpoints/auth";
 import { AuthData, TokenService } from "../../services/auth/tokenService";
 import { Navegar } from "../../navigation/navigationService";
 

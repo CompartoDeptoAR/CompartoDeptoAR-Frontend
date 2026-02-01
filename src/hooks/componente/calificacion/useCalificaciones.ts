@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import apiCalificacion, { CalificacionCrear } from "../../../api/endpoints/calificacion";
+import apiCalificacion, { CalificacionCrear } from "../../../services/api/endpoints/calificacion";
 import { Calificacion } from "../../../modelos/Calificacion";
 
 

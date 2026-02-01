@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import type { HabitosUsuario, PreferenciasUsuario } from "../modelos/Usuario";
-import apiUsuario from "../api/endpoints/usuario";
+import apiUsuario from "../services/api/endpoints/usuario";
 
 interface UseHabitosPreferenciasProps {
   habitosIniciales?: HabitosUsuario;

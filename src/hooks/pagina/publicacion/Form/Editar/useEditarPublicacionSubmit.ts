@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useToast } from "../../../../useToast";
-import apiPublicacion from "../../../../../api/endpoints/publicaciones";
+import apiPublicacion from "../../../../../services/api/endpoints/publicaciones";
 import { Navegar } from "../../../../../navigation/navigationService";
 import { Publicacion } from "../../../../../modelos/Publicacion";
 
