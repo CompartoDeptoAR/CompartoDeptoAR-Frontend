@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = import.meta.env.VITE_API_URL;
+const BASE_URL= import.meta.env.VITE_API_URL_RENDER;
 
 if (!BASE_URL) {
   console.error("❌ ERROR: VITE_API_URL no está definida en las variables de entorno.");

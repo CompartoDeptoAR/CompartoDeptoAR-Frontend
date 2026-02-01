@@ -288,34 +288,6 @@ const BotonesFormulario: React.FC<BotonesFormularioProps> = ({ modo, isMobile = 
     );
   }
 
-  if (modo === "verOtro") {
-    return (
-      <div style={{ 
-        marginTop: isMobile ? "20px" : "25px",
-        display: "flex",
-        justifyContent: "center"
-      }}>
-        <button 
-          type="button" 
-          className="btn btn-outline-secondary"
-          onClick={() => Navegar.volverAtras()}
-          style={{
-            padding: isMobile ? "12px 30px" : "12px 40px",
-            fontSize: isMobile ? "15px" : "16px",
-            borderRadius: "6px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: "8px"
-          }}
-        >
-          <span>←</span>
-          <span>Volver</span>
-        </button>
-      </div>
-    );
-  }
-
   return null;
 };
 

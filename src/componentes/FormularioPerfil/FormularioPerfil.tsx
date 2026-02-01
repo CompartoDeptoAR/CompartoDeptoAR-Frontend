@@ -12,6 +12,7 @@ import PerfilCalificaciones from "../Calificacion/PerfilCalificaciones";
 import imageCompression from 'browser-image-compression';
 import { TokenService } from "../../services/auth/tokenService";
 import { useMediaQuery } from "../../hooks/useMediaQuery"
+import { BotonVolver } from "../common/buttons";
 
 interface FormularioPerfilProps {
   perfil?: UsuarioPerfil; 
@@ -299,20 +300,9 @@ const FormularioPerfil: React.FC<FormularioPerfilProps> = ({ perfil, modo, usuar
 
           <BotonesFormulario modo={modo} isMobile={isMobile} />
 
-          {modo === "view" && (
-            <button
-              type="button"
-              className="btn-volver-atras-perfil"
-              onClick={() => Navegar.volverAtras()}
-              style={{
-                padding: isMobile ? "10px 20px" : "12px 25px",
-                fontSize: isMobile ? "14px" : "16px",
-                marginTop: isMobile ? "15px" : "20px"
-              }}
-            >
-              Volver
-            </button>
-          )}
+          <div className="btn-skip-container">
+            <BotonVolver />
+          </div>
         </form>
       </div>
     </div>
