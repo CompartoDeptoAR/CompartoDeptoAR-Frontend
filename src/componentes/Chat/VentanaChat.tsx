@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Conversacion, MensajeUI } from "../../services/chat/types";
 import "../../styles/VentanaChat.css";
+import { BotonVolver } from "../common/buttons";
 
 interface VentanaChatProps {
   mensajes: MensajeUI[];
@@ -70,9 +71,7 @@ const VentanaChat:React.FC<VentanaChatProps> = ({ mensajes, conversacion, cargan
       {/* Header */}
       <div className="chat-header">
         {onVolver && (
-          <button className="chat-back" onClick={onVolver}>
-            ←
-          </button>
+          <BotonVolver/>
         )}
 
         <div className="chat-avatar">

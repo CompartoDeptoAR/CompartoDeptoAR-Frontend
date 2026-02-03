@@ -8,6 +8,7 @@ import {
   type HabitoKey,
   type PreferenciaKey
 } from "../../../modelos/Usuario";
+import { BotonVolver } from "@/componentes/common/buttons";
 
 
 interface SegundoFormRegistroProps {
@@ -203,25 +204,8 @@ const SegundoFormRegistro: React.FC<SegundoFormRegistroProps> = ({
 
         {/* BOTONES */}
         <div style={{ display: "flex", gap: "1rem", marginTop: "2rem" }}>
-          <button
-            type="button"
-            onClick={onCancelar}
-            style={{
-              flex: 1,
-              padding: "0.75rem 1.5rem",
-              backgroundColor: "#f8f9fa",
-              color: "#495057",
-              border: "1px solid #ced4da",
-              borderRadius: "0.5rem",
-              cursor: "pointer",
-              fontSize: "1rem",
-              fontWeight: "600"
-            }}
-            disabled={loading}
-          >
-            Volver
-          </button>
-
+          
+          <BotonVolver/>
           <button
             type="submit"
             style={{

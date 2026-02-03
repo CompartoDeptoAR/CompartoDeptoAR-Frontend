@@ -1,5 +1,5 @@
 import React from "react";
-import "../../../styles/FormularioLogin.css";
+import "@/styles/formulario/FormularioLogin.css";
 
 interface PrimerFormRegistroProps {
   nombreCompleto: string;

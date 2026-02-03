@@ -46,8 +46,8 @@ const apiModeracion = {
       throw error;
     }
   },
-
-  eliminarPublicacion: async (idPublicacion: string, motivo: string): Promise<any> => {
+  //Elimianr-solf + motivo
+  eliminarPublicacionSolf: async (idPublicacion: string, motivo: string): Promise<any> => {
     try {
       const res = await axiosApi.delete(`${urlApi}/${idPublicacion}`, {
         data: { motivo }

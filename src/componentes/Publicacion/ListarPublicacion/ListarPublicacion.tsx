@@ -1,7 +1,7 @@
 import React from "react";
 import { Spinner, Button } from "react-bootstrap";
 import { ChevronDown } from "lucide-react";
-import "../../../styles/ListarPublicacion.css";
+import "@/styles/lista/ListarPublicacion.css";
 import type { PublicacionResumida } from "../../../modelos/Publicacion";
 import { useListarPublicaciones } from "../../../hooks/componente/publicacion/useListarPublicaciones";
 import CartaPublicacion from "../componenteSecundario/CartaPublicacion";

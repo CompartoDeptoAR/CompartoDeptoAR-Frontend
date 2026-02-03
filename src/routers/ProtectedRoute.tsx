@@ -49,7 +49,7 @@ const ProtectedRouter = () => {
       {hasRole(Rol.ADMIN) && (
         <>
           <Route path={ADMIN_ROUTES.PANEL} element={<AdminPage />} />
-          <Route path={ADMIN_ROUTES.REPORTE_DETALLE()} element={<ReporteDetallePage />} />
+          <Route path={"/admin/reportes/:id"} element={<ReporteDetallePage />} />
         </>
       )}
 

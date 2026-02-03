@@ -1,5 +1,5 @@
 import { Conversacion } from "../../services/chat/types";
-import "../../styles/ListaConversaciones.css"
+import "@/styles/lista/ListaConversaciones.css"
 
 interface ListaConversacionesProps {
   conversaciones: Conversacion[];

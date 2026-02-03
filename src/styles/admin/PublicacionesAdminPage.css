@@ -1,0 +1,70 @@
+/* Contenedor general */
+.publicaciones-admin {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* Item de publicación */
+.publicacion-item {
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  border-radius: 10px;
+  border: 1px solid #dee2e6;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* Imagen miniatura */
+.publicacion-imagen {
+  width: 80px;
+  height: 80px;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: #e9ecef;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.publicacion-imagen img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Info */
+.publicacion-info h5 {
+  margin-bottom: 0.5rem;
+}
+
+.publicacion-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  font-size: 0.875rem;
+  color: #6c757d;
+}
+
+/* Botones */
+.publicacion-acciones {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.publicacion-acciones button {
+  min-width: 130px;
+}
+
+/* Badge estado */
+.estado-activa {
+  background-color: #198754;
+}
+
+.estado-pausada {
+  background-color: #ffc107;
+  color: #000;
+}
+
+.estado-otro {
+  background-color: #6c757d;
+}

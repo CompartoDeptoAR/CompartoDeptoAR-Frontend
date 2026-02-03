@@ -6,6 +6,7 @@ import { SelectorHabitosPreferencias } from "../../HabitosPreferencias/SelectorH
 import { useHabitosPreferencias } from "../../../hooks/useHabitosPreferencias";
 import type { Publicacion } from "../../../modelos/Publicacion";
 import type { HabitosUsuario, PreferenciasUsuario } from "../../../modelos/Usuario";
+import { BotonVolver } from "@/componentes/common/buttons";
 
 interface FormularioPublicacionProps {
   publicacion: Publicacion;
@@ -53,7 +54,7 @@ const FormularioPublicacion: React.FC<FormularioPublicacionProps> = ({
     guardarEnPerfil: false,
   });
 
-  // 🔥 CORREGIDO: Agregar las callbacks a las dependencias
+
   useEffect(() => {
     if (!cargandoPerfil) {
       onHabitosChange?.(habitos);
@@ -184,14 +185,10 @@ const FormularioPublicacion: React.FC<FormularioPublicacionProps> = ({
                   </button>
 
                   {onCancel && (
-                    <button
-                      type="button"
+                    <BotonVolver
+                      texto="❌ Cancelar"
                       className="btn btn-outline-secondary"
-                      onClick={onCancel}
-                      disabled={loading}
-                    >
-                      ❌ Cancelar
-                    </button>
+                    />
                   )}
                 </div>
               </div>

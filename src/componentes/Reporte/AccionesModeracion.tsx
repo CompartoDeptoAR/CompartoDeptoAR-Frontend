@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Reporte } from "../../modelos/Reporte";
 import apiModeracion from "../../services/api/endpoints/moderacion";
 import { Navegar } from "../../navigation/navigationService";
+import { BotonVolver } from "../common/buttons";
 
 interface Props {
   reporte: Reporte;
@@ -31,7 +32,8 @@ export const AccionesModeracion: React.FC<Props> = ({ reporte, onChange }) => {
 
     setLoading(true);
     try {
-      await apiModeracion.eliminarPublicacion(reporte.idContenido!, motivo);
+      //falso eliminar con motivo
+      await apiModeracion.eliminarPublicacionSolf(reporte.idContenido!, motivo);
       await procesar("eliminado", motivo);
 
       alert("Publicación eliminada");
@@ -92,13 +94,7 @@ export const AccionesModeracion: React.FC<Props> = ({ reporte, onChange }) => {
             </button>
           </div>
 
-          <button
-            className="btn btn-outline-primary"
-            disabled={loading}
-            onClick={() => Navegar.volverAtras()}
-          >
-            ← Volver
-          </button>
+          <BotonVolver/>
 
         </div>
 

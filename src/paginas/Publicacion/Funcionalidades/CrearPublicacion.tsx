@@ -17,10 +17,10 @@ const CrearPublicacion = () => {
     handleHabitosChange,
   } = usePublicacionForm();
 
-  // 👇 IMPORTANTE: Obtener las funciones de toast AQUÍ
+
   const { toast, hideToast, showSuccess, showError, showWarning } = useToast();
 
-  // 👇 Pasar showSuccess, showError, showWarning al hook
+
   const { handleSubmit, loading } = usePublicacionSubmit(
     formData,
     resetForm,

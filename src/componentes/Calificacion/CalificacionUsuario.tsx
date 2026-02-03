@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useCalificaciones } from "../../hooks/componente/calificacion/useCalificaciones";
 import { CalificacionForm } from "./CalificacionForm";
+import { TokenService } from "@/services/auth/tokenService";
 
 interface CalificacionUsuarioProps {
   usuarioId: string;
@@ -12,6 +13,8 @@ export const CalificacionUsuario: React.FC<CalificacionUsuarioProps> = ({
   nombre,
 }) => {
   const { promedio, calificaciones, fetchPorUsuario, loading, crearCalificacion } = useCalificaciones();
+  const usuarioActualId = TokenService.getUserId();
+  const esMiPerfil = usuarioActualId === usuarioId;
 
   const [mostrarForm, setMostrarForm] = useState(false);
 
@@ -34,21 +37,26 @@ export const CalificacionUsuario: React.FC<CalificacionUsuarioProps> = ({
           {calificaciones.length} calificaciones
         </p>
 
-        <button
-          className="btn btn-primary btn-sm mt-2"
-          onClick={() => setMostrarForm((prev) => !prev)}
-        >
-          {mostrarForm ? "Cerrar" : "Calificar usuario"}
-        </button>
+        {!esMiPerfil && (
+          <>
+            <button
+              className="btn btn-primary btn-sm mt-2"
+              onClick={() => setMostrarForm((prev) => !prev)}
+            >
+              {mostrarForm ? "Cerrar" : "Calificar usuario"}
+            </button>
 
-        {mostrarForm && (
-          <CalificacionForm
-            idCalificado={usuarioId}
-            nombreCalificado={nombre}
-            onClose={() => setMostrarForm(false)}
-            onCreate={crearCalificacion}
-          />
+            {mostrarForm && (
+              <CalificacionForm
+                idCalificado={usuarioId}
+                nombreCalificado={nombre}
+                onClose={() => setMostrarForm(false)}
+                onCreate={crearCalificacion}
+              />
+            )}
+          </>
         )}
+
 
         <hr />
 

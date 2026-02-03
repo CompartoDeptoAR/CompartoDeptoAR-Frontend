@@ -1,13 +1,12 @@
 import { useState, useEffect } from "react";
 import type { UsuarioPerfil, HabitosUsuario, PreferenciasUsuario, Genero } from "../../modelos/Usuario";
-import "../../styles/FormularioPerfil.css";
+import "@/styles/formulario/FormularioPerfil.css";
 import { habitosConfig, opcionesGenero, preferenciasConfig } from "./helpers/config";
 import CampoTexto from "./helpers/CampoTexto";
 import CampoSelect from "./helpers/CampoSelect";
 import CampoTextArea from "./helpers/CampoTextArea";
 import BotonesFormulario from "./helpers/BotonesFormulario";
 import SeccionCheckboxes from "./helpers/SeccionCheckboxes";
-import { Navegar } from "../../navigation/navigationService";
 import PerfilCalificaciones from "../Calificacion/PerfilCalificaciones";
 import imageCompression from 'browser-image-compression';
 import { TokenService } from "../../services/auth/tokenService";
@@ -186,7 +185,7 @@ const FormularioPerfil: React.FC<FormularioPerfilProps> = ({ perfil, modo, usuar
         </div>
 
         <form className="perfil-form" onSubmit={handleSubmit} style={{ position: "relative" }}>
-          {/* Solo mostrar campo Nombre en modo edición */}
+
           {modo === "editar" && (
             <CampoTexto
               label="Nombre"

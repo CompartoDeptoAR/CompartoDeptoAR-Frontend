@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import apiPublicacion from "../../services/api/endpoints/publicaciones";
-import apiModeracion from "../../services/api/endpoints/moderacion";
 import { Navegar } from "../../navigation/navigationService";
 import type { PublicacionResumida } from "../../modelos/Publicacion";
+import Swal from "sweetalert2"
+import "@/styles/admin/PublicacionesAdminPage.css";
 
 const PublicacionesAdminPage = () => {
   const [publicaciones, setPublicaciones] = useState<PublicacionResumida[]>([]);
@@ -13,6 +14,24 @@ const PublicacionesAdminPage = () => {
   useEffect(() => {
     cargarPublicaciones();
   }, []);
+ ;
+
+  const confirmarEliminacion = (onConfirmar: () => void) => {
+    Swal.fire({
+      title: "⚠️ Zona de riesgo",
+      text: "Si continúas, esta publicación se eliminará del sistema y no podrá recuperarse.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#6c757d",
+      confirmButtonText: "Eliminar definitivamente",
+      cancelButtonText: "Cancelar",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        onConfirmar();
+      }
+    });
+  };
 
   const cargarPublicaciones = async () => {
     try {
@@ -27,23 +46,11 @@ const PublicacionesAdminPage = () => {
     }
   };
 
-  const handleEliminar = async (id: string, titulo: string) => {
-    const confirmar = window.confirm(
-      `¿Estás seguro de eliminar la publicación "${titulo}"?\n\nEsta acción no se puede deshacer.`
-    );
-
-    if (!confirmar) return;
-
-    const motivo = window.prompt(
-      "Ingresa el motivo de la eliminación:",
-      "Violación de políticas de la plataforma"
-    );
-
-    if (!motivo) return;
-
+  const handleEliminar = async (id: string) => {
+    
     try {
       setEliminando(id);
-      await apiModeracion.eliminarPublicacion(id, motivo);
+      await apiPublicacion.publicacion.eliminarPublicacionHard(id);
       setPublicaciones(prev => prev.filter(pub => pub.id !== id));
       alert("✅ Publicación eliminada correctamente");
     } catch (err: any) {
@@ -86,88 +93,70 @@ const PublicacionesAdminPage = () => {
   }
 
   return (
-    <div>
+    <div className="publicaciones-admin">
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h2 className="mb-0">📋 Todas las Publicaciones</h2>
-        <span className="badge bg-primary fs-6">{publicaciones.length} total</span>
+        <span className="badge bg-primary fs-6">
+          {publicaciones.length} total
+        </span>
       </div>
 
       <div className="list-group">
         {publicaciones.map((pub) => (
           <div
             key={pub.id}
-            className="list-group-item list-group-item-action py-4 mb-3 border rounded shadow-sm"
+            className="list-group-item list-group-item-action publicacion-item"
           >
             <div className="d-flex align-items-start gap-3">
-              {/* Imagen miniatura */}
-              <div
-                className="flex-shrink-0"
-                style={{
-                  width: "80px",
-                  height: "80px",
-                  borderRadius: "8px",
-                  overflow: "hidden",
-                  backgroundColor: "#e9ecef",
-                }}
-              >
+              {/* Imagen */}
+              <div className="publicacion-imagen">
                 {pub.foto ? (
-                  <img
-                    src={pub.foto}
-                    alt={pub.titulo}
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      objectFit: "cover",
-                    }}
-                  />
+                  <img src={pub.foto} alt={pub.titulo} />
                 ) : (
-                  <div className="w-100 h-100 d-flex align-items-center justify-content-center">
-                    <span className="text-muted">🏠</span>
-                  </div>
+                  <span className="text-muted">🏠</span>
                 )}
               </div>
 
-              {/* Información de la publicación */}
-              <div className="flex-grow-1">
-                <h5 className="mb-2">{pub.titulo}</h5>
-                <div className="d-flex flex-wrap gap-3 text-muted small mb-2">
-                  <span>
-                    <i className="bi bi-geo-alt-fill"></i> {pub.ubicacion}
-                  </span>
-                  <span>
-                    <i className="bi bi-cash"></i> ${pub.precio.toLocaleString()}/mes
-                  </span>
-                  <span>
-                    <span
-                      className={`badge ${
-                        pub.estado === "activa"
-                          ? "bg-success"
-                          : pub.estado === "pausada"
-                          ? "bg-warning"
-                          : "bg-secondary"
-                      }`}
-                    >
-                      {pub.estado}
-                    </span>
+              {/* Info */}
+              <div className="flex-grow-1 publicacion-info">
+                <h5>{pub.titulo}</h5>
+
+                <div className="publicacion-meta mb-2">
+                  <span>📍 {pub.ubicacion}</span>
+                  <span>💰 ${pub.precio.toLocaleString()}/mes</span>
+                  <span
+                    className={`badge ${
+                      pub.estado === "activa"
+                        ? "estado-activa"
+                        : pub.estado === "pausada"
+                        ? "estado-pausada"
+                        : "estado-otro"
+                    }`}
+                  >
+                    {pub.estado}
                   </span>
                 </div>
+
                 <small className="text-muted">ID: {pub.id}</small>
               </div>
 
-              {/* Botones de acción */}
-              <div className="d-flex flex-column gap-2">
+              {/* Acciones */}
+              <div className="publicacion-acciones">
                 <button
                   className="btn btn-outline-primary btn-sm"
                   onClick={() => Navegar.verPublicacion(pub.id)}
-                  style={{ minWidth: "120px" }}
                 >
                   👁️ Ver detalle
                 </button>
+
                 <button
                   className="btn btn-outline-danger btn-sm"
-                  onClick={() => handleEliminar(pub.id, pub.titulo)}
                   disabled={eliminando === pub.id}
-                  style={{ minWidth: "120px" }}
+                  onClick={() =>
+                    confirmarEliminacion( () =>
+                      handleEliminar(pub.id)
+                    )
+                  }
                 >
                   {eliminando === pub.id ? (
                     <>
@@ -185,6 +174,7 @@ const PublicacionesAdminPage = () => {
       </div>
     </div>
   );
+
 };
 
 export default PublicacionesAdminPage;
