@@ -15,13 +15,11 @@ const BuscadorResultados: React.FC<Props> = ({ show, onClose, resultados, loadin
     try {
       // @ts-ignore
       if (Navegar && typeof Navegar.publicacion === "function") {
-        // si la función espera id u objeto, se intenta con id
         // @ts-ignore
         Navegar.publicacion(id);
         return;
       }
     } catch (e) {
-      // ignore y fallback
     }
     window.location.href = `/publicacion/${id}`;
   };

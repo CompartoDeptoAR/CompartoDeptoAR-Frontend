@@ -1,3 +1,4 @@
+import { TokenService } from "@/services/auth/tokenService";
 import type { Publicacion, PublicacionResponce, PublicacionResumida } from "../../../modelos/Publicacion";
 import axiosApi from "../config/axios.config";
 
@@ -106,12 +107,25 @@ const apiPublicacion = {
 
     obtener: async (id: string): Promise<PublicacionResponce> => {
       try {
-        const res = await axiosApi.get<PublicacionResponce>(`${urlApi}/${id}`);
+        const res = await axiosApi.get<PublicacionResponce>(`/publicaciones/${id}`);
         return res.data;
       } catch (error: any) {
-        throw new Error(error.response?.data?.error || "Error al obtener la publicación");
+        if (error.response) {
+          const status = error.response.status;
+
+          if (status === 410) {
+            throw new Error("PUBLICACION_NO_DISPONIBLE");
+          }
+
+          if (status === 404) {
+            throw new Error("PUBLICACION_NO_EXISTE");
+          }
+        }
+
+        throw new Error("ERROR_INESPERADO");
       }
     },
+
 
     cambiarEstado: async (id: string, nuevoEstado: "activa" | "pausada"): Promise<void> => {
       try {
