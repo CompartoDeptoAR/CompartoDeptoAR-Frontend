@@ -107,24 +107,29 @@ const apiPublicacion = {
 
     obtener: async (id: string): Promise<PublicacionResponce> => {
       try {
-        const res = await axiosApi.get<PublicacionResponce>(`/publicaciones/${id}`);
+        const res = await axiosApi.get<PublicacionResponce>(`${urlApi}/${id}`);
+
         return res.data;
       } catch (error: any) {
-        if (error.response) {
-          const status = error.response.status;
+        const status = error.response?.status;
+        const mensaje = error.response?.data?.error;
 
-          if (status === 410) {
-            throw new Error("PUBLICACION_NO_DISPONIBLE");
-          }
-
-          if (status === 404) {
-            throw new Error("PUBLICACION_NO_EXISTE");
-          }
+        if (status === 404) {
+          throw new Error("PUBLICACION_NO_EXISTE");
         }
 
-        throw new Error("ERROR_INESPERADO");
+        if (status === 410) {
+          throw new Error("PUBLICACION_NO_DISPONIBLE");
+        }
+
+        if (status === 403) {
+          throw new Error("SIN_PERMISOS");
+        }
+
+        throw new Error(mensaje || "ERROR_INESPERADO");
       }
     },
+
 
 
     cambiarEstado: async (id: string, nuevoEstado: "activa" | "pausada"): Promise<void> => {
