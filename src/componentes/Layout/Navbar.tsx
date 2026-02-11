@@ -187,7 +187,7 @@ const NavbarApp: React.FC = () => {
                 </span>
                 <FormControl
                   type="search"
-                  placeholder="Buscar publicaciones por titulo..."
+                  placeholder="Buscar publicaciones..."
                   className="border-start-0"
                   value={textoBusqueda}
                   onChange={(e) => {

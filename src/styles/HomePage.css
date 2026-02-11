@@ -10,6 +10,7 @@ html, body, #root {
   background-position: bottom center;
   background-repeat: no-repeat;
   background-size: cover;
+  background: url("/fondoHome.png") no-repeat center center fixed;
   padding: 20px;
   padding-top: calc(80px + 20px);
   position: relative;
@@ -27,6 +28,11 @@ html, body, #root {
   z-index: 1;
 }
 
+.text-center{
+  background: rgba(177, 158, 158, 0.6);
+  border-radius: 16px;
+
+}
 .home-fondo > * {
   position: relative;
   z-index: 2;
