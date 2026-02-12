@@ -29,34 +29,20 @@ axiosApi.interceptors.request.use(
 /* RESPONSE */
 axiosApi.interceptors.response.use(
   (response) => response,
-
   (error) => {
     const status = error.response?.status;
     const msg = error.response?.data?.error || error.response?.data?.message || "";
 
     if (status === 401 || status === 403) {
-      const mensaje = msg.toLowerCase();
-
-      const tokenProblema =
-        mensaje.includes("token") ||
-        mensaje.includes("expirado") ||
-        mensaje.includes("inválido") ||
-        mensaje.includes("autorizado") ||
-        mensaje.includes("sesion");
+      const tokenProblema = ["token","expirado","inválido","autorizado","sesion"].some(str =>
+        msg.toLowerCase().includes(str)
+      );
 
       if (tokenProblema) {
         console.warn("🔒 ID Token expirado o inválido. Cerrando sesión...");
-
-        if (globalToastError) {
-          globalToastError("Tu sesión ha expirado. Por favor, inicia sesión nuevamente.");
-        }
-
+        if (globalToastError) globalToastError("Tu sesión ha expirado. Por favor, inicia sesión nuevamente.");
         TokenService.clearAuthData();
-
-        setTimeout(() => {
-          window.location.href = "/auth/login";
-        }, 1500);
-
+        setTimeout(() => { window.location.href = "/auth/login"; }, 1500);
         return Promise.reject(new Error("Sesión expirada"));
       }
     }
@@ -64,5 +50,6 @@ axiosApi.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
 
 export default axiosApi;

@@ -38,14 +38,8 @@ const apiPublicacion = {
 
     misPublicaciones: async (usuarioId?: string): Promise<PublicacionResumida[]> => {
       const headers: Record<string, string> = {};
+      const res = await axiosApi.get<PublicacionResumida[]>(`${urlApi}/misPublicaciones`);
 
-      if (usuarioId) {
-        headers["x-user-id"] = usuarioId;
-      }
-
-      const res = await axiosApi.get<PublicacionResumida[]>(`${urlApi}/misPublicaciones`, {
-        headers,
-      });
       return res.data;
     },
 
@@ -129,8 +123,6 @@ const apiPublicacion = {
         throw new Error(mensaje || "ERROR_INESPERADO");
       }
     },
-
-
 
     cambiarEstado: async (id: string, nuevoEstado: "activa" | "pausada"): Promise<void> => {
       try {
