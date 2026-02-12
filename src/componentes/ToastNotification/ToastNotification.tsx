@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 
-export type ToastType = "success" | "error" | "info" | "warning";
+export type ToastType = "success" | "error" | "info" | "warning"| "loading";
 
 interface ToastNotificationProps {
   show: boolean;
