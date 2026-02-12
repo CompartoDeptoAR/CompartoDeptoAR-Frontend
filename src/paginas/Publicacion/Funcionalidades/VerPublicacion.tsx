@@ -17,9 +17,10 @@ const VerPublicacion = () => {
         <div className="alert alert-danger text-center">
           <h4>Publicación no encontrada</h4>
           <p>La publicación que buscas no existe o ha sido eliminada.</p>
-          <BotonVolver/>
-          <BotonInicio/>
-          
+          <div className="d-flex justify-content-center gap-2 mt-3">
+            <BotonVolver />
+            <BotonInicio />
+          </div>
         </div>
       </div>
     );

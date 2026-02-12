@@ -29,7 +29,8 @@ export const Navegar = {
     contactanos: () => go(PUBLIC_ROUTES.CONTACTANOS),
     nosotros: () => go(PUBLIC_ROUTES.NOSOTROS),
     verPublicacion: (id: string) => go(PUBLIC_ROUTES.VIEW_PUBLICACION(id)),
-
+    verPublicacionAdmin: (id: string) => go(ADMIN_ROUTES.VIEW_PUBLICACION_ADMIN(id)),
+    
     crearPublicacion: () => go(USER_ROUTES.CREAR_PUBLICACION),
     editarPublicacion: (id: string) => go(USER_ROUTES.EDITAR_PUBLICACION(id)),
     miPerfil: () => go(USER_ROUTES.MI_PERFIL),

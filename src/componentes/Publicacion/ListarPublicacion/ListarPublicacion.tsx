@@ -5,6 +5,7 @@ import "@/styles/lista/ListarPublicacion.css";
 import type { PublicacionResumida } from "../../../modelos/Publicacion";
 import { useListarPublicaciones } from "../../../hooks/componente/publicacion/useListarPublicaciones";
 import CartaPublicacion from "../componenteSecundario/CartaPublicacion";
+import { BotonInicio, BotonVolver } from "@/componentes/common/buttons";
 
 interface ListarPublicacionesProps {
   publicaciones: PublicacionResumida[];
@@ -70,6 +71,10 @@ const ListarPublicaciones: React.FC<ListarPublicacionesProps> = ({
         <div className="alert alert-danger text-center">
           <h4>❌ Error</h4>
           <p>{error}</p>
+          <div className="d-flex justify-content-center gap-2 mt-3">
+            <BotonVolver />
+            <BotonInicio />
+          </div>
         </div>
       </div>
     );

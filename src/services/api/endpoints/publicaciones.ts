@@ -1,6 +1,7 @@
 import { TokenService } from "@/services/auth/tokenService";
 import type { Publicacion, PublicacionResponce, PublicacionResumida } from "../../../modelos/Publicacion";
 import axiosApi from "../config/axios.config";
+import { LocalStorageService, STORAGE_KEYS } from "@/services/storage/localStorage.service";
 
 interface ResultadoPaginado {
   publicaciones: PublicacionResumida[];
@@ -123,6 +124,26 @@ const apiPublicacion = {
         throw new Error(mensaje || "ERROR_INESPERADO");
       }
     },
+    obtenerAdmin: async (id: string): Promise<PublicacionResponce> => {
+      try {
+        const FToken = LocalStorageService.get(STORAGE_KEYS.FTOKEN);
+        if (!FToken) throw new Error("No hay token disponible");
+
+        const res = await axiosApi.get<PublicacionResponce>(`${urlApi}/admin/${id}`);
+
+        return res.data;
+      } catch (error: any) {
+        const status = error.response?.status;
+        const mensaje = error.response?.data?.error;
+
+        if (status === 404) throw new Error("PUBLICACION_NO_EXISTE");
+        if (status === 410) throw new Error("PUBLICACION_NO_DISPONIBLE");
+        if (status === 403) throw new Error("SIN_PERMISOS");
+
+        throw new Error(mensaje || "ERROR_INESPERADO");
+      }
+    },
+
 
     cambiarEstado: async (id: string, nuevoEstado: "activa" | "pausada"): Promise<void> => {
       try {
