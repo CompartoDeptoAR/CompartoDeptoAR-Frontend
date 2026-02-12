@@ -21,7 +21,7 @@ export const USER_ROUTES = {
 export const ADMIN_ROUTES = {
   PANEL: "/admin",
   REPORTE_DETALLE:(id?:string)=>`/admin/reportes/${id}`,
-  VIEW_PUBLICACION_ADMIN:(id: string | number = ":id") => `/publicacion/${id}`,
+  VIEW_PUBLICACION_ADMIN:(id: string | number = ":id") => `/admin/publicacion/${id}`,
 };
 
 export const GENERAL = {

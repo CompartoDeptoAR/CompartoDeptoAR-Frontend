@@ -144,15 +144,7 @@ const PublicacionesAdminPage = () => {
               <div className="publicacion-acciones">
                 <button
                   className="btn btn-outline-primary btn-sm"
-                  onClick={async () => {
-                    try {
-                      const publicacion = await apiPublicacion.publicacion.obtenerAdmin(pub.id);
-                      
-                      Navegar.verPublicacionAdmin(pub.id); 
-                    } catch (err: any) {
-                      alert(`❌ No se puede ver la publicación: ${err.message}`);
-                    }
-                  }}
+                  onClick={() => { Navegar.verPublicacionAdmin(pub.id) }}
                 >
                   👁️ Ver detalle
                 </button>

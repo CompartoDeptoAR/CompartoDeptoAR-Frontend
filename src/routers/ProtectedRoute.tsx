@@ -22,6 +22,8 @@ import { ChatCompleto } from "../paginas/Chat/ChatCompleto";
 
 import { ADMIN_ROUTES, GENERAL, USER_ROUTES, ROUTE } from "./Routes";
 import { NotFound } from "../paginas/system";
+import VerPublicacionAdminPage from "@/paginas/Publicacion/Funcionalidades/VerPublicacioneAdminPage";
+
 
 const ProtectedRouter = () => {
   const loggedIn = TokenService.getAuthData();
@@ -50,6 +52,7 @@ const ProtectedRouter = () => {
         <>
           <Route path={ADMIN_ROUTES.PANEL} element={<AdminPage />} />
           <Route path={"/admin/reportes/:id"} element={<ReporteDetallePage />} />
+          <Route path={"/admin/publicacion/:id"} element={<VerPublicacionAdminPage />}/>
         </>
       )}
 
