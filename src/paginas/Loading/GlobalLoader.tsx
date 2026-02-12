@@ -85,7 +85,7 @@ const GlobalLoader: React.FC = () => {
           duration: 1.2,
         }}
       >
-        Buscando compañeros ideales...
+        Cargando...
       </motion.p>
     </div>
   );
