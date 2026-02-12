@@ -1,4 +1,4 @@
-import type React from "react";
+import React from "react";
 import {
   OPCIONES_HABITOS,
   OPCIONES_PREFERENCIAS,
@@ -8,7 +8,6 @@ import {
   type HabitoKey,
   type PreferenciaKey
 } from "../../../modelos/Usuario";
-import { BotonVolver } from "@/componentes/common/buttons";
 
 
 interface SegundoFormRegistroProps {
@@ -42,6 +41,9 @@ const SegundoFormRegistro: React.FC<SegundoFormRegistroProps> = ({
   onCancelar,
   loading = false,
 }) => {
+  const [edadFocused, setEdadFocused] = React.useState(false);
+  const [descripcionFocused, setDescripcionFocused] = React.useState(false);
+
   const toggleOpcionHabito = (opcion: HabitoKey) => {
     setHabitos(
       habitos.includes(opcion)
@@ -60,172 +62,202 @@ const SegundoFormRegistro: React.FC<SegundoFormRegistroProps> = ({
 
   const MAX_DESCRIPCION = 500;
   const restantes = MAX_DESCRIPCION - descripcion.length;
+  const porcentajeUsado = ((descripcion.length / MAX_DESCRIPCION) * 100);
+
+
+  const generoIconos: Record<Genero, string> = {
+    "Masculino": "♂️",
+    "Femenino": "♀️",
+    "Prefiero no decir": "👤"
+  };
 
   return (
-    <div className="login-page">
-      <form onSubmit={handleSubmit} className="form-container form-AZUL form-container-mas-ancho" >
-        <h2 style={{ marginBottom: "1rem", color: "#333" }}>Completá tu perfil</h2>
-        <p style={{ marginBottom: "2rem", color: "#666" }}>
-          Esta información ayuda a encontrar mejores compañeros
-        </p>
+    <form onSubmit={handleSubmit} className="form-container form-moderno form-perfil">
+      <div className="form-header">
+        <h2 className="form-title">Completá tu perfil</h2>
+        <p className="form-subtitle">Paso 2 de 2 • Información personal</p>
+      </div>
 
-        {/* Edad */}
-        <div style={{ textAlign: "left" }}>
-        <label style={{ textAlign: "left", display: "block", width: "100%" }}>Edad*</label>
-          <input
-            type="number"
-            placeholder="Ej: 25"
-            value={edad || ''}
-            onChange={(e) => setEdad(Number(e.target.value))}
-            required
-            min={18}
-            max={100}
-            disabled={loading}
-          />
+      {/* Stepper visual */}
+      <div className="stepper">
+        <div className="step completed">
+          <div className="step-circle">✓</div>
+          <span className="step-label">Cuenta</span>
+        </div>
+        <div className="step-line active"></div>
+        <div className="step active">
+          <div className="step-circle">2</div>
+          <span className="step-label">Perfil</span>
+        </div>
+      </div>
+
+      <div className="form-body">
+        {/* Edad y Género en una fila */}
+        <div className="form-row">
+          <div className={`form-group-modern half ${edadFocused ? 'focused' : ''} ${edad ? 'filled' : ''}`}>
+            <label className="floating-label">Edad</label>
+            <div className="input-wrapper">
+              <span className="input-icon">🎂</span>
+              <input
+                type="number"
+                placeholder="25"
+                value={edad || ''}
+                onChange={(e) => setEdad(Number(e.target.value))}
+                onFocus={() => setEdadFocused(true)}
+                onBlur={() => setEdadFocused(false)}
+                required
+                min={18}
+                max={100}
+                disabled={loading}
+                className="modern-input"
+              />
+            </div>
+          </div>
+
+          <div className={`form-group-modern half ${genero !== 'Prefiero no decir' ? 'filled' : ''}`}>
+            <label className="floating-label">Género</label>
+            <div className="input-wrapper">
+              <span className="input-icon">{generoIconos[genero]}</span>
+              <select
+                value={genero}
+                onChange={(e) => setGenero(e.target.value as Genero)}
+                disabled={loading}
+                className="modern-select"
+              >
+                <option value="Prefiero no decir">Prefiero no decir</option>
+                <option value="Masculino">Masculino</option>
+                <option value="Femenino">Femenino</option>
+              </select>
+            </div>
+          </div>
         </div>
 
-        {/* Género */}
-      <div style={{ textAlign: "left" }}>
-        <label style={{ textAlign: "left", display: "block", width: "100%" }}>Género</label>
-          <select
-            value={genero}
-            onChange={(e) => setGenero(e.target.value as Genero)}
-            disabled={loading}
-          >
-            <option value="Prefiero no decir">Prefiero no decir</option>
-            <option value="Masculino">Masculino</option>
-            <option value="Femenino">Femenino</option>
-            <option value="Otro">Otro</option>
-          </select>
-        </div>
 
-        {/* Descripción */}
-      <div style={{ textAlign: "left" }}>
-        <label style={{ textAlign: "left", display: "block", width: "100%" }}>Descripción</label>
-          <textarea
-            placeholder="Ej: Hola, soy Juan. Me gusta el deporte, la música y conocer nuevas personas..."
-            value={descripcion}
-            onChange={(e) => setDescripcion(e.target.value)}
-            maxLength={MAX_DESCRIPCION}
-            rows={4}
-            disabled={loading}
-          />
-          <small style={{ 
-            color: restantes < 50 ? "#dc3545" : "#666", 
-            fontSize: "12px", 
-            display: "block", 
-            textAlign: "right",
-            marginTop: "-0.5rem",
-            marginBottom: "1rem"
-          }}>
-            {restantes} caracteres restantes
-          </small>
+        <div className={`form-group-modern ${descripcionFocused ? 'focused' : ''} ${descripcion ? 'filled' : ''}`}>
+          <label className="floating-label">Sobre vos (opcional)</label>
+          <div className="textarea-wrapper">
+            <textarea
+              placeholder="Contanos un poco sobre vos, tus intereses, qué te gusta hacer..."
+              value={descripcion}
+              onChange={(e) => setDescripcion(e.target.value)}
+              onFocus={() => setDescripcionFocused(true)}
+              onBlur={() => setDescripcionFocused(false)}
+              maxLength={MAX_DESCRIPCION}
+              rows={4}
+              disabled={loading}
+              className="modern-textarea"
+            />
+          </div>
+          <div className="character-counter">
+            <div className="counter-bar">
+              <div 
+                className="counter-fill"
+                style={{ 
+                  width: `${porcentajeUsado}%`,
+                  backgroundColor: restantes < 50 ? '#dc3545' : restantes < 100 ? '#ffc107' : '#007bff'
+                }}
+              ></div>
+            </div>
+            <span className={`counter-text ${restantes < 50 ? 'warning' : ''}`}>
+              {restantes} caracteres restantes
+            </span>
+          </div>
         </div>
 
         {/* Hábitos */}
-        <div style={{ margin: "2rem 0" }}>
-          <h4 style={{ color: "#333", marginBottom: "0.5rem" }}>Tus hábitos</h4>
-          <p style={{ color: "#666", fontSize: "14px", marginBottom: "1rem" }}>
-            Seleccioná lo que realmente te describe
-          </p>
+        <div className="selection-section">
+          <div className="section-header">
+            <h3> Tus hábitos</h3>
+            <p>Seleccioná lo que realmente te describe</p>
+            <span className="selection-badge">{habitos.length} seleccionados</span>
+          </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "0.75rem" }}>
+          <div className="options-grid">
             {OPCIONES_HABITOS.map((op) => (
               <label
                 key={op}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "0.75rem",
-                  padding: "0.75rem",
-                  border: `1px solid ${habitos.includes(op) ? "#007bff" : "#ccc"}`,
-                  borderRadius: "0.5rem",
-                  backgroundColor: habitos.includes(op) ? "#e7f1ff" : "white",
-                  cursor: "pointer",
-                  transition: "all 0.2s ease"
-                }}
+                className={`option-card ${habitos.includes(op) ? 'selected' : ''} ${loading ? 'disabled' : ''}`}
               >
                 <input
                   type="checkbox"
                   checked={habitos.includes(op)}
                   onChange={() => toggleOpcionHabito(op)}
                   disabled={loading}
-                  style={{
-                    width: "18px",
-                    height: "18px",
-                    accentColor: "#007bff"
-                  }}
+                  className="option-checkbox"
                 />
-                <span style={{ color: "#333", fontSize: "14px" }}>{LABELS_HABITOS[op]}</span>
+                <span className="option-checkmark">
+                  {habitos.includes(op) ? '✓' : '+'}
+                </span>
+                <span className="option-label">{LABELS_HABITOS[op]}</span>
+                <div className="option-glow"></div>
               </label>
             ))}
           </div>
         </div>
 
         {/* Preferencias */}
-        <div style={{ margin: "2rem 0" }}>
-          <h4 style={{ color: "#333", marginBottom: "0.5rem" }}>Tus preferencias</h4>
-          <p style={{ color: "#666", fontSize: "14px", marginBottom: "1rem" }}>
-            Seleccioná lo que aceptás en tu compañero
-          </p>
+        <div className="selection-section">
+          <div className="section-header">
+            <h3> Tus preferencias</h3>
+            <p>¿Qué aceptás en tu compañero?</p>
+            <span className="selection-badge">{preferencias.length} seleccionadas</span>
+          </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "0.75rem" }}>
+          <div className="options-grid">
             {OPCIONES_PREFERENCIAS.map((op) => (
               <label
                 key={op}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "0.75rem",
-                  padding: "0.75rem",
-                  border: `1px solid ${preferencias.includes(op) ? "#007bff" : "#ccc"}`,
-                  borderRadius: "0.5rem",
-                  backgroundColor: preferencias.includes(op) ? "#e7f1ff" : "white",
-                  cursor: "pointer",
-                  transition: "all 0.2s ease"
-                }}
+                className={`option-card ${preferencias.includes(op) ? 'selected' : ''} ${loading ? 'disabled' : ''}`}
               >
                 <input
                   type="checkbox"
                   checked={preferencias.includes(op)}
                   onChange={() => toggleOpcionPreferencia(op)}
                   disabled={loading}
-                  style={{
-                    width: "18px",
-                    height: "18px",
-                    accentColor: "#007bff"
-                  }}
+                  className="option-checkbox"
                 />
-                <span style={{ color: "#333", fontSize: "14px" }}>{LABELS_PREFERENCIAS[op]}</span>
+                <span className="option-checkmark">
+                  {preferencias.includes(op) ? '✓' : '+'}
+                </span>
+                <span className="option-label">{LABELS_PREFERENCIAS[op]}</span>
+                <div className="option-glow"></div>
               </label>
             ))}
           </div>
         </div>
 
-        {/* BOTONES */}
-        <div style={{ display: "flex", gap: "1rem", marginTop: "2rem" }}>
+        {/* Botones */}
+        <div className="form-actions">
+          <button
+            type="button"
+            onClick={onCancelar}
+            disabled={loading}
+            className="btn-secondary-modern"
+          >
+            <span className="btn-arrow">←</span>
+            <span>Volver</span>
+          </button>
           
-          <BotonVolver/>
           <button
             type="submit"
-            style={{
-              flex: 1,
-              padding: "0.75rem 1.5rem",
-              backgroundColor: "#007bff",
-              color: "white",
-              border: "none",
-              borderRadius: "0.5rem",
-              cursor: "pointer",
-              fontSize: "1rem",
-              fontWeight: "600"
-            }}
             disabled={loading}
+            className="btn-primary-modern btn-complete"
           >
-            {loading ? "Registrando..." : "Completar registro"}
+            {loading ? (
+              <>
+                <span className="spinner"></span>
+                Registrando...
+              </>
+            ) : (
+              <>
+                <span>Completar registro</span>
+                <span className="btn-arrow">✓</span>
+              </>
+            )}
           </button>
         </div>
-      </form>
-    </div>
+      </div>
+    </form>
   );
 };
 

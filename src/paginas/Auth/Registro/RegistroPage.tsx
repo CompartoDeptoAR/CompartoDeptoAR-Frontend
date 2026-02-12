@@ -1,11 +1,12 @@
 import SegundoFormRegistro from "../../../componentes/FormAuth/FormularioRegistro/SegundoFormRegistro";
 import PrimerFormRegistro from "../../../componentes/FormAuth/FormularioRegistro/PrimerFormRegistro";
-import ToastNotification from "../../../componentes/ToastNotification/ToastNotification";
 import { useRegistro } from "../../../hooks/auth/useRegistro";
+import ModalRegistroPaso2 from "@/componentes/FormAuth/FormularioRegistro/ModalRegistroPaso2";
+import SwalNotification from "@/componentes/ToastNotification/SwalNotification";
 
 const RegistroPage = ({ onSwitch }: { onSwitch: () => void }) => {
   const {
-    paso,
+    mostrarPaso2,
     nombreCompleto,
     correo,
     contraseña,
@@ -34,7 +35,7 @@ const RegistroPage = ({ onSwitch }: { onSwitch: () => void }) => {
 
   return (
     <>
-      {paso === 1 ? (
+      
         <PrimerFormRegistro
           nombreCompleto={nombreCompleto}
           correo={correo}
@@ -47,30 +48,41 @@ const RegistroPage = ({ onSwitch }: { onSwitch: () => void }) => {
           handleSubmit={handlePaso1Submit}
           onSwitch={onSwitch}
         />
-      ) : (
-        <SegundoFormRegistro
-          edad={edad}
-          genero={genero}
-          descripcion={descripcion}
-          habitos={habitos}
-          preferencias={preferencias}
-          loading={loading}
-          setEdad={setEdad}
-          setGenero={setGenero}
-          setDescripcion={setDescripcion}
-          setHabitos={setHabitos}
-          setPreferencias={setPreferencias}
-          handleSubmit={handlePaso2Submit}
-          onCancelar={handleCancelarPaso2}
-        />
-      )}
+        {mostrarPaso2 &&(
+          <ModalRegistroPaso2 onClose={handleCancelarPaso2}>
+            <SegundoFormRegistro
+              edad={edad}
+              genero={genero}
+              descripcion={descripcion}
+              habitos={habitos}
+              preferencias={preferencias}
+              loading={loading}
+              setEdad={setEdad}
+              setGenero={setGenero}
+              setDescripcion={setDescripcion}
+              setHabitos={setHabitos}
+              setPreferencias={setPreferencias}
+              handleSubmit={handlePaso2Submit}
+              onCancelar={handleCancelarPaso2}
+            />
+          </ModalRegistroPaso2>
+        )}
 
-      <ToastNotification
+      <SwalNotification
         show={toast.show}
         message={toast.message}
         type={toast.type}
-        onClose={hideToast}
+        onClose={() => {
+          hideToast();
+
+          if (toast.type === "success") {
+            handleCancelarPaso2(); 
+            onSwitch();  
+          }
+        }}
       />
+
+
     </>
   );
 };
