@@ -39,12 +39,13 @@ export const useFavoritos = () => {
       const mensajeError = err.message || "Error al cargar tus favoritos";
       setError(mensajeError);
       if (err.status !== 401) {
-        showError(mensajeError);
+        useToast().showError(mensajeError);
       }
     } finally {
       setLoading(false);
     }
-  }, [showError]);
+  }, []);
+
 
   const agregarFavorito = useCallback(async (publicacionId: string) => {
     if (!TokenService.isAuthenticated()) {

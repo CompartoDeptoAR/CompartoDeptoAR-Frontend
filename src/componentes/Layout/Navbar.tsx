@@ -15,6 +15,7 @@ import { ConversacionesDropdown } from "../Chat/ConversacionesDropdown";
 import { MiniChat } from "../Chat/MiniChat";
 import { useConversaciones } from "../../hooks/chat/useConversaciones";
 import { NavbarCelu } from "./NavbarCelu";
+import { BotonAuth } from "../common/buttons";
 
 const NavbarApp: React.FC = () => {
   const [showFiltros, setShowFiltros] = useState(false);
@@ -396,14 +397,7 @@ const NavbarApp: React.FC = () => {
                 </NavDropdown.Item>
               </NavDropdown>
             ) : (
-              <Button 
-                variant="outline-light" 
-                className="ms-2"
-                size="sm"
-                onClick={() => Navegar.auth()}
-              >
-                Iniciar Sesión
-              </Button>
+              <BotonAuth />
             )}
           </Nav>
         </Navbar.Collapse>
