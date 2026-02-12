@@ -50,6 +50,7 @@ const apiAuth = {
         );
 
         if (result.status === 200) {
+          console.log(result)
           TokenService.saveAuthData(
             {
               ID: result.data.ID,

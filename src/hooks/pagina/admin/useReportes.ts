@@ -54,7 +54,7 @@ export const useReportes = () => {
       setError("");
 
       if (reporte.tipo === "publicacion") {
-        await apiModeracion.eliminarPublicacion(reporte.idContenido, motivo);
+        await apiModeracion.eliminarPublicacionSolf(reporte.idContenido, motivo);
       } else {
         await apiModeracion.eliminarMensaje(reporte.idContenido, motivo);
       }
