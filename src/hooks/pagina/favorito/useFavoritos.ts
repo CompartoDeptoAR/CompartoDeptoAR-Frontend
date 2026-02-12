@@ -139,7 +139,7 @@ export const useFavoritos = () => {
 
   useEffect(() => {
     cargarFavoritos();
-  }, []);
+  }, [cargarFavoritos]);
 
   return {
     favoritos,

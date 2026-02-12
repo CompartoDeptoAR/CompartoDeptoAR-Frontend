@@ -6,7 +6,6 @@ import { useToast } from "../../../hooks/useToast";
 import { usePublicacionesPaginadas } from "../../../hooks/pagina/publicacion/listar/usePublicacionesPaginadas";
 import { useFavoritos } from "../../../hooks/pagina/favorito/useFavoritos";
 import { useLoading } from "../../../contexts/LoadingContext";  
-import SwalNotification from "@/componentes/ToastNotification/SwalNotification";
 
 const TodasLasPublicaciones: React.FC = () => {
   const { toast, hideToast } = useToast();
@@ -26,7 +25,7 @@ const TodasLasPublicaciones: React.FC = () => {
 
   const favoritosIds = useMemo(() => {
     return favoritos.map(pub => pub.id);
-  }, []);
+  }, [favoritos]);
 
   useEffect(() => {
     if (loading) showLoader();
@@ -61,7 +60,7 @@ const TodasLasPublicaciones: React.FC = () => {
         />
       </div>
 
-      <SwalNotification
+      <ToastNotification
         show={toast.show}
         message={toast.message}
         type={toast.type}
