@@ -14,7 +14,7 @@ export function useLogin() {
 
   const [usuario, setUsuario] = useState<AuthData | null>(null); 
 
-  const { toast, showSuccess, showError, hideToast } = useToast();
+  const { toast, showSuccess, showError, hideToast, setToast } = useToast();
   const togglePassword = () => setMostrarPassword((p) => !p);
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -76,5 +76,6 @@ export function useLogin() {
     togglePassword,
     handleLogin,
     hideToast,
+    setToast,
   };
 }

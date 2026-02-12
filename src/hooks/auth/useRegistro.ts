@@ -8,7 +8,8 @@ import apiAuth from "../../services/api/endpoints/auth";
 
 export function useRegistro(onSwitch: () => void) {
   // Paso actual
-  const [paso, setPaso] = useState<1 | 2>(1);
+  const [mostrarPaso2, setMostrarPaso2] = useState(false);
+
 
   // Primer formulario
   const [nombreCompleto, setNombreCompleto] = useState("");
@@ -24,34 +25,43 @@ export function useRegistro(onSwitch: () => void) {
   const [preferencias, setPreferencias] = useState<PreferenciaKey[]>([]);
   const [loading, setLoading] = useState(false);
 
-  const { toast, showSuccess, showError, showWarning, hideToast } = useToast();
+  const { toast, setToast, showWarning, hideToast } = useToast();
 
   const togglePassword = () => setMostrarPassword(p => !p);
 
-  // -------- VALIDACIÓN DE PASO 1 --------
+  
   const handlePaso1Submit = (e: React.FormEvent) => {
-    e.preventDefault();
+  e.preventDefault();
+  console.log("HANDLE PASO 1");
 
-    if (!nombreCompleto.trim()) {
-      return showWarning("Por favor ingresa tu nombre completo");
-    }
-    if (!correo.trim() || !correo.includes("@")) {
-      return showWarning("Por favor ingresa un email válido");
-    }
-    if (contraseña.length < 6) {
-      return showWarning("La contraseña debe tener al menos 6 caracteres");
-    }
+  if (!nombreCompleto.trim()) {
+    return showWarning("Por favor ingresa tu nombre completo");
+  }
+  if (!correo.trim() || !correo.includes("@")) {
+    return showWarning("Por favor ingresa un email válido");
+  }
+  if (contraseña.length < 6) {
+    return showWarning("La contraseña debe tener al menos 6 caracteres");
+  }
 
-    setPaso(2);
-  };
+  console.log("MOSTRAR PASO 2 = TRUE");
+  setMostrarPaso2(true);
+};
 
-  // -------- REGISTRO FINAL --------
+
+  
   const handlePaso2Submit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     try {
       const habitosObj = arrayToHabitos(habitos);
       const preferenciasObj = arrayToPreferencias(preferencias);
+
+      setToast({
+        show: true,
+        type: "loading",
+        message: "Creando tu cuenta..."
+      });
 
       await apiAuth.auth.registrar({
         nombreCompleto,
@@ -64,23 +74,30 @@ export function useRegistro(onSwitch: () => void) {
         preferencias: Object.keys(preferenciasObj).length > 0 ? preferenciasObj : undefined,
       });
 
-      showSuccess("¡Registro exitoso! Redirigiendo al login...");
-
-      setTimeout(() => {
-        onSwitch();        
-        setLoading(false);
-      }, 1500);
+  
+      setToast({
+        show: true,
+        type: "success",
+        message: "Tu cuenta fue creada correctamente."
+      });
 
     } catch (err: any) {
       console.error(err);
-      showError(err.message || "Error al crear la cuenta");
+
+      setToast({
+        show: true,
+        type: "error",
+        message: err.message || "Error al crear la cuenta"
+      });
     }
   };
 
-  const handleCancelarPaso2 = () => setPaso(1);
+
+
+  const handleCancelarPaso2 = () => setMostrarPaso2(false);
 
   return {
-    paso,
+    mostrarPaso2,
     nombreCompleto,
     correo,
     contraseña,
