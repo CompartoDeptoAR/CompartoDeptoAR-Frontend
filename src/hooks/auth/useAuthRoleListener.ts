@@ -8,9 +8,10 @@ import { ADMIN_ROUTES } from '../../routers/Routes';
 
 // Ponele q "escucha(je) " cambios de rol del usuario en tiempo real.
 // Deberia reaccionar si se agregan o sacan permisos sin recargar la app.
-// Si perdes el rol admin y estas en una ruta protegida, puuuum,te saca.
-// Si te ponen el rol admin, se fuerza salida de la vista para q te des cuenta...
-// Todito sincronizado...en teoria...
+// Si perdes el rol admin y estas en una ruta protegida io en cualquier lado,
+// va, puuuum,te saca.
+// Si te ponen el rol admin, se fuerza salida para q te des cuenta y se
+// cargen las cosas nuevas...
 
 const RUTAS_ADMIN: string[] = [
   ADMIN_ROUTES.PANEL,
@@ -45,8 +46,7 @@ function verificarSiEsAdmin(rolesActuales: any): boolean {
         r.rolId ||
         ''
       )
-        .toString()
-        .toUpperCase();
+        .toString().toUpperCase();
 
       return (
         valorRol === Rol.ADMIN ||
