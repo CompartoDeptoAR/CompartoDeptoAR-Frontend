@@ -29,7 +29,7 @@ const Configuracion: React.FC = () => {
   const cargarDatos = async () => {
     setLoading(true);
     try {
-      // Mis Publicaciones
+
       const publicacionesData = await apiPublicacion.publicacion.misPublicaciones();
       const publicacionesResumidas: PublicacionResumida[] = publicacionesData.map((pub: any) => ({
         id: pub.id,
@@ -45,10 +45,11 @@ const Configuracion: React.FC = () => {
             ? `${pub.localidad}, ${pub.provincia}`
             : "",
         createdAt: pub.createdAt || new Date().toISOString(),
+        usuarioId: pub.usuarioId || TokenService.getUid() || "",
       }));
       setMisPublicaciones(publicacionesResumidas);
 
-      // Mis Favoritos
+
       const favGuardados = localStorage.getItem("favoritos");
       if (favGuardados) {
         const favIds: string[] = JSON.parse(favGuardados);
@@ -70,6 +71,7 @@ const Configuracion: React.FC = () => {
                   ? `${pub.localidad}, ${pub.provincia}`
                   : "",
               createdAt: pub.createdAt || new Date().toISOString(),
+              usuarioId: pub.usuarioId || "",
             }))
             .catch(() => null)
         );
@@ -116,7 +118,7 @@ const Configuracion: React.FC = () => {
       
       showSuccess("Tu cuenta ha sido eliminada exitosamente");
       
-      // Redirigir al home después de un breve delay
+
       setTimeout(() => {
         Navegar.home();
         window.location.reload();
@@ -189,7 +191,7 @@ const Configuracion: React.FC = () => {
         />
       )}
 
-      {/* Zona de Peligro */}
+
       <div className="mt-5 pt-4 border-top">
         <div className="card border-danger">
           <div className="card-header bg-danger text-white">
@@ -216,7 +218,6 @@ const Configuracion: React.FC = () => {
         </div>
       </div>
 
-      {/* Modal de Confirmación */}
       <Modal 
         show={showModalEliminar} 
         onHide={cerrarModalEliminar}
