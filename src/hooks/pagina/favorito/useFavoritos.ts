@@ -8,7 +8,7 @@ export const useFavoritos = () => {
   const [favoritos, setFavoritos] = useState<PublicacionResumida[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  
+
   const { showSuccess, showError } = useToast();
 
   const cargarFavoritos = useCallback(async () => {
@@ -22,66 +22,79 @@ export const useFavoritos = () => {
     setError("");
 
     try {
-      const publicacionesData = (await apiFavorito.favorito.listarFavoritos()).publicaciones;
+      const publicacionesData =
+        (await apiFavorito.favorito.listarFavoritos()).publicaciones;
 
-      const publicacionesLimpias: PublicacionResumida[] = publicacionesData.map((pub: any) => ({
-        ...pub,
-        fotos: Array.isArray(pub.fotos)
-          ? pub.fotos.filter((f: any) => typeof f === "string")
-          : pub.fotos
-            ? [String(pub.fotos)]
-            : [],
-      }));
+      const publicacionesLimpias: PublicacionResumida[] =
+        publicacionesData.map((pub: any) => ({
+          ...pub,
+        }));
 
       setFavoritos(publicacionesLimpias);
     } catch (err: any) {
       console.error("Error al cargar favoritos:", err);
-      const mensajeError = err.message || "Error al cargar tus favoritos";
+      const mensajeError =
+        err.message || "Error al cargar tus favoritos";
       setError(mensajeError);
+
       if (err.status !== 401) {
-        useToast().showError(mensajeError);
+        showError(mensajeError);
       }
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [showError]);
 
+  const agregarFavorito = useCallback(
+    async (publicacionId: string) => {
+      if (!TokenService.isAuthenticated()) {
+        showError("Debes iniciar sesión para agregar favoritos");
+        return false;
+      }
 
-  const agregarFavorito = useCallback(async (publicacionId: string) => {
-    if (!TokenService.isAuthenticated()) {
-      showError("Debes iniciar sesión para agregar favoritos");
-      return false;
-    }
+      try {
+        const nuevaPublicacion = { id: publicacionId } as PublicacionResumida;
+        setFavoritos((prev) => [...prev, nuevaPublicacion]);
+        
+        await apiFavorito.favorito.agregarFavorito(publicacionId);
+        showSuccess("❤️ Agregado a favoritos");
+        
+        return true;
+      } catch (err: any) {
+        console.error("Error al agregar favorito:", err);
+        setFavoritos((prev) => prev.filter((p) => p.id !== publicacionId));
+        showError("Error al agregar a favoritos");
+        return false;
+      }
+    },
+    [showSuccess, showError]
+  );
 
-    try {
-      await apiFavorito.favorito.agregarFavorito(publicacionId);
-      showSuccess("❤️ Agregado a favoritos");
-      await cargarFavoritos();
-      return true;
-    } catch (err: any) {
-      console.error("Error al agregar favorito:", err);
-      showError("Error al agregar a favoritos");
-      return false;
-    }
-  }, [showSuccess, showError, cargarFavoritos]);
+  const eliminarFavorito = useCallback(
+    async (publicacionId: string) => {
+      if (!TokenService.isAuthenticated()) {
+        showError("Debes iniciar sesión para eliminar favoritos");
+        return false;
+      }
 
-  const eliminarFavorito = useCallback(async (publicacionId: string) => {
-    if (!TokenService.isAuthenticated()) {
-      showError("Debes iniciar sesión para eliminar favoritos");
-      return false;
-    }
+      try {
+        setFavoritos((prev) =>
+          prev.filter((pub) => pub.id !== publicacionId)
+        );
+        
+        await apiFavorito.favorito.eliminarFavorito(publicacionId);
+        showSuccess("💔 Eliminado de favoritos");
+        return true;
+      } catch (err: any) {
+        console.error("Error al eliminar favorito:", err);
 
-    try {
-      await apiFavorito.favorito.eliminarFavorito(publicacionId);
-      setFavoritos((prev) => prev.filter((pub) => pub.id !== publicacionId));
-      showSuccess("💔 Eliminado de favoritos");
-      return true;
-    } catch (err: any) {
-      console.error("Error al eliminar favorito:", err);
-      showError("Error al eliminar de favoritos");
-      return false;
-    }
-  }, [showSuccess, showError]);
+        await cargarFavoritos();
+        showError("Error al eliminar de favoritos");
+        return false;
+      }
+    },
+    [showSuccess, showError, cargarFavoritos]
+  );
 
   const toggleFavorito = async (id: string) => {
     if (!TokenService.isAuthenticated()) {
@@ -98,49 +111,52 @@ export const useFavoritos = () => {
     }
   };
 
-  const limpiarTodosFavoritos = useCallback(async () => {
-    if (!TokenService.isAuthenticated()) {
-      showError("Debes iniciar sesión para limpiar favoritos");
-      return false;
-    }
+  const limpiarTodosFavoritos = useCallback(
+    async () => {
+      if (!TokenService.isAuthenticated()) {
+        showError("Debes iniciar sesión para limpiar favoritos");
+        return false;
+      }
 
-    const confirmar = window.confirm(
-      `¿Estás seguro de que deseas eliminar todo/s tus ${favoritos.length} favoritos? Esta acción no se puede deshacer.`
-    );
-
-    if (!confirmar) return false;
-
-    try {
-      const promesas = favoritos.map((pub) =>
-        apiFavorito.favorito.eliminarFavorito(pub.id)
+      const confirmar = window.confirm(
+        `¿Estás seguro de que deseas eliminar todos tus ${favoritos.length} favoritos? Esta acción no se puede deshacer.`
       );
 
-      await Promise.all(promesas);
+      if (!confirmar) return false;
 
-      setFavoritos([]);
-      showSuccess("🗑️ Todos los favoritos han sido eliminados");
-      return true;
-    } catch (err: any) {
-      console.error("Error al limpiar favoritos:", err);
-      showError("Error al limpiar favoritos");
-      return false;
-    }
-  }, [favoritos, showSuccess, showError]);
+      try {
+        const promesas = favoritos.map((pub) =>
+          apiFavorito.favorito.eliminarFavorito(pub.id)
+        );
 
-  const verificarEsFavorito = useCallback(async (publicacionId: string): Promise<boolean> => {
-    if (!TokenService.isAuthenticated()) return false;
+        await Promise.all(promesas);
 
-    try {
-      return await apiFavorito.favorito.esFavorito(publicacionId);
-    } catch (err) {
-      console.error("Error al verificar favorito:", err);
-      return false;
-    }
-  }, []);
+        setFavoritos([]);
+        showSuccess("🗑️ Todos los favoritos han sido eliminados");
+        return true;
+      } catch (err: any) {
+        console.error("Error al limpiar favoritos:", err);
+        showError("Error al limpiar favoritos");
+        return false;
+      }
+    },
+    [favoritos, showSuccess, showError]
+  );
+
+  const verificarEsFavorito = useCallback(
+    (publicacionId: string): boolean => {
+      return favoritos.some((p) => p.id === publicacionId);
+    },
+    [favoritos]
+  );
 
   useEffect(() => {
-    cargarFavoritos();
-  }, [cargarFavoritos]);
+    const init = async () => {
+      await cargarFavoritos();
+    };
+
+    init();
+  }, []);
 
   return {
     favoritos,

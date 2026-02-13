@@ -14,6 +14,12 @@ function BotonDenuncia({
   return (
     <span
       role="button"
+      style={{
+        textDecoration: "none",
+        cursor: "pointer",
+        display: "inline",
+        color: "black",
+      }}
       className={`boton-denuncia-link ${className}`}
       onClick={() => Navegar.denunciaConId(idContenido)}
     >

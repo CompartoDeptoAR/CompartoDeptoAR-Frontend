@@ -37,15 +37,10 @@ const PublicacionDetalleView: React.FC<PublicacionDetalleViewProps> = ({
   const habitos = publicacion.habitos || {};
   const preferencias = publicacion.preferencias || {};
   const [coords, setCoords] = useState<{ lat: number; lng: number } | null>(null);
-  const [esFavorito, setEsFavorito] = useState(false);
   const [mostrarModal, setMostrarModal] = useState(false);
-  const {
-    toggleFavorito,
-    verificarEsFavorito,
-  } = useFavoritos();
-
-
   
+  const { toggleFavorito, favoritos } = useFavoritos();
+  const esFavorito = favoritos.some((p) => p.id === publicacion.id);
 
   useEffect(() => {
     setEstaLogueado(isLoggedIn());
@@ -72,17 +67,6 @@ const PublicacionDetalleView: React.FC<PublicacionDetalleViewProps> = ({
 
   }, [publicacion.ubicacion]);
 
-  useEffect(() => {
-  const verificar = async () => {
-      if (publicacion.id) {
-        const favorito = await verificarEsFavorito(publicacion.id);
-        setEsFavorito(favorito);
-      }
-    };
-
-    verificar();
-  }, [publicacion.id, verificarEsFavorito]);
-
   const handleToggleFavorite = () => {
     if (!isLoggedIn()) {
       setMostrarModal(true);
@@ -91,7 +75,6 @@ const PublicacionDetalleView: React.FC<PublicacionDetalleViewProps> = ({
 
     toggleFavorito(publicacion.id!);
   };
-
 
   async function obtenerCoordenadas(direccion: string) {
     const token = import.meta.env.VITE_MAPBOX_TOKEN;
@@ -169,7 +152,7 @@ const PublicacionDetalleView: React.FC<PublicacionDetalleViewProps> = ({
 
       <div className="btn-skip-container" style={{ bottom: '20px', left: '20px', right: 'auto' }}>
         <button className="btn-skip" style={{ backgroundColor: '#dc3545' }}>
-          <BotonDenuncia texto="⚠️ Reportar usuario" idContenido={publicacion.id!} />
+          <BotonDenuncia texto="Reportar usuario" idContenido={publicacion.id!} />
         </button>
       </div>
 

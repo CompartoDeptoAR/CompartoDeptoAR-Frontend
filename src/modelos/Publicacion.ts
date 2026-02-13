@@ -43,6 +43,7 @@ export interface PublicacionResumida {
   precio: number;
   foto?: string;
   estado:EstadoPublicacion;
+  usuarioId: string;
 }
 
 
