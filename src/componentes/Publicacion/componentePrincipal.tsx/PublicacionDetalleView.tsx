@@ -42,6 +42,8 @@ const PublicacionDetalleView: React.FC<PublicacionDetalleViewProps> = ({
   const { toggleFavorito, favoritos } = useFavoritos();
   const esFavorito = favoritos.some((p) => p.id === publicacion.id);
 
+  const esElDuenio = publicacion.usuarioFirebaseUid === TokenService.getUid();
+
   useEffect(() => {
     setEstaLogueado(isLoggedIn());
 
@@ -106,11 +108,13 @@ const PublicacionDetalleView: React.FC<PublicacionDetalleViewProps> = ({
               <div className="card-body">
            
                 <div className="galeria-wrapper">
-                  <BotonFavorito
-                    esFavorito={esFavorito}
-                    onToggle={handleToggleFavorite}
-                    className="galeria-favorito"
-                  />
+                  {!esElDuenio && (
+                    <BotonFavorito
+                      esFavorito={esFavorito}
+                      onToggle={handleToggleFavorite}
+                      className="galeria-favorito"
+                    />
+                  )}
 
                   <GaleriaPublicacion fotos={publicacion.foto || []} />
                 </div>
@@ -150,11 +154,13 @@ const PublicacionDetalleView: React.FC<PublicacionDetalleViewProps> = ({
         <BotonVolver />
       </div>
 
-      <div className="btn-skip-container" style={{ bottom: '20px', left: '20px', right: 'auto' }}>
-        <button className="btn-skip" style={{ backgroundColor: '#dc3545' }}>
-          <BotonDenuncia texto="Reportar usuario" idContenido={publicacion.id!} />
-        </button>
-      </div>
+      {!esElDuenio && (
+        <div className="btn-skip-container" style={{ bottom: '20px', left: '20px', right: 'auto' }}>
+          <button className="btn-skip" style={{ backgroundColor: '#dc3545' }}>
+            <BotonDenuncia texto="Reportar usuario" idContenido={publicacion.id!} />
+          </button>
+        </div>
+      )}
 
       {estaLogueado && (
         <MiniChat
