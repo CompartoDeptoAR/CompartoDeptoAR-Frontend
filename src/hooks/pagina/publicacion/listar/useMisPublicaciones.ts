@@ -13,6 +13,7 @@ export const useMisPublicaciones = () => {
   const [error, setError] = useState<string | null>(null);
   const [toast, setToast] = useState({ show: false, message: "", type: "info" as const });
 
+  // ✅ Sin dependencias - la función es estable
   const fetchMisPublicaciones = useCallback(async () => {
     try {
       setLoading(true);
@@ -36,11 +37,11 @@ export const useMisPublicaciones = () => {
     } finally {
       setLoading(false);
     }
-  }, [showError]);
+  }, [showError]); 
 
   useEffect(() => {
     fetchMisPublicaciones();
-  }, [fetchMisPublicaciones]);
+  }, []); 
 
   const handleEdit = (id: string) => {
     Navegar.editarPublicacion(id);
@@ -72,21 +73,24 @@ export const useMisPublicaciones = () => {
     [publicaciones, showError, showSuccess]
   );
 
-  const handleEstado = async (id: string, nuevoEstado: "activa" | "pausada") => {
-    const prev = [...publicaciones];
+  const handleEstado = useCallback(
+    async (id: string, nuevoEstado: "activa" | "pausada") => {
+      const prev = [...publicaciones];
 
-    setPublicaciones(prev =>
-      prev.map(p => (p.id === id ? { ...p, estado: nuevoEstado } : p))
-    );
+      setPublicaciones(prev =>
+        prev.map(p => (p.id === id ? { ...p, estado: nuevoEstado } : p))
+      );
 
-    try {
-      await apiPublicacion.publicacion.cambiarEstado(id, nuevoEstado);
-      showSuccess(`Estado cambiado a ${nuevoEstado}`);
-    } catch (err: any) {
-      showError(err.message || "Error al cambiar estado");
-      setPublicaciones(prev); // rollback
-    }
-  };
+      try {
+        await apiPublicacion.publicacion.cambiarEstado(id, nuevoEstado);
+        showSuccess(`Estado cambiado a ${nuevoEstado}`);
+      } catch (err: any) {
+        showError(err.message || "Error al cambiar estado");
+        setPublicaciones(prev); 
+      }
+    },
+    [publicaciones, showError, showSuccess]
+  );
 
   const handleCrearNueva = () => {
     Navegar.crearPublicacion();
