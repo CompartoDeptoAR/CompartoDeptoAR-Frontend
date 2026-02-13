@@ -6,7 +6,7 @@ const Footer: React.FC = () => {
   return (
     <footer className="bg-dark text-light py-3 mt-auto">
       <Container>
-        <Row className="align-items-center text-center text-md-start">
+        <Row className="align-items-center text-md-start">
           <Col md={6}>
             <p className="mb-0">© 2025 — CompartoDeptoAR | Proyecto Académico CIU General Belgrano </p>
           </Col>

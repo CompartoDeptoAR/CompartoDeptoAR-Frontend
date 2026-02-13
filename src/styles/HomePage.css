@@ -29,11 +29,11 @@ html, body, #root {
   z-index: 1;
 }
 
-.text-center{
+.home-header {
   background: rgba(177, 158, 158, 0.6);
   border-radius: 16px;
-
 }
+
 .home-fondo > * {
   position: relative;
   z-index: 2;

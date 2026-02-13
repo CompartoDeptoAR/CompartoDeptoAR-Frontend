@@ -17,7 +17,7 @@ const HomePage = () => {
 
     return (
         <div className="home-fondo">
-            <div className="text-center">
+            <div className="home-header text-center">
                 <h1 className="titulo-home mb-4">Bienvenido a CompartoDeptoAr</h1>
 
                 {estaIn && (
