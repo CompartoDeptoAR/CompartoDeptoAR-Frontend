@@ -7,13 +7,18 @@ interface SwalNotificationProps {
   show: boolean;
   type: SwalType;
   message: string;
+  title?: string;
+  imageUrl?: string;
   onClose?: () => void;
 }
+
 
 const SwalNotification: React.FC<SwalNotificationProps> = ({
   show,
   type,
   message,
+  title,
+  imageUrl,
   onClose,
 }) => {
   useEffect(() => {
@@ -32,21 +37,22 @@ const SwalNotification: React.FC<SwalNotificationProps> = ({
       return;
     }
 
-    // 🔥 cerrar loading si estaba abierto
     Swal.close();
 
     Swal.fire({
-      icon: type as any,
+      icon: imageUrl ? undefined : (type as any),
       title:
-        type === "success"
-          ? "¡Registro exitoso!"
+        title ||
+        (type === "success"
+          ? "Operación exitosa"
           : type === "error"
           ? "Error"
-          : "Información",
+          : "Información"),
       text: message,
+      imageUrl,
+      imageWidth: 120,
+      imageHeight: 120,
       confirmButtonColor: "#6366f1",
-    }).then(() => {
-      if (onClose) onClose();
     });
 
   }, [show, type, message, onClose]);

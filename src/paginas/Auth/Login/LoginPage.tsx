@@ -82,8 +82,12 @@ const LoginPage = ({ onSwitch }: { onSwitch: () => void }) => {
         show={toast.show}
         message={toast.message}
         type={toast.type}
+        title={toast.type === "success" ? "¡Bienvenido!" : undefined}
+        imageUrl={toast.type === "success" ? "/robot-feliz.png" : undefined}
         onClose={hideToast}
       />
+
+
     </>
   );
 };
