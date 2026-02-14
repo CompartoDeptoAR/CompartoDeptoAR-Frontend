@@ -1,14 +1,14 @@
-.auth-page-ciudad {
+.auth-page-ciudad { 
   min-height: 100vh;
-  display: flex;
-  align-items: flex-start;
-  padding: 2rem 2rem 4rem;
-  position: relative;
-  overflow-y: auto;   
-  overflow-x: hidden;
-  background: url("/src/assets/image.png") center/cover fixed no-repeat;
+  display: flex; 
+  align-items: flex-start; 
+  padding: 2rem 2rem 4rem; 
+  position: relative; 
+  overflow-y: auto; 
+  overflow-x: hidden; 
+  background: url("/src/assets/fondoAuth.png") center/cover no-repeat, 
+  radial-gradient( circle at 30% 40%, #8be2ff 0%, #57c9ff 35%, #2da2ff 65%, #0076e6 100% ); 
 }
-
 .auth-wrapper {
   padding-bottom: 3rem;
   display: flex;
@@ -19,6 +19,73 @@
   max-width: 550px;
   margin-left: 4rem;   
   margin-right: auto;  
+}
+.auth-hero-text {
+  position: absolute;
+
+  top: 140px;
+  right: 6%;
+
+  transform: none;
+
+  font-size: 2rem;
+  font-weight: 700;
+  color: white;
+  text-shadow: 0 6px 20px rgba(0,0,0,0.45);
+
+
+  white-space: nowrap;
+  overflow: hidden;
+  border-right: 2px solid rgba(255,255,255,0.9);
+  
+
+  width: 0;
+  z-index: 2;
+  pointer-events: none;
+
+  animation:
+    typing 5s steps(30) infinite,
+    cursorBlink 0.8s step-end infinite;
+}
+
+
+@keyframes typing {
+  0% {
+    width: 0;
+    opacity: 0;
+  }
+
+  15% {
+    opacity: 1;
+  }
+
+  45% {
+    width: 460px; 
+    opacity: 1;
+  }
+
+  85% {
+  width: 460px;
+  opacity: 1;
+  }
+
+  100% {
+    width: 460px;
+    opacity: 0;
+  }
+}
+
+
+
+@keyframes cursorBlink {
+  50% {
+    border-color: transparent;
+  }
+}
+@media (max-width: 768px) {
+  .auth-hero-text {
+    display: none;
+  }
 }
 
 .auth-tabs {
