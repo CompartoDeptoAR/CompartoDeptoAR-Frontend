@@ -72,15 +72,21 @@ const RegistroPage = ({ onSwitch }: { onSwitch: () => void }) => {
         show={toast.show}
         message={toast.message}
         type={toast.type}
+        title={
+          toast.type === "success"
+            ? "¡Registro exitoso!"
+            : undefined
+        }
         onClose={() => {
           hideToast();
 
           if (toast.type === "success") {
-            handleCancelarPaso2(); 
-            onSwitch();  
+            handleCancelarPaso2();
+            onSwitch();
           }
         }}
       />
+
 
 
     </>
