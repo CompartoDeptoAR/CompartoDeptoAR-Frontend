@@ -10,7 +10,7 @@ html, body, #root {
   background-position: bottom center;
   background-repeat: no-repeat;
   background-size: cover;
-  background: url("/fondoHome.png") no-repeat center center fixed;
+  background: url("/public/fondoHome.png") no-repeat center center fixed;
   background-size: cover;
   padding: 20px;
   padding-top: calc(80px + 20px);
