@@ -12,12 +12,7 @@ import PerfilOtroUsuarioView from "../paginas/Perfil/PerfilOtroUsuarioView";
 
 import { PUBLIC_ROUTES, GENERAL } from "./Routes";
 import { TokenService } from "../services/auth/tokenService";
-import {
-  RestrictedAccess,
-  EnConstruccion,
-  NotFound,
-  Error500,
-} from "../paginas/system";
+import {RestrictedAccess,EnConstruccion,NotFound,Error500} from "../paginas/system";
 
 const Router: React.FC = () => {
   const authData = TokenService.getAuthData();

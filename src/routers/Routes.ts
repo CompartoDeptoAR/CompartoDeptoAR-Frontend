@@ -16,6 +16,8 @@ export const USER_ROUTES = {
 
   MIS_PUBLICACIONES: "/mis-publicaciones",
   MIS_FAVORITOS: "/mis-favoritos",
+
+  CONTACTOS: "/contactos",
 };
 
 export const ADMIN_ROUTES = {

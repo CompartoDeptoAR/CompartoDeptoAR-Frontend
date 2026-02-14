@@ -23,6 +23,7 @@ import { ChatCompleto } from "../paginas/Chat/ChatCompleto";
 import { ADMIN_ROUTES, GENERAL, USER_ROUTES, ROUTE } from "./Routes";
 import { NotFound } from "../paginas/system";
 import VerPublicacionAdminPage from "@/paginas/Publicacion/Funcionalidades/VerPublicacioneAdminPage";
+import { EnConstruccion } from "../paginas/system";
 
 
 const ProtectedRouter = () => {
@@ -44,6 +45,7 @@ const ProtectedRouter = () => {
           <Route path={USER_ROUTES.EDITAR_PUBLICACION()} element={<EditarPublicacion />} />
           <Route path={USER_ROUTES.MIS_FAVORITOS} element={<MisFavoritos />} />
           <Route path={USER_ROUTES.MIS_PUBLICACIONES} element={<MisPublicaciones />} />
+          <Route path={USER_ROUTES.CONTACTOS} element={<EnConstruccion />} />
         </>
       )}
 
