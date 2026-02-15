@@ -21,11 +21,11 @@ const AuthPage = () => {
 return (
   <div className="auth-page-ciudad">
 
-  
+   {/* 
     <div className="auth-hero-text">
       Encontrá tu compañero ideal...
-    </div>
-
+    </div>  
+    */}
     <div className="auth-background">
       <div className="gradient-orb orb-1"></div>
       <div className="gradient-orb orb-2"></div>

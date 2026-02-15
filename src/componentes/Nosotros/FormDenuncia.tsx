@@ -90,7 +90,7 @@ const FormularioDenuncia: React.FC<FormularioDenunciaProps> = ({
           allowOutsideClick: false,
         });
 
-        Navegar.volverAtras();
+        Navegar.verPublicacion(idContenido);
 
       } catch (err) {
         console.error(err);
@@ -105,7 +105,7 @@ const FormularioDenuncia: React.FC<FormularioDenunciaProps> = ({
           confirmButtonText: "Volver",
         });
 
-        Navegar.volverAtras();
+        Navegar.verPublicacion(idContenido);
       }
     };
 
