@@ -53,6 +53,8 @@ const SwalNotification: React.FC<SwalNotificationProps> = ({
       imageWidth: 120,
       imageHeight: 120,
       confirmButtonColor: "#6366f1",
+    }).then(() => {
+      onClose?.();
     });
 
   }, [show, type, message, onClose]);

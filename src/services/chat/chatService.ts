@@ -90,7 +90,7 @@ class ChatService {
       const q = query(
         collection(db, this.mensajesCollection),
         where("participantes", "array-contains", idUsuario),
-        orderBy("fechaEnvio", "desc") // 🔥 Ordenar por fecha para optimizar
+        orderBy("fechaEnvio", "desc")
       );
 
       const snapshot = await getDocs(q);
