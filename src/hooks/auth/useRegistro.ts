@@ -31,22 +31,22 @@ export function useRegistro(onSwitch: () => void) {
 
   
   const handlePaso1Submit = (e: React.FormEvent) => {
-  e.preventDefault();
-  console.log("HANDLE PASO 1");
+    e.preventDefault();
+    console.log("HANDLE PASO 1");
 
-  if (!nombreCompleto.trim()) {
-    return showWarning("Por favor ingresa tu nombre completo");
-  }
-  if (!correo.trim() || !correo.includes("@")) {
-    return showWarning("Por favor ingresa un email válido");
-  }
-  if (contraseña.length < 6) {
-    return showWarning("La contraseña debe tener al menos 6 caracteres");
-  }
+    if (!nombreCompleto.trim()) {
+      return showWarning("Por favor ingresa tu nombre completo");
+    }
+    if (!correo.trim() || !correo.includes("@")) {
+      return showWarning("Por favor ingresa un email válido");
+    }
+    if (contraseña.length < 6) {
+      return showWarning("La contraseña debe tener al menos 6 caracteres");
+    }
 
-  console.log("MOSTRAR PASO 2 = TRUE");
-  setMostrarPaso2(true);
-};
+    console.log("MOSTRAR PASO 2 = TRUE");
+    setMostrarPaso2(true);
+  };
 
 
   
