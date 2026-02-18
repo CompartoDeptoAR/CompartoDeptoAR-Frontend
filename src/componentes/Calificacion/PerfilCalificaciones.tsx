@@ -1,13 +1,6 @@
 import { useEffect, useState } from "react";
 import { Doughnut } from "react-chartjs-2";
-import {
-  Chart as ChartJS,
-  ArcElement,
-  Tooltip,
-  Legend,
-  ChartOptions,
-  Plugin
-} from "chart.js";
+import {Chart as ChartJS,ArcElement,Tooltip,Legend, ChartOptions,Plugin} from "chart.js";
 import apiCalificacion from "../../services/api/endpoints/calificacion";
 import type { Calificacion } from "../../modelos/Calificacion";
 
@@ -17,7 +10,7 @@ interface PerfilCalificacionesProps {
   idUsuario: string;
   esMiPerfil?: boolean;
   nombreUsuario?: string;
-  isMobile?: boolean; // Nueva prop
+  isMobile?: boolean;
 }
 
 const centerTextPlugin: Plugin<"doughnut"> = {
@@ -134,7 +127,7 @@ const PerfilCalificaciones: React.FC<PerfilCalificacionesProps> = ({
     );
   };
 
-  // Si es móvil y hay muchas calificaciones, mostrar versión simplificada
+  // Si es celu y hay muchas calificaciones, mostrar version simplificada
   if (isMobile && cantidad > 3) {
     return (
       <div style={{ 
@@ -145,7 +138,7 @@ const PerfilCalificaciones: React.FC<PerfilCalificacionesProps> = ({
         border: "1px solid #e0e0e0",
         overflow: "hidden"
       }}>
-        {/* Encabezado simplificado para móvil */}
+        {/* Encabezado simplificado para celu */}
         <div style={{ padding: "12px", borderBottom: "1px solid #e9ecef" }}>
           <div style={{ 
             fontSize: isMobile ? "14px" : "15px", 
@@ -178,7 +171,7 @@ const PerfilCalificaciones: React.FC<PerfilCalificacionesProps> = ({
             </div>
           </div>
           
-          {/* Botón para ver comentarios */}
+          {/* Boton para ver comentarios */}
           <button
             onClick={() => setTabActiva(tabActiva === "resumen" ? "comentarios" : "resumen")}
             style={{
@@ -201,7 +194,7 @@ const PerfilCalificaciones: React.FC<PerfilCalificacionesProps> = ({
           </button>
         </div>
         
-        {/* Contenido según pestaña activa */}
+        {/* Contenido segun pestaña activa */}
         {tabActiva === "comentarios" && (
           <div style={{ maxHeight: "200px", overflowY: "auto", padding: "10px" }}>
             {calificaciones.map((calif, index) => (
@@ -240,7 +233,7 @@ const PerfilCalificaciones: React.FC<PerfilCalificacionesProps> = ({
     );
   }
 
-  // Versión normal para desktop/tablet
+  // Version normal para desktop/tablet
   return (
     <div style={{ 
       width: "100%",

@@ -3,7 +3,7 @@ import { useToast } from "../../../useToast";
 import type { PublicacionResumida } from "../../../../modelos/Publicacion";
 import apiPublicacion from "../../../../services/api/endpoints/publicaciones";
 
-const ITEMS_PER_PAGE = 12;
+const ITEMS_PER_PAGE = 4;
 
 export const usePublicacionesPaginadas = () => {
   const { showError } = useToast();

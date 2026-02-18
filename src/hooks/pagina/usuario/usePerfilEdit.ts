@@ -4,16 +4,16 @@ import { LocalStorageService, STORAGE_KEYS } from "../../../services/storage/loc
 import { useToast } from "../../useToast";
 import apiUsuario from "../../../services/api/endpoints/usuario";
 import { Navegar } from "../../../navigation/navigationService";
-import { TokenService } from "../../../services/auth/tokenService"; // ✅ AGREGAR IMPORT
+import { TokenService } from "../../../services/auth/tokenService";
 
 export const usePerfilEdit = () => {
   const [perfil, setPerfil] = useState<UsuarioPerfil>();
-  const [userId, setUserId] = useState<string | null>(null); // ✅ AGREGAR
+  const [userId, setUserId] = useState<string | null>(null);
   const [loading, setLoading] = useState(!perfil);
   const { toast, showSuccess, showError, hideToast } = useToast();
 
   useEffect(() => {
-    const id = TokenService.getUserId(); // ✅ OBTENER userId
+    const id = TokenService.getUserId();
     setUserId(id);
   }, []);
 
