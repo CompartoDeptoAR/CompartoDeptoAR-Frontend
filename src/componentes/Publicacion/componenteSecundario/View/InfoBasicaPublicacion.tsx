@@ -59,7 +59,12 @@ export const InfoBasicaPublicacion: React.FC<InfoBasicaProps> = ({ publicacion }
             Reglas y condiciones
           </h5>
           <div className="alert alert-info">
-            <p className="mb-0">{publicacion.reglas}</p>
+            <ul className="mb-0">
+              {publicacion.reglas.map((regla, index) => (
+                <li key={index}>{regla}</li>
+              ))}
+            </ul>
+
           </div>
         </div>
       )}
